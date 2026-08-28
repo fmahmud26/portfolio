@@ -116,8 +116,8 @@ export function Hero() {
             {...fadeUp(0.72, reducedMotion)}
             className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4"
           >
-            <MagneticButton href="#work" variant="primary">
-              View my work
+            <MagneticButton href="#experience" variant="primary">
+              View experience
               <ArrowUpRight size={16} aria-hidden="true" />
             </MagneticButton>
             <MagneticButton href={profile.linkedin} variant="secondary">

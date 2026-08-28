@@ -2,11 +2,21 @@ import { useEffect, useRef, type ReactNode } from 'react'
 import Lenis from 'lenis'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { NAV_SCROLL_OFFSET } from '../../hooks/useActiveSection'
 
 gsap.registerPlugin(ScrollTrigger)
 
 type SmoothScrollProps = {
   children: ReactNode
+}
+
+function scrollToHash(hash: string, lenis: Lenis) {
+  if (hash === '#' || hash === '') {
+    lenis.scrollTo(0, { duration: 1.2 })
+    return
+  }
+
+  lenis.scrollTo(hash, { offset: NAV_SCROLL_OFFSET, duration: 1.2 })
 }
 
 export function SmoothScroll({ children }: SmoothScrollProps) {
@@ -23,6 +33,33 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     ;(window as Window & { __lenis?: Lenis }).__lenis = lenis
     lenis.on('scroll', ScrollTrigger.update)
 
+    const onAnchorClick = (event: MouseEvent) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+
+      const anchor = target.closest('a[href^="#"]')
+      if (!(anchor instanceof HTMLAnchorElement)) return
+
+      const hash = anchor.getAttribute('href')
+      if (!hash) return
+
+      const destination =
+        hash === '#' ? null : (document.querySelector(hash) as HTMLElement | null)
+
+      if (hash !== '#' && !destination) return
+
+      event.preventDefault()
+      scrollToHash(hash, lenis)
+
+      if (hash !== '#') {
+        window.history.pushState(null, '', hash)
+      } else {
+        window.history.pushState(null, '', window.location.pathname)
+      }
+    }
+
+    document.addEventListener('click', onAnchorClick)
+
     const ticker = (time: number) => {
       lenis.raf(time * 1000)
     }
@@ -31,6 +68,7 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     gsap.ticker.lagSmoothing(0)
 
     return () => {
+      document.removeEventListener('click', onAnchorClick)
       gsap.ticker.remove(ticker)
       lenis.destroy()
       lenisRef.current = null
@@ -43,5 +81,12 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
 
 export function scrollTo(target: string | number) {
   const lenis = (window as Window & { __lenis?: Lenis }).__lenis
-  lenis?.scrollTo(target, { duration: 1.5 })
+  if (!lenis) return
+
+  if (typeof target === 'string' && target.startsWith('#')) {
+    scrollToHash(target, lenis)
+    return
+  }
+
+  lenis.scrollTo(target, { duration: 1.5 })
 }

@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useGsapStagger } from '../hooks/useGsapScroll'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
-import { skillCategories } from '../data/content'
+import { sections, skillCategories } from '../data/content'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
 export function Skills() {
@@ -11,20 +11,17 @@ export function Skills() {
   const [activeIndex, setActiveIndex] = useState(0)
   const reducedMotion = useReducedMotion()
   const active = skillCategories[activeIndex]
+  const copy = sections.skills
 
   return (
     <SectionShell id="skills" atmosphere="minimal">
-      <SectionHeading
-        label="Expertise"
-        title="Technical toolkit"
-        subtitle="Languages, AI/LLM integration, cloud architecture, and DevOps/DevSecOps tooling."
-      />
+      <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
       <div ref={ref} className="grid gap-6 lg:grid-cols-[minmax(0,18rem)_1fr] lg:gap-10 xl:grid-cols-[minmax(0,20rem)_1fr] xl:gap-12">
         <nav
           data-stagger
           aria-label="Skill categories"
-          className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0"
+          className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
         >
           {skillCategories.map((category, index) => {
             const isActive = index === activeIndex
@@ -63,8 +60,8 @@ export function Skills() {
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
               <h3 className="font-display text-xl font-semibold sm:text-2xl">{active.name}</h3>
-              <p className="mt-2 max-w-none text-sm text-muted sm:text-base">
-                Core technologies and practices in this domain.
+              <p className="mt-2 max-w-none text-sm leading-relaxed text-muted sm:text-base">
+                {active.description}
               </p>
 
               <ul className="mt-6 grid gap-3 sm:grid-cols-2 sm:gap-4">

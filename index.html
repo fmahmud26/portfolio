@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta
       name="description"
-      content="Firoz Mahmud — Senior Software Engineer. Backend, AI, cloud & DevSecOps — 7+ years shipping LLM pipelines, Java/Python services, and AWS infrastructure. Open to Forward Deployed AI roles."
+      content="Firoz Mahmud — Senior Software Engineer. Seven years building backend systems, LLM pipelines, and cloud-native platforms on AWS, GCP, and Azure. Open to Forward Deployed AI, backend, and cloud roles."
     />
     <meta name="author" content="Firoz Mahmud" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -19,12 +19,14 @@
     <script>
       (function () {
         var stored = localStorage.getItem('portfolio-theme');
-        var theme =
-          stored === 'light' || stored === 'dark'
-            ? stored
-            : window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light';
+        var theme = 'light';
+
+        if (stored === 'light' || stored === 'dark') {
+          theme = stored;
+        } else if (window.matchMedia) {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
         if (theme === 'dark') document.documentElement.classList.add('dark');
       })();
     </script>

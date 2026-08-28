@@ -1,19 +1,16 @@
 import { useGsapStagger } from '../hooks/useGsapScroll'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
-import { experience } from '../data/content'
+import { experience, sections } from '../data/content'
 import { Briefcase } from 'lucide-react'
 
 export function Experience() {
   const ref = useGsapStagger<HTMLDivElement>()
+  const copy = sections.experience
 
   return (
     <SectionShell id="experience" atmosphere="minimal">
-      <SectionHeading
-        label="Experience"
-        title="Where I've shipped"
-        subtitle="7+ years building backend systems, LLM pipelines, and cloud-native platforms in production."
-      />
+      <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
       <div ref={ref} className="relative w-full">
         <div

@@ -4,21 +4,18 @@ import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
 import { MagneticButton } from '../components/ui/MagneticButton'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
-import { profile } from '../data/content'
+import { profile, sections } from '../data/content'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
 export function Contact() {
   const ref = useRef(null)
   const inView = useInView(ref, { once: true, margin: '-80px' })
   const reducedMotion = useReducedMotion()
+  const copy = sections.contact
 
   return (
     <SectionShell id="contact" atmosphere="minimal">
-      <SectionHeading
-        label="Contact"
-        title="Let's build something that ships"
-        subtitle="Open to backend, AI, cloud architecture, and DevSecOps engineering roles."
-      />
+      <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
       <motion.div
         ref={ref}
@@ -40,10 +37,9 @@ export function Contact() {
 
         <div className="relative grid gap-10 lg:grid-cols-2 lg:gap-12 xl:gap-16">
           <div>
-            <h3 className="font-display text-2xl font-semibold sm:text-3xl">Get in touch</h3>
-            <p className="mt-3 max-w-none text-base text-muted sm:mt-4 sm:text-lg">
-              Whether it's an LLM integration, enterprise SaaS build, or cloud architecture
-              challenge — I'd love to hear what you're working on.
+            <h3 className="font-display text-2xl font-semibold sm:text-3xl">{copy.innerTitle}</h3>
+            <p className="mt-3 max-w-none text-base leading-relaxed text-muted sm:mt-4 sm:text-lg">
+              {copy.intro}
             </p>
 
             <ul className="mt-6 space-y-3 sm:mt-8 sm:space-y-4">
@@ -74,15 +70,15 @@ export function Contact() {
 
           <div className="flex flex-col items-stretch justify-center gap-3 pr-14 sm:gap-4 sm:pr-20 lg:items-start lg:pr-24">
             <MagneticButton href={`mailto:${profile.email}`} variant="primary" className="w-full lg:w-auto">
-              Send an email
+              {copy.emailCta}
               <ArrowUpRight size={18} aria-hidden="true" />
             </MagneticButton>
             <MagneticButton href={profile.linkedin} variant="secondary" className="w-full lg:w-auto">
-              Connect on LinkedIn
+              {copy.linkedinCta}
               <ArrowUpRight size={18} aria-hidden="true" />
             </MagneticButton>
             <MagneticButton href={profile.credly} variant="secondary" className="w-full lg:w-auto">
-              View certifications
+              {copy.credlyCta}
               <ArrowUpRight size={18} aria-hidden="true" />
             </MagneticButton>
           </div>

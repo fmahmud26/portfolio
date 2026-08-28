@@ -2,12 +2,29 @@ import { useEffect, useState } from 'react'
 import type Lenis from 'lenis'
 
 const ACTIVATION_OFFSET = 128
+const BOTTOM_THRESHOLD = 96
 
 function getLenis() {
   return (window as Window & { __lenis?: Lenis }).__lenis
 }
 
+function getScrollMetrics() {
+  const lenis = getLenis()
+  const scrollY = lenis?.scroll ?? window.scrollY
+  const limit =
+    lenis?.limit ?? Math.max(document.documentElement.scrollHeight - window.innerHeight, 0)
+
+  return { scrollY, limit }
+}
+
+function isNearPageBottom() {
+  const { scrollY, limit } = getScrollMetrics()
+  return limit - scrollY <= BOTTOM_THRESHOLD
+}
+
 function computeActiveSection(sectionIds: string[]) {
+  if (!sectionIds.length) return ''
+
   let current = sectionIds[0] ?? ''
 
   for (const id of sectionIds) {
@@ -17,6 +34,16 @@ function computeActiveSection(sectionIds: string[]) {
     const top = el.getBoundingClientRect().top
     if (top <= ACTIVATION_OFFSET) {
       current = id
+    }
+  }
+
+  const lastId = sectionIds[sectionIds.length - 1]
+  const lastEl = lastId ? document.getElementById(lastId) : null
+
+  if (lastEl && lastId && isNearPageBottom()) {
+    const rect = lastEl.getBoundingClientRect()
+    if (rect.top < window.innerHeight) {
+      current = lastId
     }
   }
 
@@ -73,3 +100,5 @@ export function useActiveSection(sectionIds: string[]) {
 
   return active
 }
+
+export const NAV_SCROLL_OFFSET = -ACTIVATION_OFFSET

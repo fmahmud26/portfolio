@@ -18,13 +18,24 @@ const ThemeContext = createContext<ThemeContextValue | null>(null)
 
 const STORAGE_KEY = 'portfolio-theme'
 
-function getInitialTheme(): Theme {
+function getSystemTheme(): Theme {
   if (typeof window === 'undefined') return 'light'
+  if (typeof window.matchMedia !== 'function') return 'light'
+
+  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+}
+
+function getStoredTheme(): Theme | null {
+  if (typeof window === 'undefined') return null
 
   const stored = localStorage.getItem(STORAGE_KEY)
   if (stored === 'light' || stored === 'dark') return stored
 
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  return null
+}
+
+function getInitialTheme(): Theme {
+  return getStoredTheme() ?? getSystemTheme()
 }
 
 function applyTheme(theme: Theme) {
@@ -37,15 +48,41 @@ type ThemeProviderProps = {
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme)
+  const [hasUserPreference, setHasUserPreference] = useState(() => getStoredTheme() !== null)
 
   useEffect(() => {
     applyTheme(theme)
-    localStorage.setItem(STORAGE_KEY, theme)
   }, [theme])
 
-  const setTheme = (next: Theme) => setThemeState(next)
+  useEffect(() => {
+    if (hasUserPreference) {
+      localStorage.setItem(STORAGE_KEY, theme)
+      return
+    }
 
-  const toggleTheme = () => setThemeState((current) => (current === 'dark' ? 'light' : 'dark'))
+    localStorage.removeItem(STORAGE_KEY)
+  }, [theme, hasUserPreference])
+
+  useEffect(() => {
+    if (hasUserPreference) return
+
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)')
+    const syncWithSystem = () => setThemeState(getSystemTheme())
+
+    syncWithSystem()
+    mediaQuery.addEventListener('change', syncWithSystem)
+    return () => mediaQuery.removeEventListener('change', syncWithSystem)
+  }, [hasUserPreference])
+
+  const setTheme = (next: Theme) => {
+    setHasUserPreference(true)
+    setThemeState(next)
+  }
+
+  const toggleTheme = () => {
+    setHasUserPreference(true)
+    setThemeState((current) => (current === 'dark' ? 'light' : 'dark'))
+  }
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, toggleTheme }}>

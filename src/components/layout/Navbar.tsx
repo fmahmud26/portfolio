@@ -44,8 +44,8 @@ export function Navbar() {
         >
           <div className="header-shine h-px w-full opacity-70" />
 
-          <ContainerNav className="flex items-center justify-between gap-3 py-2.5 sm:gap-4 sm:py-3">
-            <a href="#" className="group flex min-w-0 items-center gap-3">
+          <ContainerNav className="flex items-center justify-between gap-2 py-2.5 sm:gap-3 sm:py-3 lg:gap-4">
+            <a href="#" className="group flex min-w-0 shrink-0 items-center gap-3">
               <ProfileAvatar interactive />
               <div className="hidden min-w-0 sm:block">
                 <p className="truncate text-sm font-semibold leading-tight">{profile.name}</p>
@@ -53,12 +53,12 @@ export function Navbar() {
               </div>
             </a>
 
-            <ul className="nav-track hidden items-center gap-0.5 rounded-full border border-border bg-surface/50 p-1 md:flex">
+            <ul className="nav-track hidden min-w-0 flex-1 items-center justify-center gap-0.5 overflow-x-auto rounded-full border border-border bg-surface/50 p-1 [-ms-overflow-style:none] [scrollbar-width:none] md:flex [&::-webkit-scrollbar]:hidden">
               {navLinks.map((link) => {
                 const id = link.href.slice(1)
                 const isActive = activeSection === id
                 return (
-                  <li key={link.href} className="relative">
+                  <li key={link.href} className="relative shrink-0">
                     {isActive && (
                       <motion.span
                         layoutId="nav-active-indicator"
@@ -69,7 +69,7 @@ export function Navbar() {
                     <a
                       href={link.href}
                       aria-current={isActive ? 'page' : undefined}
-                      className={`relative z-10 block rounded-full px-3 py-1.5 text-sm transition-[color,transform,letter-spacing] duration-200 focus-visible:outline-none lg:px-4 ${
+                      className={`relative z-10 block rounded-full px-2.5 py-1.5 text-sm whitespace-nowrap transition-[color,transform,letter-spacing] duration-200 focus-visible:outline-none lg:px-3.5 xl:px-4 ${
                         isActive
                           ? 'nav-link-active font-semibold'
                           : 'text-muted hover:text-foreground'
@@ -91,13 +91,13 @@ export function Navbar() {
               })}
             </ul>
 
-            <div className="hidden items-center gap-2 md:flex">
+            <div className="hidden shrink-0 items-center gap-2 md:flex">
               <ThemeToggle />
               <a
                 href="#contact"
                 className="nav-cta inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-medium text-white lg:px-5"
               >
-                Let's talk
+                Get in touch
                 <ArrowUpRight size={15} />
               </a>
             </div>
@@ -200,7 +200,7 @@ export function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className="nav-cta flex w-full items-center justify-center gap-2 rounded-2xl py-3.5 text-sm font-medium text-white"
               >
-                Let's talk
+                Get in touch
                 <ArrowUpRight size={16} />
               </a>
             </div>
