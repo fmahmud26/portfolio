@@ -1,0 +1,36 @@
+---
+description: Full portfolio project context for Cursor AI — read AGENTS.md before editing
+alwaysApply: true
+---
+
+# Firoz Mahmud Portfolio — Cursor AI Context
+
+**Before any edit, read `/AGENTS.md` in the repo root** for complete architecture, design system, content rules, and session decisions.
+
+## Non-negotiables
+
+1. **Content source**: `src/data/content.ts` — never invent resume facts
+2. **Display role**: Senior Software Engineer (Forward Deployed AI only in `availability` text)
+3. **Font**: Inter only
+4. **Layout**: use `.page-container` — no nested `px-*` + `max-w-*` stacking
+5. **Nav scroll-spy**: use `src/hooks/useActiveSection.ts` — not IntersectionObserver
+6. **Theme**: `localStorage` key `portfolio-theme`; system preference on first visit
+7. **Reduced motion**: use `useReducedMotion()` for animations
+8. **Lenis**: smooth scroll via `window.__lenis`; BackToTop uses it for scroll-to-top
+9. **Commits**: only when user explicitly requests
+
+## Key paths
+
+| What | Where |
+|------|-------|
+| All content | `src/data/content.ts` |
+| Design tokens | `src/index.css` |
+| Section order | `src/pages/HomePage.tsx` |
+| 3D hero | `src/components/three/HeroScene.tsx` |
+| Resume source | `../my-resume/ai-forward-deployed-engineer/Firoz_Mahmud_Resume.tex` |
+
+## Commands
+
+`npm run dev` · `npm run build` · `npm run lint`
+
+For Claude Code, also see `CLAUDE.md`.
