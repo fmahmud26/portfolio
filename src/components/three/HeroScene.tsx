@@ -25,7 +25,7 @@ export function HeroScene() {
         style={{
           background: isDark
             ? 'linear-gradient(to right, rgba(46,46,54,0.99) 0%, rgba(46,46,54,0.88) 38%, rgba(46,46,54,0.52) 62%, transparent 100%)'
-            : 'linear-gradient(to right, rgba(237,241,247,0.99) 0%, rgba(237,241,247,0.92) 36%, rgba(237,241,247,0.58) 58%, transparent 100%)',
+            : 'linear-gradient(to right, rgba(233,238,245,0.98) 0%, rgba(233,238,245,0.9) 36%, rgba(233,238,245,0.55) 58%, transparent 100%)',
         }}
       />
 
@@ -34,7 +34,7 @@ export function HeroScene() {
         style={{
           background: isDark
             ? 'linear-gradient(to top, rgba(46,46,54,0.92) 0%, transparent 100%)'
-            : 'linear-gradient(to top, rgba(237,241,247,0.92) 0%, transparent 100%)',
+            : 'linear-gradient(to top, rgba(233,238,245,0.9) 0%, transparent 100%)',
         }}
       />
     </div>

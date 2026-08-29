@@ -26,7 +26,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative z-10 w-full overflow-hidden border-t border-border-strong bg-surface/95 backdrop-blur-md">
+    <footer className="site-footer relative z-10 w-full overflow-hidden border-t border-border-strong backdrop-blur-md">
       <div className="section-divider absolute inset-x-0 top-0" aria-hidden="true" />
 
       <div

@@ -3,18 +3,7 @@ import { useFrame } from '@react-three/fiber'
 import * as THREE from 'three'
 import type { Group, Mesh } from 'three'
 
-export type SolarSystemPlacement = {
-  position: [number, number, number]
-  scale: number
-  opacity: number
-  phase: number
-  starColor: string
-  /** 2–4 planets; distant systems use fewer automatically when lite */
-  planets: number
-  orbitSpeed: number
-  /** Distant systems — fewer details, smaller glow */
-  far?: boolean
-}
+import type { SolarSystemPlacement } from './types'
 
 type PlanetSpec = {
   orbit: number

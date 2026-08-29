@@ -87,7 +87,7 @@ export function Skills() {
                     initial={reducedMotion ? false : { opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: reducedMotion ? 0 : i * 0.04, duration: 0.3 }}
-                    className="flex items-center gap-3 rounded-xl border border-border/80 bg-bg-subtle/50 px-4 py-3 text-sm text-foreground sm:text-[0.9375rem]"
+                    className="skill-chip flex items-center gap-3 rounded-xl border border-border/80 px-4 py-3 text-sm text-foreground sm:text-[0.9375rem]"
                   >
                     <span
                       className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"

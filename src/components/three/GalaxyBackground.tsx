@@ -1,21 +1,25 @@
 import { useEffect, useRef, useState } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Stars } from '@react-three/drei'
 import type { Group } from 'three'
 import type Lenis from 'lenis'
 import { useTheme } from '../../context/ThemeContext'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { GalaxyCore } from './galaxy/GalaxyCore'
 import { SolarSystem } from './galaxy/SolarSystem'
+import { RoguePlanet } from './galaxy/RoguePlanet'
+import { DeepStarField } from './galaxy/DeepStarField'
 import {
   DESKTOP_GALAXIES,
+  DESKTOP_ROGUE_PLANETS,
   DESKTOP_SOLAR_SYSTEMS,
   LIGHT_BG,
   DARK_BG,
   MOBILE_GALAXIES,
+  MOBILE_ROGUE_PLANETS,
   MOBILE_SOLAR_SYSTEMS,
   SCROLL_PARALLAX,
   type GalaxyPlacement,
+  type RoguePlanetPlacement,
   type SolarSystemPlacement,
 } from './galaxy/constants'
 
@@ -35,16 +39,17 @@ function getScrollProgress() {
 function SceneLights({ isDark }: { isDark: boolean }) {
   return (
     <>
-      <ambientLight intensity={isDark ? 0.46 : 0.38} />
+      <ambientLight intensity={isDark ? 0.48 : 0.42} />
       <hemisphereLight
-        args={[isDark ? '#c4b5fd' : '#c7d2fe', isDark ? DARK_BG : LIGHT_BG, isDark ? 0.26 : 0.14]}
+        args={[isDark ? '#c4b5fd' : '#c7d2fe', isDark ? DARK_BG : LIGHT_BG, isDark ? 0.28 : 0.18]}
       />
       <pointLight
         position={[3.5, 2, 4.5]}
-        intensity={isDark ? 0.72 : 0.48}
+        intensity={isDark ? 0.75 : 0.52}
         color={isDark ? '#c4b5fd' : '#6366f1'}
       />
-      <pointLight position={[-1.5, -0.5, 2.5]} intensity={isDark ? 0.32 : 0.22} color="#94a3b8" />
+      <pointLight position={[-1.5, -0.5, 2.5]} intensity={isDark ? 0.34 : 0.24} color="#94a3b8" />
+      <pointLight position={[0, -4, -8]} intensity={isDark ? 0.18 : 0.12} color="#fbbf24" />
     </>
   )
 }
@@ -73,16 +78,14 @@ function AnimatedGalaxy({
   isMobile: boolean
 }) {
   const groupRef = useRef<Group>(null)
-  const far = galaxy.far ?? false
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime + galaxy.phase
     if (!groupRef.current) return
 
-    const drift = far ? 0.04 : 0.08
     groupRef.current.position.y =
-      galaxy.position[1] + Math.sin(t * 0.14 + index) * drift * (1 - index * 0.04)
-    groupRef.current.rotation.y = Math.sin(t * 0.05 + galaxy.phase) * (far ? 0.02 : 0.04)
+      galaxy.position[1] + Math.sin(t * 0.14 + index) * 0.04
+    groupRef.current.rotation.y = Math.sin(t * 0.05 + galaxy.phase) * 0.02
   })
 
   return (
@@ -94,48 +97,7 @@ function AnimatedGalaxy({
         phase={galaxy.phase}
         initialTilt={galaxy.tilt}
         spinScale={galaxy.spin}
-        lite={far || index > 0}
-      />
-    </group>
-  )
-}
-
-function AnimatedSolarSystem({
-  system,
-  index,
-  isDark,
-}: {
-  system: SolarSystemPlacement
-  index: number
-  isDark: boolean
-}) {
-  return (
-    <SolarSystem placement={system} isDark={isDark} index={index} />
-  )
-}
-
-function StarField({ count, isDark }: { count: number; isDark: boolean }) {
-  const ref = useRef<Group>(null)
-
-  useFrame(({ clock }) => {
-    if (!ref.current) return
-    const progress = getScrollProgress()
-    ref.current.rotation.y = clock.elapsedTime * 0.004 + progress * 0.42
-    ref.current.rotation.x = Math.sin(clock.elapsedTime * 0.03) * 0.015
-    ref.current.position.y = progress * 8 - 4
-  })
-
-  if (count <= 0) return null
-
-  return (
-    <group ref={ref}>
-      <Stars
-        radius={160}
-        depth={110}
-        count={count}
-        factor={isDark ? 1.35 : 1.85}
-        fade
-        speed={0.045}
+        lite
       />
     </group>
   )
@@ -146,18 +108,36 @@ function CosmicField({
   isMobile,
   galaxies,
   solarSystems,
-  starCount,
+  roguePlanets,
 }: {
   isDark: boolean
   isMobile: boolean
   galaxies: GalaxyPlacement[]
   solarSystems: SolarSystemPlacement[]
-  starCount: number
+  roguePlanets: RoguePlanetPlacement[]
 }) {
   return (
     <ScrollParallax>
       <SceneLights isDark={isDark} />
-      <StarField count={starCount} isDark={isDark} />
+      <DeepStarField isDark={isDark} isMobile={isMobile} scrollY={getScrollProgress} />
+
+      {roguePlanets.map((planet, index) => (
+        <RoguePlanet
+          key={`planet-${planet.phase}-${index}`}
+          placement={planet}
+          isDark={isDark}
+          index={index}
+        />
+      ))}
+
+      {solarSystems.map((system, index) => (
+        <SolarSystem
+          key={`solar-${system.phase}-${index}`}
+          placement={system}
+          isDark={isDark}
+          index={index}
+        />
+      ))}
 
       {galaxies.map((galaxy, index) => (
         <AnimatedGalaxy
@@ -166,15 +146,6 @@ function CosmicField({
           index={index}
           isDark={isDark}
           isMobile={isMobile}
-        />
-      ))}
-
-      {solarSystems.map((system, index) => (
-        <AnimatedSolarSystem
-          key={`solar-${system.phase}-${index}`}
-          system={system}
-          index={index}
-          isDark={isDark}
         />
       ))}
     </ScrollParallax>
@@ -203,26 +174,30 @@ export function GalaxyBackground() {
 
   const galaxies = isMobile ? MOBILE_GALAXIES : DESKTOP_GALAXIES
   const solarSystems = isMobile ? MOBILE_SOLAR_SYSTEMS : DESKTOP_SOLAR_SYSTEMS
-  const starCount = reducedMotion ? 0 : isDark ? (isMobile ? 80 : 130) : isMobile ? 70 : 110
+  const roguePlanets = isMobile ? MOBILE_ROGUE_PLANETS : DESKTOP_ROGUE_PLANETS
 
   if (reducedMotion) return null
 
   return (
     <div className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
-      <div className="sticky top-0 h-[100dvh] w-full overflow-hidden">
+      <div
+        className="cosmic-deep-starfield sticky top-0 h-[100dvh] w-full overflow-hidden"
+        style={{ background: isDark ? DARK_BG : LIGHT_BG }}
+      >
+        <div className="cosmic-deep-starfield__sky absolute inset-0" aria-hidden="true" />
+
         <Canvas
           camera={{ position: [0, 0, 14], fov: 52 }}
           dpr={isMobile ? [1, 1.5] : [1, 2]}
           gl={{ antialias: !isMobile, alpha: true, powerPreference: 'high-performance' }}
-          style={{ width: '100%', height: '100%', display: 'block' }}
+          style={{ width: '100%', height: '100%', display: 'block', position: 'relative', zIndex: 1 }}
         >
-          <color attach="background" args={[isDark ? DARK_BG : LIGHT_BG]} />
           <CosmicField
             isDark={isDark}
             isMobile={isMobile}
             galaxies={galaxies}
             solarSystems={solarSystems}
-            starCount={starCount}
+            roguePlanets={roguePlanets}
           />
         </Canvas>
 
@@ -232,8 +207,8 @@ export function GalaxyBackground() {
             background: isDark
               ? `radial-gradient(ellipse 72% 58% at 34% 44%, rgba(46,46,54,0.72) 0%, rgba(46,46,54,0.28) 52%, transparent 78%),
                  radial-gradient(ellipse 88% 68% at 50% 42%, transparent 0%, rgba(46,46,54,0.42) 68%, rgba(46,46,54,0.82) 100%)`
-              : `radial-gradient(ellipse 72% 58% at 34% 44%, rgba(237,241,247,0.78) 0%, rgba(237,241,247,0.38) 52%, transparent 78%),
-                 radial-gradient(ellipse 92% 78% at 50% 45%, transparent 0%, rgba(237,241,247,0.22) 72%, rgba(237,241,247,0.52) 100%)`,
+              : `radial-gradient(ellipse 72% 58% at 34% 44%, rgba(233,238,245,0.72) 0%, rgba(233,238,245,0.32) 52%, transparent 78%),
+                 radial-gradient(ellipse 92% 78% at 50% 45%, transparent 0%, rgba(233,238,245,0.18) 72%, rgba(233,238,245,0.42) 100%)`,
           }}
         />
       </div>
