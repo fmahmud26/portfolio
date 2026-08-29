@@ -50,8 +50,8 @@ export const sections = {
     subtitle:
       'Seven years building backend services, AI integrations, and cloud-native platforms in production.',
   },
-  work: {
-    label: 'Selected Work',
+  projects: {
+    label: 'Projects',
     title: 'Systems I Have Built',
     subtitle:
       'Representative systems—structured around the problem, the engineering approach, and the outcome.',
@@ -62,12 +62,16 @@ export const sections = {
     subtitle:
       'Organized by capability—languages, platforms, and practices used to design and run production software.',
   },
-  credentials: {
-    label: 'Credentials',
-    title: 'Certifications & Education',
-    subtitle: 'Industry certifications verified on Credly, plus formal training in computer science.',
+  certifications: {
+    label: 'Certifications',
+    title: 'Industry Certifications',
+    subtitle: 'Verified credentials from AWS, HashiCorp, and the CNCF.',
     credlyLink: 'View all verified credentials on Credly',
-    educationHeading: 'Education',
+  },
+  education: {
+    label: 'Education',
+    title: 'Formal Training',
+    subtitle: 'Foundation in computer science and software engineering.',
   },
   contact: {
     label: 'Contact',
@@ -321,9 +325,11 @@ export const education = {
 
 export const navLinks = [
   { label: 'About', href: '#about' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Work', href: '#work' },
   { label: 'Skills', href: '#skills' },
+  { label: 'Experience', href: '#experience' },
+  { label: 'Projects', href: '#projects' },
+  { label: 'Certifications', href: '#certifications' },
+  { label: 'Education', href: '#education' },
   { label: 'Contact', href: '#contact' },
 ]
 

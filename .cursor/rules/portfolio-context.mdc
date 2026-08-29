@@ -26,11 +26,9 @@ alwaysApply: true
 
 ## Live page order
 
-Hero → About → Experience → Work → Skills → Credentials → Contact
+Hero → About → Skills → Experience → Projects → Certifications → Education → Contact
 
-Nav (`navLinks`): About · Experience · Work · Skills · Contact
-
-`Projects.tsx` is **not mounted** — do not assume a Work section on the live page.
+Nav (`navLinks`): About · Skills · Experience · Projects · Certifications · Education · Contact
 
 ## Key paths
 

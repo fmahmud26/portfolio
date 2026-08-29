@@ -116,13 +116,14 @@ portfolio/
 
 1. **Hero** — full viewport, 3D background, no section id
 2. **About** — `id="about"` (principles sidebar, no duplicate stats)
-3. **Experience** — `id="experience"`
-4. **Work / Projects** — `id="work"` (case-study cards: problem → approach → outcome)
-5. **Skills** — `id="skills"` (manual category tabs; no auto-slide)
-6. **Credentials** — `id="credentials"` (certifications + education; not in top nav)
-7. **Contact** — `id="contact"`
+3. **Skills** — `id="skills"` (manual category tabs; no auto-slide)
+4. **Experience** — `id="experience"`
+5. **Projects** — `id="projects"` (case-study cards: problem → approach → outcome)
+6. **Certifications** — `id="certifications"`
+7. **Education** — `id="education"`
+8. **Contact** — `id="contact"`
 
-Nav links (`content.ts` → `navLinks`): About, Experience, Work, Skills, Contact.
+Nav links (`content.ts` → `navLinks`): About, Skills, Experience, Projects, Certifications, Education, Contact.
 
 Section headings live in `sections` in `content.ts`. Use **Title Case** for section titles. Subtitles stay sentence case.
 

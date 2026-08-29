@@ -8,7 +8,8 @@ import { About } from '../sections/About'
 import { Experience } from '../sections/Experience'
 import { Projects } from '../sections/Projects'
 import { Skills } from '../sections/Skills'
-import { Credentials } from '../sections/Credentials'
+import { Certifications } from '../sections/Certifications'
+import { Education } from '../sections/Education'
 import { Contact } from '../sections/Contact'
 
 const GalaxyBackground = lazy(() =>
@@ -28,10 +29,11 @@ export function HomePage() {
         <main id="main" className="relative z-10 w-full pb-16 sm:pb-20">
           <Hero />
           <About />
+          <Skills />
           <Experience />
           <Projects />
-          <Skills />
-          <Credentials />
+          <Certifications />
+          <Education />
           <Contact />
         </main>
       </div>

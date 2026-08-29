@@ -119,7 +119,7 @@ export function Hero() {
             {...fadeUp(0.72, reducedMotion)}
             className="btn-group mt-8 sm:mt-10"
           >
-            <Button href="#work" variant="primary" size="lg">
+            <Button href="#projects" variant="primary" size="lg">
               View selected work
               <ArrowUpRight size={16} aria-hidden="true" />
             </Button>

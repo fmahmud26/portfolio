@@ -18,7 +18,7 @@
 
 ## Page order (live)
 
-Hero → About → Experience → Work → Skills → Credentials → Contact
+Hero → About → Skills → Experience → Projects → Certifications → Education → Contact
 
 **Nav:** About · Experience · Work · Skills · Contact
 

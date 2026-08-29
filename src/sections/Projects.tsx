@@ -8,10 +8,10 @@ import { projects, sections } from '../data/content'
 export function Projects() {
   const ref = useGsapStagger<HTMLDivElement>()
   const [activeId, setActiveId] = useState<string | null>(null)
-  const copy = sections.work
+  const copy = sections.projects
 
   return (
-    <SectionShell id="work" atmosphere="minimal">
+    <SectionShell id="projects" atmosphere="minimal">
       <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
       <div ref={ref} className="grid gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3 xl:gap-7">
