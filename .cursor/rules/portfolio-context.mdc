@@ -42,7 +42,7 @@ Nav (`navLinks`): About · Skills · Experience · Projects · Certifications ·
 | Nav selection pill | `src/components/ui/GlassSelectIndicator.tsx` |
 | Section order | `src/pages/HomePage.tsx` |
 | Nav / footer scroll-spy | `src/hooks/useActiveSection.ts` |
-| Navbar | `src/components/layout/Navbar.tsx` — 7-link pill; theme toggle only (no hamburger) |
+| Navbar | `src/components/layout/Navbar.tsx` — 7-link pill on `lg+`; hamburger menu below `lg` (photo always visible) |
 | Skills tabs | `src/sections/Skills.tsx` — manual category tabs only |
 | Section atmosphere | `src/components/ui/CosmicAtmosphere.tsx` — minimal stars only |
 | 3D cosmos (WebGL) | `src/components/three/GalaxyBackground.tsx` + `galaxy/*` |

@@ -243,9 +243,9 @@ Algorithm:
 - `NAV_SCROLL_OFFSET = -128` exported for anchor scrolling
 
 **Navbar** (`Navbar.tsx`):
-- All 7 nav links in horizontal pill at **all breakpoints** (horizontal scroll on narrow screens)
-- **No hamburger / mobile drawer** — header right corner is theme toggle only
-- `GlassSelectIndicator` (`layoutId="header-nav-glass"`)
+- **Desktop (`lg+`)**: all 7 nav links in horizontal pill + theme toggle
+- **Mobile (`< lg`)**: profile photo left, hamburger right — nav links and theme toggle in slide-down panel
+- `GlassSelectIndicator` (`layoutId="header-nav-glass"` desktop; `mobile-header-nav-glass` mobile menu)
 - `pendingSection` state on click until scroll-spy agrees (same pattern in `Footer.tsx`)
 
 **Footer nav**: `FooterNavLink` + single `LayoutGroup id="footer-nav"` wrapping the `<ul>`
@@ -265,6 +265,7 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 | **Header avatar** | Photo with FM fallback |
 | **Button system** | Global glass `Button.tsx`; nav/tabs use `GlassSelectIndicator` + `glassLayers={false}` |
 | **Nav Contact fix** | Scroll-spy near-line + pending section; Education no longer steals Contact highlight |
+| **Mobile nav** | Hamburger menu below `lg` (1024px); photo stays in header; nav + theme in panel |
 | **Section order** | About → Skills → Experience → Projects → Certifications → Education → Contact (all in nav) |
 | **Projects** | Mounted on `HomePage`; section id `#projects`; hero CTA links to `#projects` |
 | **Certifications & Education** | Split from combined Credentials; separate sections + nav entries |
@@ -338,7 +339,7 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 - Do not use IntersectionObserver for **nav** active state (use `useActiveSection`)
 - Do not put galaxy/3D on back-to-top button
 - Do not add nebula/galaxy blobs to every section — page-level WebGL + hero CSS overlays only
-- Do not wrap each nav link in its own `LayoutGroup` — one group per nav list
+- Do not wrap each nav link in its own `LayoutGroup` — one group per nav list (desktop + mobile menu each have one)
 - Do not let AI context files drift — update them when the codebase changes materially
 - Do not mount Footer inside the galaxy absolute wrapper — it hides behind the canvas
 

@@ -12,7 +12,7 @@
 - **Layout**: `.page-container` in `src/index.css` — do not stack extra horizontal padding
 - **Buttons**: use `Button.tsx` (glass system in `index.css`); `MagneticButton` is deprecated
 - **Nav active state**: `src/hooks/useActiveSection.ts` (scroll-spy, Lenis-aware, near-line + bottom fixes)
-- **Nav UI**: 7-link pill at all breakpoints (horizontal scroll on narrow screens); theme toggle only — **no hamburger**
+- **Nav UI**: 7-link pill on `lg+`; below `lg`, hamburger menu with nav links + theme toggle (photo stays visible)
 - **Theme**: `portfolio-theme` in localStorage; light bg `#e9eef5`, dark `#2e2e36`
 - **Photo**: `public/img/myself.jpeg` with FM fallback
 

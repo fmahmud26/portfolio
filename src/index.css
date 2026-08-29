@@ -1169,6 +1169,43 @@
       0 2px 12px rgba(0, 0, 0, 0.14);
   }
 
+  .mobile-nav-backdrop {
+    background: color-mix(in srgb, var(--theme-bg) 42%, transparent);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+
+  .mobile-nav-panel {
+    background: var(--theme-header-bg-scrolled);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+  }
+
+  .dark .mobile-nav-panel {
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  }
+
+  .mobile-nav-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .mobile-nav-list > li {
+    margin-inline: 0;
+  }
+
+  .mobile-nav-list .btn--nav {
+    min-height: 2.75rem;
+    padding-inline: 0.875rem;
+    margin-inline: 0;
+    justify-content: flex-start;
+  }
+
+  .mobile-nav-theme {
+    border-top: 1px solid var(--theme-header-border);
+    padding-top: 1rem;
+  }
+
   /* ── Light theme: frosted glass material (translucent + readable) ── */
   html:not(.dark) .btn {
     background: rgba(255, 255, 255, 0.54);
