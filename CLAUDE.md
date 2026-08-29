@@ -12,24 +12,23 @@
 - **Layout**: `.page-container` in `src/index.css` — do not stack extra horizontal padding
 - **Buttons**: use `Button.tsx` (glass system in `index.css`); `MagneticButton` is deprecated
 - **Nav active state**: `src/hooks/useActiveSection.ts` (scroll-spy, Lenis-aware, near-line + bottom fixes)
-- **Nav UI**: nav pill at all breakpoints (horizontal scroll on narrow screens); theme toggle only in header actions — **no hamburger**
-- **Theme**: `portfolio-theme` in localStorage; light bg `#edf1f7`, dark `#2e2e36`
+- **Nav UI**: 7-link pill at all breakpoints (horizontal scroll on narrow screens); theme toggle only — **no hamburger**
+- **Theme**: `portfolio-theme` in localStorage; light bg `#e9eef5`, dark `#2e2e36`
 - **Photo**: `public/img/myself.jpeg` with FM fallback
 
 ## Page order (live)
 
-Hero → About → Skills → Experience → Projects → Certifications → Education → Contact
+Hero → About → Skills → Experience → Projects → Certifications → Education → Contact → Footer
 
 **Nav:** About · Skills · Experience · Projects · Certifications · Education · Contact
 
-`Projects.tsx` exists but is **not mounted** on `HomePage`.
-
 ## Copy & UX rules
 
-- Section **titles**: Title Case (`Technical Expertise`, `Get in Touch`)
+- Section **titles**: Title Case (`Technical Stack`, `Industry Certifications`)
 - Section **subtitles**: sentence case
-- **Skills**: auto-cycles every 4.5s while section ≥35% visible; pauses off-screen; stops on manual tab click; off when reduced motion
-- **Cosmic**: one distant galaxy in hero 3D only; sections use sparse stars (`CosmicAtmosphere` minimal) — no repeated nebula blobs
+- **Skills**: manual category tabs only — no auto-slide
+- **Cosmic**: lazy `GalaxyBackground` (sticky WebGL canvas, scroll parallax, hero-right galaxy, solar systems, stars); `HeroScene` = hero CSS readability overlays only; sections use sparse stars (`CosmicAtmosphere` minimal)
+- **Footer**: sibling of main/galaxy wrapper — not inside cosmic canvas
 - **LayoutGroup**: one per nav list (`header-nav`, `footer-nav`, `skills-nav`) — not per link
 
 ## AI context maintenance

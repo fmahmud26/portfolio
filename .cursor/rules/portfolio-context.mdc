@@ -14,19 +14,20 @@ alwaysApply: true
 3. **Font**: Inter only
 4. **Layout**: use `.page-container` — no nested `px-*` + `max-w-*` stacking
 5. **Buttons**: use `src/components/ui/Button.tsx` — glass CSS in `index.css`; nav/tabs use `glassLayers={false}` + `GlassSelectIndicator`
-6. **Nav scroll-spy**: use `src/hooks/useActiveSection.ts` — not IntersectionObserver (Skills auto-slide uses IO separately)
-7. **Theme**: `localStorage` key `portfolio-theme`; light `#edf1f7` (slate canvas + indigo/teal accents), dark `#2e2e36`; system preference on first visit
-8. **Reduced motion**: use `useReducedMotion()` for animations
+6. **Nav scroll-spy**: use `src/hooks/useActiveSection.ts` — not IntersectionObserver
+7. **Theme**: `localStorage` key `portfolio-theme`; light `#e9eef5`, dark `#2e2e36`; system preference on first visit
+8. **Reduced motion**: use `useReducedMotion()` for animations; `GalaxyBackground` returns null
 9. **Lenis**: smooth scroll via `window.__lenis`; BackToTop uses it for scroll-to-top
-10. **Cosmic visuals**: distant galaxy in hero 3D only — sections get sparse stars via `CosmicAtmosphere` minimal, no nebula blobs
-11. **Commits**: only when user explicitly requests
-12. **Production build**: run `npm run build` after code changes so `dist/` stays updated (or keep `npm run build:watch` running)
-13. **Section titles**: Title Case for headings; subtitles stay sentence case
-14. **AI context**: after structural/UX/command changes, update `AGENTS.md`, `CLAUDE.md`, and this file
+10. **Cosmic visuals**: lazy `GalaxyBackground` (page-level WebGL) + `HeroScene` (hero CSS overlays); sections get sparse stars via `CosmicAtmosphere` minimal — no nebula blobs per section
+11. **Footer placement**: outside galaxy wrapper in `HomePage.tsx` — stays above canvas
+12. **Commits**: only when user explicitly requests
+13. **Production build**: run `npm run build` after code changes so `dist/` stays updated (or keep `npm run build:watch` running)
+14. **Section titles**: Title Case for headings; subtitles stay sentence case
+15. **AI context**: after structural/UX/command changes, update `AGENTS.md`, `CLAUDE.md`, and this file
 
 ## Live page order
 
-Hero → About → Skills → Experience → Projects → Certifications → Education → Contact
+Hero → About → Skills → Experience → Projects → Certifications → Education → Contact → Footer
 
 Nav (`navLinks`): About · Skills · Experience · Projects · Certifications · Education · Contact
 
@@ -36,15 +37,18 @@ Nav (`navLinks`): About · Skills · Experience · Projects · Certifications ·
 |------|-------|
 | All content | `src/data/content.ts` |
 | Section copy & nav | `content.ts` → `sections`, `navLinks` |
-| Design tokens & buttons | `src/index.css` (`.btn*`, `:root`, `.dark`) |
+| Design tokens & buttons | `src/index.css` (`.btn*`, `:root`, `.dark`, cosmic veils) |
 | Primary button component | `src/components/ui/Button.tsx` |
 | Nav selection pill | `src/components/ui/GlassSelectIndicator.tsx` |
 | Section order | `src/pages/HomePage.tsx` |
 | Nav / footer scroll-spy | `src/hooks/useActiveSection.ts` |
-| Navbar | `src/components/layout/Navbar.tsx` — nav pill all breakpoints; theme toggle only (no hamburger) |
-| Skills auto-slide | `src/sections/Skills.tsx` — ≥35% visible; stops on manual click |
+| Navbar | `src/components/layout/Navbar.tsx` — 7-link pill; theme toggle only (no hamburger) |
+| Skills tabs | `src/sections/Skills.tsx` — manual category tabs only |
 | Section atmosphere | `src/components/ui/CosmicAtmosphere.tsx` — minimal stars only |
-| 3D hero (distant galaxy) | `src/components/three/HeroScene.tsx` |
+| 3D cosmos (WebGL) | `src/components/three/GalaxyBackground.tsx` + `galaxy/*` |
+| Hero readability overlays | `src/components/three/HeroScene.tsx` — CSS gradients only |
+| Hero-right galaxy | `galaxy/constants.ts` → `HERO_RIGHT_GALAXY` |
+| Certifications / Education | `src/sections/Certifications.tsx`, `Education.tsx` |
 | Credentials UI | `src/components/ui/CredentialStack.tsx` |
 | Resume source | `../my-resume/ai-forward-deployed-engineer/Firoz_Mahmud_Resume.tex` |
 

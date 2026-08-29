@@ -49,7 +49,7 @@ npm run lint         # oxlint
 | UI animation | Framer Motion |
 | Scroll animation | GSAP + ScrollTrigger (`src/hooks/useGsapScroll.ts`) |
 | Smooth scroll | Lenis (`src/components/layout/SmoothScroll.tsx`, exposed as `window.__lenis`) |
-| 3D hero | Three.js + R3F + Drei (`src/components/three/GalaxyBackground.tsx`, hero overlays in `HeroScene.tsx`) |
+| 3D cosmos | Three.js + R3F + Drei (`GalaxyBackground.tsx` — lazy on `HomePage`; hero CSS overlays in `HeroScene.tsx`) |
 | Icons | Lucide React (+ custom brand SVGs in `BrandIcons.tsx` for GitHub/LinkedIn) |
 | Routing | React Router (`src/App.tsx` — single route `/`) |
 | Lint | oxlint |
@@ -68,7 +68,7 @@ portfolio/
 ├── src/
 │   ├── App.tsx
 │   ├── main.tsx
-│   ├── index.css            # Design system, theme tokens, glass button CSS
+│   ├── index.css            # Design system, theme tokens, glass button CSS, cosmic veils
 │   ├── data/content.ts      # ★ ALL resume/portfolio content (single source of truth)
 │   ├── context/ThemeContext.tsx
 │   ├── hooks/
@@ -76,10 +76,10 @@ portfolio/
 │   │   ├── useGsapScroll.ts      # GSAP reveal/stagger (respects reduced motion)
 │   │   └── useReducedMotion.ts
 │   ├── pages/HomePage.tsx
-│   ├── sections/            # Hero, About, Skills, Experience, Certifications, Education, Contact (+ Projects.tsx unused)
+│   ├── sections/            # Hero, About, Skills, Experience, Projects, Certifications, Education, Contact
 │   ├── components/
 │   │   ├── layout/          # Navbar, Footer, Container, SmoothScroll
-│   │   ├── three/           # HeroScene (distant 3D galaxy, hero only)
+│   │   ├── three/           # GalaxyBackground, HeroScene, galaxy/* (3D cosmos)
 │   │   └── ui/              # Reusable UI primitives (see below)
 │   └── assets/
 ├── index.html               # Theme flash prevention script, meta, title
@@ -108,19 +108,46 @@ portfolio/
 | `CredentialStack.tsx` | Stacked credential rows (certifications, education) |
 | `CosmicAtmosphere.tsx` | Sparse distant starfield for sections (no galaxy blobs) |
 
+### Key 3D / cosmos files
+
+| File | Purpose |
+|------|---------|
+| `GalaxyBackground.tsx` | Sticky full-viewport Canvas; lazy-loaded on `HomePage`; disabled when `prefers-reduced-motion` |
+| `HeroScene.tsx` | Hero-only CSS gradients/readability overlays (no WebGL) |
+| `galaxy/constants.ts` | `HERO_RIGHT_GALAXY`, distant galaxies, `COMFORT` tokens, parallax range |
+| `galaxy/generateCosmos.ts` | Procedural solar systems + rogue planets (desktop/mobile counts) |
+| `galaxy/GalaxyCore.tsx` | Spiral galaxy mesh (differential spin, core halo) |
+| `galaxy/SolarSystem.tsx` | Star + orbiting planets |
+| `galaxy/RoguePlanet.tsx` | Standalone drifting planets |
+| `galaxy/DeepStarField.tsx` | Multi-layer drei `Stars` + pinprick particles |
+| `galaxy/AmbientCosmicDrift.tsx` | Slow time-based scene drift |
+| `galaxy/cosmicMotion.ts` | `cosmicVisibility(isDark, opacity)` theme multiplier |
+
 ---
 
 ## 5. Page Structure & Section IDs
 
-`HomePage.tsx` section order:
+`HomePage.tsx` layout:
 
-1. **Hero** — full viewport, 3D background, no section id
+```
+<div> Navbar
+  <div> GalaxyBackground (absolute) + content-readability-veil
+    <main> Hero → About → Skills → Experience → Projects → Certifications → Education → Contact
+  </div>
+  Footer          ← sibling outside galaxy wrapper (z-index above canvas)
+  BackToTop
+</div>
+```
+
+Section order:
+
+1. **Hero** — full viewport, no section id
 2. **About** — `id="about"` (principles sidebar, no duplicate stats)
-3. **Skills** — `id="skills"` (manual category tabs; no auto-slide)
+3. **Skills** — `id="skills"` (manual category tabs)
 4. **Experience** — `id="experience"`
 5. **Projects** — `id="projects"` (case-study cards: problem → approach → outcome)
-6. **Certifications** — `id="certifications"`
-7. **Education** — `id="education"`
+6. **Certifications** — `id="certifications"` (`Certifications.tsx` + `CredentialStack`)
+7. **Education** — `id="education"` (`Education.tsx` + `CredentialStack`)
 8. **Contact** — `id="contact"`
 
 Nav links (`content.ts` → `navLinks`): About, Skills, Experience, Projects, Certifications, Education, Contact.
@@ -138,9 +165,9 @@ All live sections use `atmosphere="minimal"` on `SectionShell` (sparse distant s
 - **Default on first visit**: system preference (`prefers-color-scheme`), then `localStorage` key `portfolio-theme`
 - **Toggle**: `ThemeContext` + `ThemeToggle`
 - **No flash**: inline script in `index.html` applies `.dark` before paint
-- Light mode: cool slate canvas `#edf1f7`, white surfaces, indigo `#4755c7` + teal `#117a8a` accents
+- Light mode: soft off-white canvas `#e9eef5`, indigo `#4755c7` + teal `#117a8a` accents
 - Dark mode: soft gray `#2e2e36`, not pure black
-- Hero 3D bg matches theme: `LIGHT_BG = '#d2d2d6'`, `DARK_BG = '#2e2e36'`
+- WebGL canvas bg: `LIGHT_BG = '#e9eef5'`, `DARK_BG = '#2e2e36'` in `galaxy/constants.ts`
 
 ### Layout container (important)
 
@@ -171,8 +198,9 @@ Reading width for long text: `.reading-width` / `--reading-max: 42rem`.
 ### Visual language
 
 - Premium, minimal, Inter typography, eye-comfortable contrast
-- **Cosmic**: one **distant** galaxy in hero 3D only — light-years-away feel, not repeated nebula blobs per section
-- `CosmicAtmosphere`: sparse pinprick stars (`starfield--distant`); **no** nebula orbs on sections
+- **Cosmic**: scroll-linked full-page `GalaxyBackground` (stars, solar systems, rogue planets, distant galaxies + featured hero-right galaxy); `HeroScene` adds hero text readability gradients only
+- Readability layers: `content-readability-veil` (page), `section-readability-scrim` (sections), `cosmic-vignette` (canvas overlay) — cosmos visible at edges
+- `CosmicAtmosphere`: sparse pinprick stars on sections; **no** nebula orbs per section
 - Glass surfaces: `.glass`, panels: `.surface-panel`, lifts: `.interactive-lift`
 - Always respect `prefers-reduced-motion` via `useReducedMotion` and CSS media query
 
@@ -205,25 +233,24 @@ Reading width for long text: `.reading-width` / `--reading-max: 42rem`.
 
 **File**: `src/hooks/useActiveSection.ts`
 
-Uses **scroll position**, NOT IntersectionObserver for nav (Skills auto-slide uses IO separately).
+Uses **scroll position**, NOT IntersectionObserver for nav.
 
 Algorithm:
 - Activation line at **128px** from viewport top
 - Default: last section whose `top <= 128px`
-- **Near-line fallback**: if next section's top is just below the line (within 160px), prefer it — fixes Contact vs Education highlight bug
+- **Near-line fallback**: if next section's top is just below the line (within 160px), prefer it — fixes Contact vs Education highlight at page end
 - **Near page bottom**: prefer last visible section in nav order
 - `NAV_SCROLL_OFFSET = -128` exported for anchor scrolling
 
 **Navbar** (`Navbar.tsx`):
-- All nav links in horizontal pill at **all breakpoints** (scroll horizontally on narrow screens)
+- All 7 nav links in horizontal pill at **all breakpoints** (horizontal scroll on narrow screens)
 - **No hamburger / mobile drawer** — header right corner is theme toggle only
 - `GlassSelectIndicator` (`layoutId="header-nav-glass"`)
 - `pendingSection` state on click until scroll-spy agrees (same pattern in `Footer.tsx`)
-- Contact is **in the nav pill** with other links — not a separate CTA
 
 **Footer nav**: `FooterNavLink` + single `LayoutGroup id="footer-nav"` wrapping the `<ul>`
 
-Order: about → experience → work → skills → contact (credentials is on-page, not in nav)
+Nav scroll-spy order (from `navLinks`): about → skills → experience → projects → certifications → education → contact
 
 ---
 
@@ -233,18 +260,20 @@ Order: about → experience → work → skills → contact (credentials is on-p
 |-------|----------|
 | **Role display** | Show **Senior Software Engineer** everywhere; FDE only in availability text |
 | **Layout width** | Widened via single `.page-container`; hero uses full width |
-| **Back to top** | `right-4 bottom-4 sm:right-6 sm:bottom-6` + safe-area margins |
+| **Back to top** | Simple FAB + scroll progress ring — no cosmic orbit animation |
 | **Theme tooltip** | Portaled `Tooltip`, position left, auto-hide ~2.2s |
 | **Header avatar** | Photo with FM fallback |
 | **Button system** | Global glass `Button.tsx`; nav/tabs use `GlassSelectIndicator` + `glassLayers={false}` |
 | **Nav Contact fix** | Scroll-spy near-line + pending section; Education no longer steals Contact highlight |
-| **Hero 3D** | Scroll-linked `GalaxyBackground` (sticky viewport + parallax) — 5 distant galaxies desktop / 3 mobile + star field; galaxies spread vertically and shift with Lenis/window scroll; `HeroScene` adds hero text readability overlays; off when `prefers-reduced-motion` |
-| **Section atmosphere** | All sections `minimal` — sparse distant CSS stars; 3D galaxies show through page canvas between panels |
-| **Skills section** | Auto-cycles every 4.5s while section ≥35% visible (`IntersectionObserver`, `rootMargin: -12%`); pauses off-screen/tab hidden; stops permanently on manual tab click; `LayoutGroup id="skills-nav"` |
-| **Section titles** | Title Case in `sections` / headings; subtitles sentence case |
-| **Certifications & Education** | In nav; rendered via `CredentialStack` |
-| **Projects** | Not on live page; `Projects.tsx` + `projects[]` retained but unmounted |
-| **Light theme** | Soft neutral grey palette (`#d2d2d6` bg) — lower contrast, eye-comfort |
+| **Section order** | About → Skills → Experience → Projects → Certifications → Education → Contact (all in nav) |
+| **Projects** | Mounted on `HomePage`; section id `#projects`; hero CTA links to `#projects` |
+| **Certifications & Education** | Split from combined Credentials; separate sections + nav entries |
+| **3D cosmos** | `GalaxyBackground` sticky canvas with Lenis scroll parallax; featured galaxy beside hero text (right); procedural solar systems/planets; `AmbientCosmicDrift`; boosted visibility in light + dark via `cosmicVisibility()` |
+| **Hero overlays** | `HeroScene` = CSS gradients only; WebGL lives in page-level `GalaxyBackground` |
+| **Section atmosphere** | All sections `minimal` — sparse distant CSS stars |
+| **Skills section** | Manual category tabs only (`LayoutGroup id="skills-nav"`) — no auto-slide |
+| **Footer** | Outside galaxy wrapper so it stays visible above cosmic canvas |
+| **Light theme** | Soft `#e9eef5` canvas, frosted glass buttons/surfaces |
 | **dist/ builds** | Run `npm run build` after changes, or keep `npm run build:watch` running |
 | **AI context files** | Keep `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/portfolio-context.mdc` in sync |
 
@@ -252,10 +281,10 @@ Order: about → experience → work → skills → contact (credentials is on-p
 
 ## 10. Performance & 3D
 
-- `HeroScene` lazy-loaded in `Hero.tsx`
-- Reduced star/particle counts; camera pulled back for distant galaxy; 3D disabled when `prefers-reduced-motion`
+- `GalaxyBackground` lazy-loaded via `Suspense` on `HomePage` (not in Hero)
+- Reduced counts on mobile; entire 3D canvas returns `null` when `prefers-reduced-motion`
 - Lenis + GSAP ScrollTrigger synced in `SmoothScroll.tsx`
-- Build warning: HeroScene chunk ~889KB — acceptable for hero lazy load
+- Build warning: GalaxyBackground chunk ~900KB — acceptable for lazy load
 
 ---
 
@@ -266,7 +295,7 @@ Order: about → experience → work → skills → contact (credentials is on-p
 - `aria-current="page"` on active nav links; `aria-pressed` on skills tabs
 - Focus rings via `--focus-ring` in `index.css`
 - Keyboard nav + tooltips on focus
-- Reduced motion: disable non-essential animation
+- Reduced motion: disable non-essential animation (including full 3D canvas)
 
 ---
 
@@ -276,16 +305,19 @@ Order: about → experience → work → skills → contact (credentials is on-p
 → Edit `src/data/content.ts`, verify against `.tex` resume.
 
 ### Change theme colors
-→ Edit CSS variables in `src/index.css` (`:root` and `.dark`); update `HeroScene.tsx` `LIGHT_BG` / `DARK_BG` if bg changes.
+→ Edit CSS variables in `src/index.css` (`:root` and `.dark`); update `LIGHT_BG` / `DARK_BG` in `galaxy/constants.ts` if canvas bg changes.
 
 ### Add or style a button
 → Use `Button` from `src/components/ui/Button.tsx`; extend `.btn*` in `index.css` if needed.
 
 ### Add a nav section
-→ Add section `id`, add to `navLinks` in `content.ts`, add to `HomePage.tsx`; scroll-spy picks up ids from `navLinks` automatically.
+→ Add section `id`, add to `navLinks` in `content.ts`, mount in `HomePage.tsx`; scroll-spy picks up ids from `navLinks` automatically.
 
 ### Change layout width
 → Adjust `--content-max` and `--page-gutter` in `index.css`, not per-component px.
+
+### Tune 3D cosmos
+→ Placements in `galaxy/constants.ts` + `generateCosmos.ts`; motion in `COMFORT`, `AmbientCosmicDrift`, component `useFrame` hooks; readability in `index.css` veils.
 
 ### Swap profile photo
 → Replace `public/img/myself.jpeg` (and optionally `img/myself.jpeg`).
@@ -305,9 +337,10 @@ Order: about → experience → work → skills → contact (credentials is on-p
 - Do not nest horizontal padding inside `.page-container`
 - Do not use IntersectionObserver for **nav** active state (use `useActiveSection`)
 - Do not put galaxy/3D on back-to-top button
-- Do not add nebula/galaxy blobs to every section — hero 3D is the only galaxy focal point
+- Do not add nebula/galaxy blobs to every section — page-level WebGL + hero CSS overlays only
 - Do not wrap each nav link in its own `LayoutGroup` — one group per nav list
 - Do not let AI context files drift — update them when the codebase changes materially
+- Do not mount Footer inside the galaxy absolute wrapper — it hides behind the canvas
 
 ---
 
@@ -326,4 +359,4 @@ Order: about → experience → work → skills → contact (credentials is on-p
 
 ---
 
-*Last updated: 2026-08-29 — Glass Button system, distant hero galaxy, minimal section atmosphere, nav Contact fix, light theme grey tokens, Footer LayoutGroup.*
+*Last updated: 2026-08-29 — Section reorder (Skills before Experience; split Certifications/Education; Projects mounted); full-page GalaxyBackground cosmos; hero-right galaxy; AI context sync.*

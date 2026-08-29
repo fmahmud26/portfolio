@@ -51,9 +51,9 @@ npm run preview   # preview the production build locally
 src/
 ├── components/
 │   ├── layout/     # Navbar, Footer, Container, SmoothScroll
-│   ├── three/      # HeroScene (3D cosmic background)
+│   ├── three/      # GalaxyBackground (WebGL cosmos), HeroScene (hero CSS overlays), galaxy/*
 │   └── ui/         # Buttons, tooltips, BackToTop, footer pressables, etc.
-├── sections/       # Hero, About, Skills, Experience, Certifications, Education, Contact
+├── sections/       # Hero, About, Skills, Experience, Projects, Certifications, Education, Contact
 ├── pages/          # HomePage
 ├── hooks/          # useActiveSection, useGsapScroll, useReducedMotion
 ├── context/        # ThemeContext
