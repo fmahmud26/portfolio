@@ -20,7 +20,7 @@
 
 Hero → About → Skills → Experience → Projects → Certifications → Education → Contact
 
-**Nav:** About · Experience · Work · Skills · Contact
+**Nav:** About · Skills · Experience · Projects · Certifications · Education · Contact
 
 `Projects.tsx` exists but is **not mounted** on `HomePage`.
 
