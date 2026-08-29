@@ -243,9 +243,14 @@ Algorithm:
 - `NAV_SCROLL_OFFSET = -128` exported for anchor scrolling
 
 **Navbar** (`Navbar.tsx`):
-- **Desktop (`lg+`)**: all 7 nav links in horizontal pill + theme toggle
-- **Mobile (`< lg`)**: profile photo left, hamburger right — nav links and theme toggle in slide-down panel
-- `GlassSelectIndicator` (`layoutId="header-nav-glass"` desktop; `mobile-header-nav-glass` mobile menu)
+- **Breakpoint**: `lg` = 1024px; mobile nav uses `matchMedia('(max-width: 1023px)')` → `isMobileNav` state (same as `GalaxyBackground` mobile detection)
+- **Desktop (`lg+`)**: all 7 nav links in horizontal pill + theme toggle in header; **no hamburger** (not rendered)
+- **Mobile (`< lg`)**: profile photo left, hamburger right — nav links + theme toggle in slide-down panel (`#mobile-nav-menu`)
+- **Hamburger visibility**: render hamburger only when `isMobileNav` is true — do **not** rely on `lg:hidden` on `Button` alone (`.btn { display: inline-flex }` overrides Tailwind `hidden`)
+- **Mobile menu**: `AnimatePresence` panel + backdrop; closes on link click, backdrop tap, Escape, or resize to desktop; Lenis `stop()` / `start()` while open
+- `GlassSelectIndicator`: `layoutId="header-nav-glass"` (desktop); `mobile-header-nav-glass` (mobile menu)
+- `LayoutGroup`: `header-nav` (desktop pill); `mobile-header-nav` (mobile list) — one group per list, not per link
+- Mobile menu styles: `.mobile-nav-backdrop`, `.mobile-nav-panel`, `.mobile-nav-list`, `.mobile-nav-theme` in `index.css`
 - `pendingSection` state on click until scroll-spy agrees (same pattern in `Footer.tsx`)
 
 **Footer nav**: `FooterNavLink` + single `LayoutGroup id="footer-nav"` wrapping the `<ul>`
@@ -265,7 +270,7 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 | **Header avatar** | Photo with FM fallback |
 | **Button system** | Global glass `Button.tsx`; nav/tabs use `GlassSelectIndicator` + `glassLayers={false}` |
 | **Nav Contact fix** | Scroll-spy near-line + pending section; Education no longer steals Contact highlight |
-| **Mobile nav** | Hamburger menu below `lg` (1024px); photo stays in header; nav + theme in panel |
+| **Mobile nav** | Hamburger below `lg` (1023px); photo in header; nav + theme in panel; hamburger unmounted on desktop |
 | **Section order** | About → Skills → Experience → Projects → Certifications → Education → Contact (all in nav) |
 | **Projects** | Mounted on `HomePage`; section id `#projects`; hero CTA links to `#projects` |
 | **Certifications & Education** | Split from combined Credentials; separate sections + nav entries |
@@ -292,7 +297,7 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 ## 11. Accessibility Checklist
 
 - Semantic HTML, heading hierarchy
-- `aria-label` on icon-only buttons
+- `aria-label` on icon-only buttons; `aria-expanded` / `aria-controls` on mobile menu toggle
 - `aria-current="page"` on active nav links; `aria-pressed` on skills tabs
 - Focus rings via `--focus-ring` in `index.css`
 - Keyboard nav + tooltips on focus
@@ -323,6 +328,9 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 ### Swap profile photo
 → Replace `public/img/myself.jpeg` (and optionally `img/myself.jpeg`).
 
+### Tune mobile header nav
+→ `Navbar.tsx` (`isMobileNav`, menu state); mobile styles under `.mobile-nav-*` in `index.css`. Keep desktop pill unchanged at `lg+`.
+
 ### Keep AI context current
 → After changing section order, nav, scripts, content structure, or UX rules, update **`AGENTS.md`**, **`CLAUDE.md`**, and **`.cursor/rules/portfolio-context.mdc`** in the same session.
 
@@ -339,7 +347,8 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 - Do not use IntersectionObserver for **nav** active state (use `useActiveSection`)
 - Do not put galaxy/3D on back-to-top button
 - Do not add nebula/galaxy blobs to every section — page-level WebGL + hero CSS overlays only
-- Do not wrap each nav link in its own `LayoutGroup` — one group per nav list (desktop + mobile menu each have one)
+- Do not use `lg:hidden` on `Button` to hide the hamburger — use `isMobileNav` conditional render (or a non-`.btn` wrapper)
+- Do not wrap each nav link in its own `LayoutGroup` — one group per nav list (`header-nav`, `mobile-header-nav`, `footer-nav`, `skills-nav`)
 - Do not let AI context files drift — update them when the codebase changes materially
 - Do not mount Footer inside the galaxy absolute wrapper — it hides behind the canvas
 
@@ -360,4 +369,4 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 
 ---
 
-*Last updated: 2026-08-29 — Section reorder (Skills before Experience; split Certifications/Education; Projects mounted); full-page GalaxyBackground cosmos; hero-right galaxy; AI context sync.*
+*Last updated: 2026-08-29 — Mobile hamburger nav below `lg` (conditional render + slide-down panel); AI context sync for Claude & Cursor.*

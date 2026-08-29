@@ -15,15 +15,16 @@ alwaysApply: true
 4. **Layout**: use `.page-container` — no nested `px-*` + `max-w-*` stacking
 5. **Buttons**: use `src/components/ui/Button.tsx` — glass CSS in `index.css`; nav/tabs use `glassLayers={false}` + `GlassSelectIndicator`
 6. **Nav scroll-spy**: use `src/hooks/useActiveSection.ts` — not IntersectionObserver
-7. **Theme**: `localStorage` key `portfolio-theme`; light `#e9eef5`, dark `#2e2e36`; system preference on first visit
-8. **Reduced motion**: use `useReducedMotion()` for animations; `GalaxyBackground` returns null
-9. **Lenis**: smooth scroll via `window.__lenis`; BackToTop uses it for scroll-to-top
-10. **Cosmic visuals**: lazy `GalaxyBackground` (page-level WebGL) + `HeroScene` (hero CSS overlays); sections get sparse stars via `CosmicAtmosphere` minimal — no nebula blobs per section
-11. **Footer placement**: outside galaxy wrapper in `HomePage.tsx` — stays above canvas
-12. **Commits**: only when user explicitly requests
-13. **Production build**: run `npm run build` after code changes so `dist/` stays updated (or keep `npm run build:watch` running)
-14. **Section titles**: Title Case for headings; subtitles stay sentence case
-15. **AI context**: after structural/UX/command changes, update `AGENTS.md`, `CLAUDE.md`, and this file
+7. **Mobile header**: below `lg` (1023px) — photo stays visible; hamburger opens slide-down nav + theme; hamburger **unmounted** at `lg+` (conditional render, not `lg:hidden` on `Button`)
+8. **Theme**: `localStorage` key `portfolio-theme`; light `#e9eef5`, dark `#2e2e36`; system preference on first visit
+9. **Reduced motion**: use `useReducedMotion()` for animations; `GalaxyBackground` returns null
+10. **Lenis**: smooth scroll via `window.__lenis`; BackToTop uses it for scroll-to-top; mobile menu calls `stop()` / `start()`
+11. **Cosmic visuals**: lazy `GalaxyBackground` (page-level WebGL) + `HeroScene` (hero CSS overlays); sections get sparse stars via `CosmicAtmosphere` minimal — no nebula blobs per section
+12. **Footer placement**: outside galaxy wrapper in `HomePage.tsx` — stays above canvas
+13. **Commits**: only when user explicitly requests
+14. **Production build**: run `npm run build` after code changes so `dist/` stays updated (or keep `npm run build:watch` running)
+15. **Section titles**: Title Case for headings; subtitles stay sentence case
+16. **AI context**: after structural/UX/command changes, update `AGENTS.md`, `CLAUDE.md`, and this file
 
 ## Live page order
 
@@ -42,7 +43,8 @@ Nav (`navLinks`): About · Skills · Experience · Projects · Certifications ·
 | Nav selection pill | `src/components/ui/GlassSelectIndicator.tsx` |
 | Section order | `src/pages/HomePage.tsx` |
 | Nav / footer scroll-spy | `src/hooks/useActiveSection.ts` |
-| Navbar | `src/components/layout/Navbar.tsx` — 7-link pill on `lg+`; hamburger menu below `lg` (photo always visible) |
+| Navbar | `src/components/layout/Navbar.tsx` — `lg+` pill + theme; `< lg` photo + hamburger panel (`isMobileNav`, `mobile-header-nav` LayoutGroup) |
+| Mobile nav styles | `src/index.css` — `.mobile-nav-backdrop`, `.mobile-nav-panel`, `.mobile-nav-list`, `.mobile-nav-theme` |
 | Skills tabs | `src/sections/Skills.tsx` — manual category tabs only |
 | Section atmosphere | `src/components/ui/CosmicAtmosphere.tsx` — minimal stars only |
 | 3D cosmos (WebGL) | `src/components/three/GalaxyBackground.tsx` + `galaxy/*` |
