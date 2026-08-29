@@ -1,14 +1,12 @@
-import { lazy, Suspense } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight, Sparkles } from 'lucide-react'
 import { Container } from '../components/layout/Container'
-import { MagneticButton } from '../components/ui/MagneticButton'
+import { Button } from '../components/ui/Button'
+import { GitHubIcon } from '../components/ui/BrandIcons'
 import { profile, stats, focusAreas } from '../data/content'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
-const HeroScene = lazy(() =>
-  import('../components/three/HeroScene').then((m) => ({ default: m.HeroScene })),
-)
+import { HeroScene } from '../components/three/HeroScene'
 
 const fadeUp = (delay: number, reduced: boolean) =>
   reduced
@@ -24,9 +22,7 @@ export function Hero() {
 
   return (
     <section className="relative flex min-h-screen min-h-[100dvh] w-full items-center overflow-hidden">
-      <Suspense fallback={<div className="absolute inset-0 -z-10 bg-bg" aria-hidden="true" />}>
-        <HeroScene />
-      </Suspense>
+      <HeroScene />
 
       <Container className="relative w-full pt-24 pb-24 sm:pt-28 md:pt-32 lg:pt-36">
         <div className="relative z-10 w-full max-w-4xl xl:max-w-5xl 2xl:max-w-6xl">
@@ -37,7 +33,7 @@ export function Hero() {
 
           <motion.div
             {...fadeUp(0.25, reducedMotion)}
-            className="hero-badge mb-6 inline-flex max-w-full items-center gap-2.5 rounded-full border border-accent/15 bg-surface/70 px-4 py-2 text-sm backdrop-blur-md sm:mb-8"
+            className="hero-badge glass mb-6 inline-flex max-w-full items-center gap-2.5 rounded-full px-4 py-2 text-sm sm:mb-8"
           >
             <span className="relative flex h-2 w-2 shrink-0">
               {!reducedMotion && (
@@ -52,13 +48,13 @@ export function Hero() {
           <motion.div {...fadeUp(0.32, reducedMotion)} className="flex items-center gap-3">
             <span className="h-px w-8 bg-accent/45 sm:w-10" aria-hidden="true" />
             <p className="font-mono text-[11px] tracking-[0.2em] text-accent uppercase sm:text-xs">
-              {profile.title}
+              {profile.tagline}
             </p>
           </motion.div>
 
           <motion.h1
             {...fadeUp(0.38, reducedMotion)}
-            className="font-display mt-4 text-[clamp(2.35rem,7vw,5.75rem)] leading-[1.08] font-bold tracking-tight text-balance sm:mt-5"
+            className="font-display mt-4 text-[clamp(2.35rem,7vw,5.75rem)] leading-[1.06] font-bold tracking-tight text-balance sm:mt-5"
           >
             {profile.name.split(' ')[0]}
             <br />
@@ -66,8 +62,15 @@ export function Hero() {
           </motion.h1>
 
           <motion.p
+            {...fadeUp(0.44, reducedMotion)}
+            className="mt-3 font-display text-lg font-medium text-foreground sm:mt-4 sm:text-xl"
+          >
+            {profile.title}
+          </motion.p>
+
+          <motion.p
             {...fadeUp(0.48, reducedMotion)}
-            className="mt-6 reading-width text-base leading-relaxed text-muted sm:mt-8 sm:text-lg lg:text-[1.125rem]"
+            className="mt-4 reading-width text-base leading-relaxed text-muted sm:mt-5 sm:text-lg lg:text-[1.125rem]"
           >
             {profile.heroPitch}
           </motion.p>
@@ -102,10 +105,10 @@ export function Hero() {
                 key={stat.label}
                 className="surface-panel rounded-xl px-3 py-2.5 sm:rounded-2xl sm:px-4 sm:py-3"
               >
-                <div className="font-display text-lg font-bold text-gradient sm:text-xl">
+                <div className="font-display text-base font-bold text-gradient sm:text-lg lg:text-xl">
                   {stat.value}
                 </div>
-                <div className="mt-0.5 text-[11px] leading-snug text-muted sm:text-xs">
+                <div className="mt-0.5 text-[10px] leading-snug text-muted sm:text-xs">
                   {stat.label}
                 </div>
               </div>
@@ -114,16 +117,20 @@ export function Hero() {
 
           <motion.div
             {...fadeUp(0.72, reducedMotion)}
-            className="mt-8 flex flex-wrap items-center gap-3 sm:mt-10 sm:gap-4"
+            className="btn-group mt-8 sm:mt-10"
           >
-            <MagneticButton href="#experience" variant="primary">
-              View experience
+            <Button href="#work" variant="primary" size="lg">
+              View selected work
               <ArrowUpRight size={16} aria-hidden="true" />
-            </MagneticButton>
-            <MagneticButton href={profile.linkedin} variant="secondary">
-              Connect on LinkedIn
+            </Button>
+            <Button href={`mailto:${profile.email}`} variant="outlined" size="lg">
+              Email me
               <ArrowUpRight size={16} aria-hidden="true" />
-            </MagneticButton>
+            </Button>
+            <Button href={profile.github} variant="ghost" size="lg" external>
+              <GitHubIcon size={16} />
+              GitHub
+            </Button>
           </motion.div>
         </div>
 

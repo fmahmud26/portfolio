@@ -13,24 +13,47 @@ alwaysApply: true
 2. **Display role**: Senior Software Engineer (Forward Deployed AI only in `availability` text)
 3. **Font**: Inter only
 4. **Layout**: use `.page-container` — no nested `px-*` + `max-w-*` stacking
-5. **Nav scroll-spy**: use `src/hooks/useActiveSection.ts` — not IntersectionObserver
-6. **Theme**: `localStorage` key `portfolio-theme`; system preference on first visit
-7. **Reduced motion**: use `useReducedMotion()` for animations
-8. **Lenis**: smooth scroll via `window.__lenis`; BackToTop uses it for scroll-to-top
-9. **Commits**: only when user explicitly requests
+5. **Buttons**: use `src/components/ui/Button.tsx` — glass CSS in `index.css`; nav/tabs use `glassLayers={false}` + `GlassSelectIndicator`
+6. **Nav scroll-spy**: use `src/hooks/useActiveSection.ts` — not IntersectionObserver (Skills auto-slide uses IO separately)
+7. **Theme**: `localStorage` key `portfolio-theme`; light `#edf1f7` (slate canvas + indigo/teal accents), dark `#2e2e36`; system preference on first visit
+8. **Reduced motion**: use `useReducedMotion()` for animations
+9. **Lenis**: smooth scroll via `window.__lenis`; BackToTop uses it for scroll-to-top
+10. **Cosmic visuals**: distant galaxy in hero 3D only — sections get sparse stars via `CosmicAtmosphere` minimal, no nebula blobs
+11. **Commits**: only when user explicitly requests
+12. **Production build**: run `npm run build` after code changes so `dist/` stays updated (or keep `npm run build:watch` running)
+13. **Section titles**: Title Case for headings; subtitles stay sentence case
+14. **AI context**: after structural/UX/command changes, update `AGENTS.md`, `CLAUDE.md`, and this file
+
+## Live page order
+
+Hero → About → Experience → Work → Skills → Credentials → Contact
+
+Nav (`navLinks`): About · Experience · Work · Skills · Contact
+
+`Projects.tsx` is **not mounted** — do not assume a Work section on the live page.
 
 ## Key paths
 
 | What | Where |
 |------|-------|
 | All content | `src/data/content.ts` |
-| Design tokens | `src/index.css` |
+| Section copy & nav | `content.ts` → `sections`, `navLinks` |
+| Design tokens & buttons | `src/index.css` (`.btn*`, `:root`, `.dark`) |
+| Primary button component | `src/components/ui/Button.tsx` |
+| Nav selection pill | `src/components/ui/GlassSelectIndicator.tsx` |
 | Section order | `src/pages/HomePage.tsx` |
-| 3D hero | `src/components/three/HeroScene.tsx` |
+| Nav / footer scroll-spy | `src/hooks/useActiveSection.ts` |
+| Navbar | `src/components/layout/Navbar.tsx` — nav pill all breakpoints; theme toggle only (no hamburger) |
+| Skills auto-slide | `src/sections/Skills.tsx` — ≥35% visible; stops on manual click |
+| Section atmosphere | `src/components/ui/CosmicAtmosphere.tsx` — minimal stars only |
+| 3D hero (distant galaxy) | `src/components/three/HeroScene.tsx` |
+| Credentials UI | `src/components/ui/CredentialStack.tsx` |
 | Resume source | `../my-resume/ai-forward-deployed-engineer/Firoz_Mahmud_Resume.tex` |
 
 ## Commands
 
-`npm run dev` · `npm run build` · `npm run lint`
+`npm run dev` · `npm run build` · `npm run build:watch` · `npm run lint`
+
+Run **`npm run build`** after edits so **`dist/`** stays current.
 
 For Claude Code, also see `CLAUDE.md`.

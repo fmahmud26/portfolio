@@ -1,54 +1,70 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import { useGsapStagger } from '../hooks/useGsapScroll'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
+import { Button } from '../components/ui/Button'
+import { GlassSelectIndicator } from '../components/ui/GlassSelectIndicator'
 import { sections, skillCategories } from '../data/content'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
 export function Skills() {
   const ref = useGsapStagger<HTMLDivElement>()
+  const navRef = useRef<HTMLElement>(null)
   const [activeIndex, setActiveIndex] = useState(0)
   const reducedMotion = useReducedMotion()
   const active = skillCategories[activeIndex]
   const copy = sections.skills
+
+  useEffect(() => {
+    const nav = navRef.current
+    if (!nav) return
+    const activeBtn = nav.querySelector<HTMLElement>('[aria-pressed="true"]')
+    activeBtn?.scrollIntoView({
+      behavior: reducedMotion ? 'auto' : 'smooth',
+      block: 'nearest',
+      inline: 'nearest',
+    })
+  }, [activeIndex, reducedMotion])
 
   return (
     <SectionShell id="skills" atmosphere="minimal">
       <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
       <div ref={ref} className="grid gap-6 lg:grid-cols-[minmax(0,18rem)_1fr] lg:gap-10 xl:grid-cols-[minmax(0,20rem)_1fr] xl:gap-12">
-        <nav
-          data-stagger
-          aria-label="Skill categories"
-          className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
-        >
-          {skillCategories.map((category, index) => {
-            const isActive = index === activeIndex
-            return (
-              <button
-                key={category.name}
-                type="button"
-                onClick={() => setActiveIndex(index)}
-                aria-pressed={isActive}
-                className={`relative shrink-0 rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors sm:text-base lg:w-full ${
-                  isActive
-                    ? 'border-accent/30 bg-accent/10 text-foreground'
-                    : 'border-border bg-surface/40 text-muted hover:text-foreground'
-                }`}
-              >
-                {isActive && (
-                  <motion.span
-                    layoutId="skill-active"
-                    className="absolute inset-0 rounded-xl border border-accent/20 bg-accent/10"
-                    transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+        <LayoutGroup id="skills-nav">
+          <nav
+            ref={navRef}
+            data-stagger
+            aria-label="Skill categories"
+            className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
+          >
+            {skillCategories.map((category, index) => {
+              const isActive = index === activeIndex
+              return (
+                <div key={category.name} className="relative shrink-0 lg:w-full">
+                  <GlassSelectIndicator
+                    layoutId="skills-tab-glass"
+                    active={isActive}
+                    className="rounded-[var(--btn-radius)]"
                   />
-                )}
-                <span className="relative">{category.name}</span>
-              </button>
-            )
-          })}
-        </nav>
+                  <Button
+                    type="button"
+                    onClick={() => setActiveIndex(index)}
+                    aria-pressed={isActive}
+                    variant="outlined"
+                    size="md"
+                    selected={isActive}
+                    glassLayers={false}
+                    className="btn--tab relative z-10 w-full justify-start text-left"
+                  >
+                    {category.name}
+                  </Button>
+                </div>
+              )
+            })}
+          </nav>
+        </LayoutGroup>
 
         <div data-stagger className="surface-panel rounded-2xl p-6 sm:p-8 lg:p-9">
           <AnimatePresence mode="wait">

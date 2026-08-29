@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
-import { MagneticButton } from '../components/ui/MagneticButton'
+import { Button } from '../components/ui/Button'
+import { GitHubIcon } from '../components/ui/BrandIcons'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
 import { profile, sections } from '../data/content'
@@ -24,17 +25,6 @@ export function Contact() {
         transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
         className="surface-panel glow-accent relative overflow-hidden rounded-2xl p-6 sm:rounded-3xl sm:p-10 lg:p-12 xl:p-14"
       >
-        <div
-          className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full blur-3xl"
-          style={{ background: 'var(--theme-nebula)' }}
-          aria-hidden="true"
-        />
-        <div
-          className="pointer-events-none absolute -bottom-24 -left-16 h-56 w-56 rounded-full blur-3xl"
-          style={{ background: 'color-mix(in srgb, var(--color-cyan) 12%, transparent)' }}
-          aria-hidden="true"
-        />
-
         <div className="relative grid gap-10 lg:grid-cols-2 lg:gap-12 xl:gap-16">
           <div>
             <h3 className="font-display text-2xl font-semibold sm:text-3xl">{copy.innerTitle}</h3>
@@ -68,19 +58,19 @@ export function Contact() {
             </ul>
           </div>
 
-          <div className="flex flex-col items-stretch justify-center gap-3 pr-14 sm:gap-4 sm:pr-20 lg:items-start lg:pr-24">
-            <MagneticButton href={`mailto:${profile.email}`} variant="primary" className="w-full lg:w-auto">
+          <div className="btn-group btn-group--stack-sm flex flex-col items-stretch justify-center pr-0 lg:items-start">
+            <Button href={`mailto:${profile.email}`} variant="primary" size="lg" fullWidth className="lg:w-auto">
               {copy.emailCta}
               <ArrowUpRight size={18} aria-hidden="true" />
-            </MagneticButton>
-            <MagneticButton href={profile.linkedin} variant="secondary" className="w-full lg:w-auto">
+            </Button>
+            <Button href={profile.linkedin} variant="outlined" size="lg" fullWidth className="lg:w-auto" external>
               {copy.linkedinCta}
               <ArrowUpRight size={18} aria-hidden="true" />
-            </MagneticButton>
-            <MagneticButton href={profile.credly} variant="secondary" className="w-full lg:w-auto">
-              {copy.credlyCta}
-              <ArrowUpRight size={18} aria-hidden="true" />
-            </MagneticButton>
+            </Button>
+            <Button href={profile.github} variant="outlined" size="lg" fullWidth className="lg:w-auto" external>
+              <GitHubIcon size={18} />
+              {copy.githubCta}
+            </Button>
           </div>
         </div>
       </motion.div>

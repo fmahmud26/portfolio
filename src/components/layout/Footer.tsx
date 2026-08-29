@@ -1,6 +1,9 @@
+import { useState } from 'react'
+import { LayoutGroup } from 'framer-motion'
 import { Container } from './Container'
-import { FooterPressable } from '../ui/FooterPressable'
+import { FooterNavLink } from '../ui/FooterNavLink'
 import { FooterSocialLink, type SocialLabel } from '../ui/FooterSocialLink'
+import { useActiveSection } from '../../hooks/useActiveSection'
 import { navLinks, profile } from '../../data/content'
 
 const socialLinks: { href: string; label: SocialLabel; external: boolean }[] = [
@@ -11,19 +14,24 @@ const socialLinks: { href: string; label: SocialLabel; external: boolean }[] = [
 ]
 
 export function Footer() {
+  const sectionIds = navLinks.map((link) => link.href.slice(1))
+  const activeSection = useActiveSection(sectionIds)
+  const [pendingSection, setPendingSection] = useState<string | null>(null)
+
+  const displayActive = pendingSection ?? activeSection
+
+  const handleSelect = (sectionId: string) => {
+    setPendingSection(sectionId)
+    window.setTimeout(() => setPendingSection(null), 900)
+  }
+
   return (
-    <footer className="relative w-full overflow-hidden border-t border-border bg-surface/40">
+    <footer className="relative z-10 w-full overflow-hidden border-t border-border-strong bg-surface/95 backdrop-blur-md">
       <div className="section-divider absolute inset-x-0 top-0" aria-hidden="true" />
 
-      {/* Subtle cosmic depth behind social area */}
       <div
-        className="pointer-events-none absolute -bottom-16 right-[8%] h-40 w-40 rounded-full blur-3xl opacity-50 cosmos-drift-slow"
+        className="pointer-events-none absolute -bottom-20 right-[10%] h-32 w-32 rounded-full blur-3xl opacity-25"
         style={{ background: 'var(--theme-nebula)' }}
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute -bottom-10 left-[12%] h-28 w-28 rounded-full blur-3xl opacity-30"
-        style={{ background: 'color-mix(in srgb, var(--color-cyan) 10%, transparent)' }}
         aria-hidden="true"
       />
 
@@ -39,18 +47,24 @@ export function Footer() {
 
           <nav
             aria-label="Footer navigation"
-            className="order-1 flex flex-wrap items-center justify-center gap-1 sm:order-2"
+            className="order-1 sm:order-2"
           >
-            {navLinks.map((link) => (
-              <FooterPressable
-                key={link.href}
-                href={link.href}
-                variant="pill"
-                className="glass-hover rounded-full px-3 py-1.5 text-xs text-muted transition-colors hover:text-foreground sm:text-sm"
-              >
-                {link.label}
-              </FooterPressable>
-            ))}
+            <ul className="site-nav-list site-nav-list--wrap">
+              <LayoutGroup id="footer-nav">
+                {navLinks.map((link) => {
+                  const id = link.href.slice(1)
+                  return (
+                    <FooterNavLink
+                      key={link.href}
+                      href={link.href}
+                      label={link.label}
+                      isActive={displayActive === id}
+                      onSelect={handleSelect}
+                    />
+                  )
+                })}
+              </LayoutGroup>
+            </ul>
           </nav>
 
           <div className="order-2 flex items-center gap-2 pr-12 sm:order-3 sm:gap-2.5 sm:pr-16">

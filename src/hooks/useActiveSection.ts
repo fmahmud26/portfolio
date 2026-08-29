@@ -3,6 +3,8 @@ import type Lenis from 'lenis'
 
 const ACTIVATION_OFFSET = 128
 const BOTTOM_THRESHOLD = 96
+/** Last sections may stop slightly below the nav line when the page ends. */
+const NEAR_LINE_THRESHOLD = 160
 
 function getLenis() {
   return (window as Window & { __lenis?: Lenis }).__lenis
@@ -25,29 +27,46 @@ function isNearPageBottom() {
 function computeActiveSection(sectionIds: string[]) {
   if (!sectionIds.length) return ''
 
-  let current = sectionIds[0] ?? ''
+  const activationY = ACTIVATION_OFFSET
+  let passed = sectionIds[0] ?? ''
 
   for (const id of sectionIds) {
     const el = document.getElementById(id)
     if (!el) continue
 
+    if (el.getBoundingClientRect().top <= activationY) {
+      passed = id
+    }
+  }
+
+  const passedIndex = sectionIds.indexOf(passed)
+
+  // Scrolled to a section whose top sits just below the nav line (common for Contact at page end).
+  for (let i = passedIndex + 1; i < sectionIds.length; i++) {
+    const id = sectionIds[i]
+    const el = document.getElementById(id)
+    if (!el) continue
+
     const top = el.getBoundingClientRect().top
-    if (top <= ACTIVATION_OFFSET) {
-      current = id
+    if (top > activationY && top < activationY + NEAR_LINE_THRESHOLD) {
+      return id
     }
   }
 
-  const lastId = sectionIds[sectionIds.length - 1]
-  const lastEl = lastId ? document.getElementById(lastId) : null
+  if (isNearPageBottom()) {
+    for (let i = sectionIds.length - 1; i >= 0; i--) {
+      const id = sectionIds[i]
+      const el = document.getElementById(id)
+      if (!el) continue
 
-  if (lastEl && lastId && isNearPageBottom()) {
-    const rect = lastEl.getBoundingClientRect()
-    if (rect.top < window.innerHeight) {
-      current = lastId
+      const rect = el.getBoundingClientRect()
+      if (rect.top < window.innerHeight && rect.bottom > activationY) {
+        return id
+      }
     }
   }
 
-  return current
+  return passed
 }
 
 export function useActiveSection(sectionIds: string[]) {

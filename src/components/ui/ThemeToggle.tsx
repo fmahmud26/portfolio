@@ -1,6 +1,7 @@
-import { motion } from 'framer-motion'
 import { Moon, Sun } from 'lucide-react'
+import { motion } from 'framer-motion'
 import { useTheme } from '../../context/ThemeContext'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { Tooltip } from './Tooltip'
 
 type ThemeToggleProps = {
@@ -10,33 +11,44 @@ type ThemeToggleProps = {
 export function ThemeToggle({ className = '' }: ThemeToggleProps) {
   const { theme, toggleTheme } = useTheme()
   const isDark = theme === 'dark'
+  const reducedMotion = useReducedMotion()
   const tooltipText = isDark ? 'Switch to light mode' : 'Switch to dark mode'
+
+  const thumbTransition = reducedMotion
+    ? { duration: 0 }
+    : { type: 'spring' as const, stiffness: 520, damping: 34, mass: 0.72 }
 
   return (
     <Tooltip text={tooltipText} position="left" autoHideMs={2200}>
-      <button
+      <motion.button
         type="button"
-        onClick={toggleTheme}
+        role="switch"
+        aria-checked={isDark}
         aria-label={tooltipText}
-        className={`glass glass-hover relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full transition-colors ${className}`}
+        onClick={toggleTheme}
+        whileTap={reducedMotion ? undefined : { scale: 0.94 }}
+        whileFocus={reducedMotion ? undefined : { scale: 1.04 }}
+        transition={{ type: 'spring', stiffness: 460, damping: 24 }}
+        className={`theme-switch ${className}`.trim()}
       >
-      <motion.div
-        initial={false}
-        animate={{ rotate: isDark ? 0 : 180, scale: isDark ? 1 : 0 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute inset-0 flex items-center justify-center"
-      >
-        <Moon size={18} className="text-accent-glow" />
-      </motion.div>
-      <motion.div
-        initial={false}
-        animate={{ rotate: isDark ? -180 : 0, scale: isDark ? 0 : 1 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="absolute inset-0 flex items-center justify-center"
-      >
-        <Sun size={18} className="text-amber-500" />
-      </motion.div>
-    </button>
+        <span className="theme-switch__track" aria-hidden="true">
+          <motion.span
+            className="theme-switch__thumb"
+            animate={{ x: isDark ? '100%' : '0%' }}
+            transition={thumbTransition}
+          />
+
+          <span className={`theme-switch__slot${isDark ? '' : ' theme-switch__slot--active'}`}>
+            <Sun size={16} strokeWidth={2.25} />
+          </span>
+
+          <span className={`theme-switch__slot${isDark ? ' theme-switch__slot--active' : ''}`}>
+            <Moon size={16} strokeWidth={2.25} />
+          </span>
+        </span>
+
+        <span className="theme-switch__focus-ring" aria-hidden="true" />
+      </motion.button>
     </Tooltip>
   )
 }

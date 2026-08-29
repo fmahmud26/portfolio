@@ -13,5 +13,5 @@ export function Container({ children, className = '' }: ContainerProps) {
 }
 
 export function ContainerNav({ children, className = '' }: ContainerProps) {
-  return <nav className={`${containerClassName} ${className}`.trim()}>{children}</nav>
+  return <div className={`${containerClassName} ${className}`.trim()}>{children}</div>
 }

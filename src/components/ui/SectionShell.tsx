@@ -17,6 +17,7 @@ export function SectionShell({
 }: SectionShellProps) {
   return (
     <section id={id} className={`section-shell relative w-full ${className}`.trim()}>
+      <div className="section-readability-scrim pointer-events-none absolute inset-0" aria-hidden="true" />
       {atmosphere !== 'none' && <CosmicAtmosphere variant={atmosphere} />}
       <Container className="relative">{children}</Container>
     </section>

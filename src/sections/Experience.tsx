@@ -2,7 +2,14 @@ import { useGsapStagger } from '../hooks/useGsapScroll'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
 import { experience, sections } from '../data/content'
-import { Briefcase } from 'lucide-react'
+import { Briefcase, ArrowUpRight } from 'lucide-react'
+
+function formatDateTimeRange(role: (typeof experience)[0]['roles'][0]) {
+  if (role.dateTimeEnd) {
+    return `${role.dateTimeStart}/${role.dateTimeEnd}`
+  }
+  return role.dateTimeStart
+}
 
 export function Experience() {
   const ref = useGsapStagger<HTMLDivElement>()
@@ -30,7 +37,22 @@ export function Experience() {
 
               <header className="mb-6 sm:mb-8">
                 <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <h3 className="font-display text-xl font-semibold sm:text-2xl">{job.company}</h3>
+                  <h3 className="font-display text-xl font-semibold sm:text-2xl">
+                    {job.url ? (
+                      <a
+                        href={job.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+                      >
+                        {job.company}
+                        <ArrowUpRight size={16} className="shrink-0 text-accent/80" aria-hidden="true" />
+                        <span className="sr-only"> (opens in new tab)</span>
+                      </a>
+                    ) : (
+                      job.company
+                    )}
+                  </h3>
                   <span className="font-mono text-xs text-muted">{String(jobIndex + 1).padStart(2, '0')}</span>
                 </div>
                 <p className="mt-1 text-sm text-muted">{job.location}</p>
@@ -46,7 +68,10 @@ export function Experience() {
                       <h4 className="text-base font-medium text-accent-glow sm:text-lg">
                         {role.title}
                       </h4>
-                      <time className="font-mono shrink-0 text-xs text-muted sm:text-sm">
+                      <time
+                        className="font-mono shrink-0 text-xs text-muted sm:text-sm"
+                        dateTime={formatDateTimeRange(role)}
+                      >
                         {role.period}
                       </time>
                     </div>

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence, useSpring, useTransform } from 'framer-motion'
 import { ArrowUp } from 'lucide-react'
 import type Lenis from 'lenis'
+import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { Tooltip } from './Tooltip'
 
 const SCROLL_THRESHOLD = 320
@@ -22,25 +23,35 @@ function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
 
-function OrbitDots({ active }: { active: boolean }) {
+function OrbitDots({ active, reduced }: { active: boolean; reduced: boolean }) {
+  if (reduced) return null
+
+  const dots = [0, 90, 180, 270]
+
   return (
     <motion.div
       className="pointer-events-none absolute inset-0"
       animate={{ rotate: 360 }}
-      transition={{ duration: active ? 4 : 10, repeat: Infinity, ease: 'linear' }}
+      transition={{ duration: active ? 2.8 : 7, repeat: Infinity, ease: 'linear' }}
     >
-      {[0, 120, 240].map((angle) => (
+      {dots.map((angle, i) => (
         <motion.span
           key={angle}
-          className="absolute left-1/2 top-[3px] h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-cyan shadow-[0_0_8px_rgba(103,232,249,0.9)]"
-          style={{ transformOrigin: '50% 25px', rotate: `${angle}deg` }}
+          className="absolute left-1/2 top-[2px] h-1.5 w-1.5 -translate-x-1/2 rounded-full shadow-[0_0_8px_rgba(103,232,249,0.9)]"
+          style={{
+            transformOrigin: '50% 26px',
+            rotate: `${angle}deg`,
+            background: i % 2 === 0 ? 'var(--color-cyan)' : 'var(--color-accent-glow)',
+          }}
           animate={{
-            opacity: active ? [0.4, 1, 0.4] : 0.35,
-            scale: active ? [0.9, 1.2, 0.9] : 1,
+            opacity: active ? [0.35, 1, 0.35] : [0.25, 0.65, 0.25],
+            scale: active ? [0.85, 1.35, 0.85] : [0.9, 1.1, 0.9],
           }}
           transition={{
-            opacity: { duration: 1.6, repeat: Infinity, delay: angle / 360 },
-            scale: { duration: 1.6, repeat: Infinity, delay: angle / 360 },
+            duration: active ? 1.1 : 2.2,
+            repeat: Infinity,
+            delay: i * 0.15,
+            ease: 'easeInOut',
           }}
         />
       ))}
@@ -48,14 +59,66 @@ function OrbitDots({ active }: { active: boolean }) {
   )
 }
 
+function PulseRing({ reduced }: { reduced: boolean }) {
+  if (reduced) return null
+
+  return (
+    <>
+      {[0, 1.4].map((delay) => (
+        <motion.span
+          key={delay}
+          className="pointer-events-none absolute inset-0 rounded-full border border-accent/25"
+          initial={{ scale: 1, opacity: 0.35 }}
+          animate={{ scale: 1.55, opacity: 0 }}
+          transition={{
+            duration: 2.4,
+            repeat: Infinity,
+            delay,
+            ease: 'easeOut',
+          }}
+        />
+      ))}
+    </>
+  )
+}
+
+function LaunchBurst({ id, onDone }: { id: number; onDone: () => void }) {
+  const particles = Array.from({ length: 8 }, (_, i) => ({
+    angle: (i / 8) * Math.PI * 2,
+    dist: 18 + (i % 3) * 6,
+  }))
+
+  return (
+    <>
+      {particles.map((p, i) => (
+        <motion.span
+          key={`${id}-${i}`}
+          className="pointer-events-none absolute left-1/2 top-1/2 h-1 w-1 rounded-full bg-accent"
+          initial={{ x: 0, y: 0, opacity: 0.9, scale: 1 }}
+          animate={{
+            x: Math.cos(p.angle) * p.dist,
+            y: Math.sin(p.angle) * p.dist,
+            opacity: 0,
+            scale: 0.2,
+          }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          onAnimationComplete={i === particles.length - 1 ? onDone : undefined}
+        />
+      ))}
+    </>
+  )
+}
+
 export function BackToTop() {
+  const reducedMotion = useReducedMotion()
   const [visible, setVisible] = useState(false)
   const [progress, setProgress] = useState(0)
   const [hovered, setHovered] = useState(false)
   const [launching, setLaunching] = useState(false)
   const [ripples, setRipples] = useState<number[]>([])
+  const [bursts, setBursts] = useState<number[]>([])
 
-  const springProgress = useSpring(0, { stiffness: 120, damping: 22 })
+  const springProgress = useSpring(reducedMotion ? progress : 0, { stiffness: 120, damping: 22 })
   const strokeDashoffset = useTransform(
     springProgress,
     (v) => RING_CIRCUMFERENCE * (1 - v),
@@ -118,20 +181,23 @@ export function BackToTop() {
 
   const handleClick = () => {
     setLaunching(true)
-    setRipples((prev) => [...prev, Date.now()])
+    const now = Date.now()
+    setRipples((prev) => [...prev, now, now + 1])
+    if (!reducedMotion) setBursts((prev) => [...prev, now])
     scrollToTop()
     window.setTimeout(() => setLaunching(false), 700)
   }
 
   const progressPercent = Math.round(progress * 100)
+  const nearTop = progress > 0.85
 
   return (
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={{ opacity: 0, y: 32, scale: 0.65, rotate: -20 }}
-          animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
-          exit={{ opacity: 0, y: 32, scale: 0.65, rotate: 20 }}
+          initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 32, scale: 0.65, rotate: -20 }}
+          animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1, rotate: 0 }}
+          exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 32, scale: 0.65, rotate: 20 }}
           transition={{ type: 'spring', stiffness: 280, damping: 20 }}
           className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6"
           style={{
@@ -139,6 +205,12 @@ export function BackToTop() {
             marginBottom: 'env(safe-area-inset-bottom, 0px)',
           }}
         >
+          <motion.div
+            animate={reducedMotion ? undefined : { y: [0, -5, 0] }}
+            transition={
+              reducedMotion ? undefined : { duration: 3.2, repeat: Infinity, ease: 'easeInOut' }
+            }
+          >
           <Tooltip text="Back to top" position="left">
             <motion.button
               type="button"
@@ -146,67 +218,89 @@ export function BackToTop() {
               onHoverStart={() => setHovered(true)}
               onHoverEnd={() => setHovered(false)}
               aria-label={`Back to top — ${progressPercent}% scrolled`}
-              whileTap={{ scale: 0.9 }}
+              whileTap={reducedMotion ? undefined : { scale: 0.88 }}
               animate={{
-                scale: hovered ? 1.1 : 1,
+                scale: hovered && !reducedMotion ? 1.12 : 1,
+                rotate: hovered && !reducedMotion ? [0, -3, 3, 0] : 0,
               }}
-              transition={{ type: 'spring', stiffness: 400, damping: 18 }}
+              transition={{
+                scale: { type: 'spring', stiffness: 400, damping: 16 },
+                rotate: hovered
+                  ? { duration: 0.6, repeat: Infinity, ease: 'easeInOut' }
+                  : { duration: 0.2 },
+              }}
               className="group relative flex items-center justify-center"
               style={{ width: BUTTON_SIZE, height: BUTTON_SIZE }}
             >
-              {/* Breathing glow */}
+              <PulseRing reduced={reducedMotion} />
+
               <motion.span
                 className="absolute inset-0 rounded-full blur-md"
-                animate={{
-                  opacity: hovered ? [0.5, 0.9, 0.5] : [0.35, 0.55, 0.35],
-                  scale: hovered ? [1, 1.15, 1] : [1, 1.08, 1],
+                animate={
+                  reducedMotion
+                    ? { opacity: hovered ? 0.55 : 0.4 }
+                    : {
+                        opacity: hovered ? [0.5, 1, 0.5] : [0.3, 0.6, 0.3],
+                        scale: hovered ? [1, 1.2, 1] : [1, 1.1, 1],
+                      }
+                }
+                transition={{
+                  duration: hovered ? 1 : 2.2,
+                  repeat: reducedMotion ? 0 : Infinity,
+                  ease: 'easeInOut',
                 }}
-                transition={{ duration: hovered ? 1.2 : 2.4, repeat: Infinity, ease: 'easeInOut' }}
                 style={{
                   background:
                     'conic-gradient(from 0deg, var(--color-accent), var(--color-cyan), var(--color-accent-glow), var(--color-accent))',
                 }}
               />
 
-              {/* Spinning border — speeds up on hover */}
-              <motion.span
-                className="absolute inset-0 rounded-full p-[2px]"
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: hovered ? 1.5 : 4,
-                  repeat: Infinity,
-                  ease: 'linear',
-                }}
-                style={{
-                  background:
-                    'conic-gradient(from 0deg, transparent 0%, var(--color-accent) 25%, var(--color-cyan) 50%, var(--color-accent-glow) 75%, transparent 100%)',
-                }}
-              >
-                <span className="block h-full w-full rounded-full bg-bg" />
-              </motion.span>
+              {!reducedMotion && (
+                <motion.span
+                  className="absolute inset-0 rounded-full p-[2px]"
+                  animate={{ rotate: 360 }}
+                  transition={{
+                    duration: hovered ? 1.2 : 3.5,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  }}
+                  style={{
+                    background:
+                      'conic-gradient(from 0deg, transparent 0%, var(--color-accent) 25%, var(--color-cyan) 50%, var(--color-accent-glow) 75%, transparent 100%)',
+                  }}
+                >
+                  <span className="block h-full w-full rounded-full bg-bg" />
+                </motion.span>
+              )}
 
-              {/* Counter-spin inner ring on hover */}
-              <motion.span
-                className="absolute inset-[5px] rounded-full border border-accent/20"
-                animate={{ rotate: hovered ? -360 : 0, opacity: hovered ? 0.8 : 0 }}
-                transition={{
-                  rotate: { duration: 3, repeat: Infinity, ease: 'linear' },
-                  opacity: { duration: 0.25 },
-                }}
-              />
+              {!reducedMotion && (
+                <motion.span
+                  className="absolute inset-[4px] rounded-full border border-cyan/25"
+                  animate={{ rotate: -360, opacity: hovered ? 0.85 : 0.35 }}
+                  transition={{
+                    rotate: { duration: hovered ? 2.2 : 5.5, repeat: Infinity, ease: 'linear' },
+                    opacity: { duration: 0.25 },
+                  }}
+                />
+              )}
 
-              <OrbitDots active={hovered} />
+              <OrbitDots active={hovered || nearTop} reduced={reducedMotion} />
 
-              {/* Click ripples */}
               <AnimatePresence>
                 {ripples.map((id) => (
                   <motion.span
                     key={id}
-                    className="pointer-events-none absolute inset-0 rounded-full border-2 border-accent/50"
-                    initial={{ scale: 0.8, opacity: 0.7 }}
-                    animate={{ scale: 2.2, opacity: 0 }}
+                    className="pointer-events-none absolute inset-0 rounded-full border-2"
+                    style={{
+                      borderColor:
+                        id % 2 === 0
+                          ? 'color-mix(in srgb, var(--color-accent) 55%, transparent)'
+                          : 'color-mix(in srgb, var(--color-cyan) 45%, transparent)',
+                    }}
+                    initial={{ scale: 0.75, opacity: 0.75 }}
+                    animate={{ scale: 2.4, opacity: 0 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.65, ease: 'easeOut' }}
+                    transition={{ duration: 0.75, ease: 'easeOut', delay: id % 2 === 0 ? 0 : 0.08 }}
                     onAnimationComplete={() =>
                       setRipples((prev) => prev.filter((r) => r !== id))
                     }
@@ -214,7 +308,16 @@ export function BackToTop() {
                 ))}
               </AnimatePresence>
 
-              {/* Progress ring */}
+              <AnimatePresence>
+                {bursts.map((id) => (
+                  <LaunchBurst
+                    key={id}
+                    id={id}
+                    onDone={() => setBursts((prev) => prev.filter((b) => b !== id))}
+                  />
+                ))}
+              </AnimatePresence>
+
               <svg
                 className="absolute inset-0 -rotate-90"
                 viewBox="0 0 56 56"
@@ -239,6 +342,20 @@ export function BackToTop() {
                   strokeLinecap="round"
                   strokeDasharray={RING_CIRCUMFERENCE}
                   style={{ strokeDashoffset }}
+                  animate={
+                    reducedMotion
+                      ? undefined
+                      : {
+                          filter: nearTop
+                            ? [
+                                'drop-shadow(0 0 2px var(--color-accent))',
+                                'drop-shadow(0 0 8px var(--color-cyan))',
+                                'drop-shadow(0 0 2px var(--color-accent))',
+                              ]
+                            : 'drop-shadow(0 0 0px transparent)',
+                        }
+                  }
+                  transition={{ duration: 1.8, repeat: nearTop ? Infinity : 0, ease: 'easeInOut' }}
                 />
                 <defs>
                   <linearGradient id="backToTopGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -248,64 +365,51 @@ export function BackToTop() {
                 </defs>
               </svg>
 
-              {/* Core */}
-              <motion.span
-                className="glass relative z-10 flex h-11 w-11 items-center justify-center overflow-hidden rounded-full border border-border shadow-[0_8px_32px_rgba(99,102,241,0.25)]"
-                animate={{
-                  boxShadow: hovered
-                    ? '0 12px 40px rgba(99,102,241,0.5), 0 0 24px rgba(103,232,249,0.25)'
-                    : '0 8px 32px rgba(99,102,241,0.25)',
-                }}
-              >
-                {/* Shimmer sweep on hover */}
-                <motion.span
-                  className="absolute inset-0 bg-linear-to-r from-transparent via-white/20 to-transparent"
-                  initial={{ x: '-100%' }}
-                  animate={{ x: hovered ? '100%' : '-100%' }}
-                  transition={{
-                    duration: hovered ? 0.7 : 0,
-                    repeat: hovered ? Infinity : 0,
-                    repeatDelay: 0.8,
-                  }}
-                />
-
+              <span className="btn btn--fab relative z-10">
                 <motion.span
                   animate={
-                    launching
-                      ? { y: -18, opacity: 0, scale: 1.3 }
-                      : hovered
-                        ? { y: [0, -5, 0] }
-                        : { y: [0, -3, 0] }
+                    launching && !reducedMotion
+                      ? { y: -22, opacity: 0, scale: 1.45, rotate: -8 }
+                      : hovered && !reducedMotion
+                        ? { y: [0, -4, 0], scale: [1, 1.04, 1] }
+                        : !reducedMotion
+                          ? { y: [0, -2, 0], scale: 1 }
+                          : { y: 0, scale: 1 }
                   }
                   transition={
                     launching
-                      ? { duration: 0.55, ease: [0.22, 1, 0.36, 1] }
-                      : { repeat: Infinity, duration: hovered ? 0.9 : 1.6, ease: 'easeInOut' }
+                      ? { duration: 0.6, ease: [0.22, 1, 0.36, 1] }
+                      : { repeat: Infinity, duration: hovered ? 0.75 : 1.4, ease: 'easeInOut' }
                   }
                 >
                   <ArrowUp
                     size={20}
-                    className="relative text-accent transition-colors group-hover:text-accent-glow"
+                    className="relative text-accent"
                     strokeWidth={2.5}
+                    aria-hidden="true"
                   />
                 </motion.span>
-              </motion.span>
+              </span>
 
-              {/* Progress badge on hover */}
               <motion.span
                 className="pointer-events-none absolute -top-1 -right-1 z-20 rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-white"
                 initial={false}
                 animate={{
-                  opacity: hovered ? 1 : 0,
-                  scale: hovered ? 1 : 0.6,
-                  y: hovered ? 0 : 4,
+                  opacity: hovered || nearTop ? 1 : 0,
+                  scale: hovered || nearTop ? [1, 1.08, 1] : 0.6,
+                  y: hovered || nearTop ? 0 : 4,
                 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 22 }}
+                transition={{
+                  opacity: { duration: 0.2 },
+                  scale: nearTop && !hovered ? { duration: 1.2, repeat: Infinity } : { type: 'spring', stiffness: 400, damping: 22 },
+                  y: { type: 'spring', stiffness: 400, damping: 22 },
+                }}
               >
                 {progressPercent}%
               </motion.span>
             </motion.button>
           </Tooltip>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>

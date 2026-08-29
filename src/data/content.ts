@@ -3,7 +3,7 @@ export const profile = {
   initials: 'FM',
   avatar: '/img/myself.jpeg',
   title: 'Senior Software Engineer',
-  tagline: 'Senior Software Engineer',
+  tagline: 'Backend · LLM pipelines · Cloud-native systems',
   email: 'firozmahmud26@gmail.com',
   phone: '+880 1744-885126',
   location: 'Dhaka, Bangladesh',
@@ -11,66 +11,89 @@ export const profile = {
   github: 'https://github.com/fmahmud26',
   credly: 'https://www.credly.com/users/fmahmud26',
   summary:
-    'Senior Software Engineer with more than seven years of experience delivering production systems—from early requirements through deployment and operations. I specialize in backend services, LLM-powered pipelines, and cloud-native architecture across AWS, GCP, and Azure, with Kubernetes at the center of how I build and run software.',
+    'I build and operate production backend systems—translating requirements into durable architecture, shipping with CI/CD and observability from day one, and mentoring teams on cloud-native delivery.',
   availability: 'Open to Forward Deployed AI, backend, and cloud engineering roles',
   heroPitch:
-    'I design and ship backend services, LLM pipelines, and cloud-native platforms—taking products from prototype to production on AWS, GCP, and Azure with Kubernetes, CI/CD, and DevSecOps built in.',
+    'Seven years delivering enterprise SaaS, LLM-powered data pipelines, and Kubernetes-backed platforms across AWS, GCP, and Azure.',
 }
+
+export const workPrinciples = [
+  {
+    title: 'Scope with stakeholders',
+    description:
+      'Align on requirements, constraints, and success criteria before committing to architecture—reducing rework and keeping delivery predictable.',
+  },
+  {
+    title: 'Ship with operational readiness',
+    description:
+      'CI/CD, security gates, and observability are part of the build—not afterthoughts added once something breaks in production.',
+  },
+  {
+    title: 'Design for systems, not features',
+    description:
+      'Multi-tenant isolation, async boundaries, and infrastructure-as-code so platforms stay maintainable as they grow.',
+  },
+] as const
 
 export const sections = {
   about: {
     label: 'About',
-    title: 'From prototype to production',
+    title: 'Engineering for Production',
     subtitle:
-      'Partnering with stakeholders to define scope, validate ideas quickly, and deliver durable software.',
+      'From early scoping through deployment and operations—focused on systems that hold up under real load.',
     continued:
-      'At Brain Station 23, I lead technical delivery for enterprise SaaS—guiding engineers on backend and cloud-native design while operating CI/CD, Kubernetes, and DevSecOps across AWS, GCP, and Azure.',
-  },
-  skills: {
-    label: 'Skills',
-    title: 'Technical expertise',
-    subtitle:
-      'Languages, platforms, and practices used to design, build, and operate production systems.',
+      'At Brain Station 23, I lead technical delivery for enterprise SaaS: backend architecture, Kubernetes operations, and DevSecOps across AWS, GCP, and Azure—while mentoring engineers on Java, Python, and cloud-native patterns.',
   },
   experience: {
     label: 'Experience',
-    title: 'Professional experience',
+    title: 'Where I Have Delivered',
     subtitle:
-      'Seven years of backend engineering, AI integration, and cloud-native delivery in production environments.',
+      'Seven years building backend services, AI integrations, and cloud-native platforms in production.',
   },
-  certifications: {
-    label: 'Certifications',
-    title: 'Industry certifications',
-    subtitle: 'Credentials from AWS, HashiCorp, and the CNCF—verified on Credly.',
-    credlyLink: 'View verified credentials on Credly',
+  work: {
+    label: 'Selected Work',
+    title: 'Systems I Have Built',
+    subtitle:
+      'Representative systems—structured around the problem, the engineering approach, and the outcome.',
   },
-  education: {
-    label: 'Education',
-    title: 'Academic background',
-    subtitle: 'Formal training in computer science and engineering.',
+  skills: {
+    label: 'Skills',
+    title: 'Technical Stack',
+    subtitle:
+      'Organized by capability—languages, platforms, and practices used to design and run production software.',
+  },
+  credentials: {
+    label: 'Credentials',
+    title: 'Certifications & Education',
+    subtitle: 'Industry certifications verified on Credly, plus formal training in computer science.',
+    credlyLink: 'View all verified credentials on Credly',
+    educationHeading: 'Education',
   },
   contact: {
     label: 'Contact',
-    title: 'Get in touch',
-    subtitle: 'Open to Forward Deployed AI, backend, and cloud engineering opportunities.',
-    innerTitle: 'Contact details',
+    title: 'Start a Conversation',
+    subtitle: 'Available for Forward Deployed AI, backend, and cloud engineering roles.',
+    innerTitle: 'Reach out directly',
     intro:
-      'Whether you are exploring an LLM integration, an enterprise platform build, or a cloud architecture engagement, I would welcome a conversation.',
-    emailCta: 'Send an email',
+      'For LLM integrations, platform builds, or cloud architecture work—I respond to email and LinkedIn.',
+    emailCta: 'Send an Email',
     linkedinCta: 'Connect on LinkedIn',
-    credlyCta: 'View certifications',
+    githubCta: 'View GitHub',
   },
 } as const
 
 export type ExperienceRole = {
   title: string
   period: string
+  dateTimeStart: string
+  dateTimeEnd?: string
   highlights: string[]
 }
 
 export type Experience = {
   company: string
   location: string
+  url?: string
   roles: ExperienceRole[]
 }
 
@@ -78,10 +101,12 @@ export const experience: Experience[] = [
   {
     company: 'Brain Station 23',
     location: 'Dhaka, Bangladesh',
+    url: 'https://brainstation-23.com',
     roles: [
       {
         title: 'Senior Software Engineer',
         period: 'Jul 2024 — Present',
+        dateTimeStart: '2024-07',
         highlights: [
           'Own end-to-end technical delivery for enterprise SaaS products—scoping with product teams and clients, prototyping, shipping, and operating in production.',
           'Lead CI/CD on Jenkins and GitHub Actions for Docker and Kubernetes workloads; reduced deployment time by 80% through zero-downtime releases and DevSecOps gates (SAST, dependency scanning, and image security).',
@@ -91,6 +116,8 @@ export const experience: Experience[] = [
       {
         title: 'Software Engineer',
         period: 'Oct 2021 — Jun 2024',
+        dateTimeStart: '2021-10',
+        dateTimeEnd: '2024-06',
         highlights: [
           'Built and led the Omnizia PubMed Service (Python, FastAPI, OpenAI API, PostgreSQL, AWS) with LLM-powered tagging for summaries, sentiment analysis, and categorization.',
           'Owned Spring Boot multi-tenant SaaS backends (database-per-tenant) with OAuth2/JWT, optimized SQL, and Spring WebFlux concurrency.',
@@ -103,10 +130,13 @@ export const experience: Experience[] = [
   {
     company: '10 Minute School',
     location: 'Dhaka, Bangladesh',
+    url: 'https://10minuteschool.com',
     roles: [
       {
         title: 'Associate Software Engineer',
         period: 'Feb 2019 — Sep 2021',
+        dateTimeStart: '2019-02',
+        dateTimeEnd: '2021-09',
         highlights: [
           'Built scalable REST APIs and backend services for a national ed-tech platform serving millions of users.',
           'Delivered API-driven, white-label backend modules with configurable branding and caching for partner organizations.',
@@ -120,7 +150,10 @@ export const experience: Experience[] = [
 export type Project = {
   id: string
   title: string
-  description: string
+  summary: string
+  problem: string
+  approach: string
+  outcome: string
   tags: string[]
   link?: string
   github?: string
@@ -131,31 +164,51 @@ export const projects: Project[] = [
   {
     id: '01',
     title: 'Omnizia PubMed Service',
-    description:
-      'Asynchronous ingestion pipeline for PubMed articles with LLM-powered tagging—automated summaries, sentiment analysis, and structured categorization that reduced manual curation effort.',
+    summary: 'LLM-powered ingestion pipeline for PubMed articles with automated tagging and categorization.',
+    problem:
+      'Research teams spent significant time manually reviewing and categorizing PubMed articles before downstream use.',
+    approach:
+      'Built an asynchronous Python/FastAPI pipeline on AWS with PostgreSQL storage and OpenAI API integration for summaries, sentiment analysis, and structured tagging.',
+    outcome:
+      'Automated curation workflows—reducing manual review effort while keeping article metadata consistent and searchable.',
     tags: ['Python', 'FastAPI', 'OpenAI API', 'PostgreSQL', 'AWS'],
     featured: true,
   },
   {
     id: '02',
     title: 'Enterprise Multi-Tenant SaaS',
-    description:
-      'Database-per-tenant Spring Boot backends with OAuth2/JWT security, optimized SQL access, Spring WebFlux concurrency, and hardened REST APIs for enterprise clients.',
+    summary: 'Database-per-tenant Spring Boot backends with OAuth2 security and reactive concurrency.',
+    problem:
+      'Enterprise clients required isolated tenant data, secure API access, and predictable performance under concurrent load.',
+    approach:
+      'Designed database-per-tenant Spring Boot services with OAuth2/JWT, optimized SQL access patterns, and Spring WebFlux for non-blocking I/O on high-traffic endpoints.',
+    outcome:
+      'Hardened REST APIs and tenant isolation that supported multiple enterprise clients on shared infrastructure.',
     tags: ['Java', 'Spring Boot', 'PostgreSQL', 'OAuth2', 'Redis'],
     featured: true,
   },
   {
     id: '03',
     title: 'CI/CD and DevSecOps Platform',
-    description:
-      'Jenkins and GitHub Actions pipelines for Docker and Kubernetes deployments with zero-downtime releases, SAST, dependency scanning, and image security gates—80% faster deployments.',
+    summary: 'Automated release pipelines with security gates for containerized Kubernetes workloads.',
+    problem:
+      'Manual deployments were slow, error-prone, and lacked consistent security checks before production release.',
+    approach:
+      'Implemented Jenkins and GitHub Actions pipelines for Docker builds and Kubernetes deploys—with SAST, dependency scanning, image security gates, and zero-downtime rollout patterns.',
+    outcome:
+      'Reduced deployment time by 80% while embedding DevSecOps checks into every release.',
     tags: ['Docker', 'Kubernetes', 'Jenkins', 'GitHub Actions', 'Terraform'],
   },
   {
     id: '04',
     title: 'Cloud Observability Stack',
-    description:
-      'Production observability platform with Prometheus, Grafana, and Loki—unified metrics, logs, and alerting across microservices on AWS and Kubernetes.',
+    summary: 'Unified metrics, logs, and alerting for microservices on AWS and Kubernetes.',
+    problem:
+      'Production incidents were harder to diagnose without correlated metrics and logs across distributed services.',
+    approach:
+      'Deployed Prometheus for metrics, Grafana for dashboards, and Loki for log aggregation—integrated with existing Kubernetes and AWS workloads.',
+    outcome:
+      'Faster incident response and clearer production visibility across microservice boundaries.',
     tags: ['Prometheus', 'Grafana', 'Loki', 'AWS', 'Kubernetes'],
   },
 ]
@@ -168,12 +221,12 @@ export type SkillCategory = {
 
 export const skillCategories: SkillCategory[] = [
   {
-    name: 'Programming Languages',
-    description: 'Primary languages for backend services, APIs, data access, and automation.',
+    name: 'Programming',
+    description: 'Languages used for backend services, APIs, data access, and automation.',
     skills: ['Java', 'Python', 'Go', 'Rust', 'TypeScript', 'SQL'],
   },
   {
-    name: 'Backend',
+    name: 'Backend Engineering',
     description: 'Frameworks and patterns for secure, scalable service development.',
     skills: ['Spring Boot', 'FastAPI', 'Gin', 'Spring WebFlux', 'REST APIs', 'OAuth2/JWT'],
   },
@@ -198,8 +251,8 @@ export const skillCategories: SkillCategory[] = [
     skills: ['AWS', 'GCP', 'Azure', 'Solutions Architecture'],
   },
   {
-    name: 'IaC',
-    description: 'Infrastructure provisioning, configuration, and environment consistency as code.',
+    name: 'Infrastructure as Code',
+    description: 'Provisioning and environment consistency as code.',
     skills: ['Terraform', 'Ansible'],
   },
   {
@@ -209,8 +262,7 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     name: 'DevOps & DevSecOps',
-    description:
-      'Container platforms, orchestration, GitOps, and DevSecOps tooling for secure build and release pipelines.',
+    description: 'Containers, orchestration, GitOps, and security tooling for build and release.',
     skills: [
       'Docker',
       'Kubernetes',
@@ -227,12 +279,12 @@ export const skillCategories: SkillCategory[] = [
   },
   {
     name: 'Data & Messaging',
-    description: 'Persistent storage, caching, and asynchronous messaging systems.',
+    description: 'Storage, caching, and asynchronous messaging.',
     skills: ['PostgreSQL', 'MongoDB', 'DynamoDB', 'Redis', 'RabbitMQ', 'SQL Optimization'],
   },
   {
     name: 'Observability',
-    description: 'Metrics, logging, and performance validation for production systems.',
+    description: 'Metrics, logging, and performance validation in production.',
     skills: ['Prometheus', 'Grafana', 'Loki', 'Load Testing'],
   },
 ]
@@ -252,10 +304,12 @@ export const certifications: Certification[] = [
   {
     name: 'HashiCorp Certified: Terraform Associate',
     issuer: 'HashiCorp',
+    link: 'https://www.credly.com/users/fmahmud26',
   },
   {
     name: 'Certified Kubernetes Administrator (CKA)',
     issuer: 'Cloud Native Computing Foundation',
+    link: 'https://www.credly.com/users/fmahmud26',
   },
 ]
 
@@ -267,18 +321,17 @@ export const education = {
 
 export const navLinks = [
   { label: 'About', href: '#about' },
-  { label: 'Skills', href: '#skills' },
   { label: 'Experience', href: '#experience' },
-  { label: 'Certifications', href: '#certifications' },
-  { label: 'Education', href: '#education' },
+  { label: 'Work', href: '#work' },
+  { label: 'Skills', href: '#skills' },
   { label: 'Contact', href: '#contact' },
 ]
 
 export const stats = [
-  { value: '7+', label: 'Years of Experience' },
-  { value: '3', label: 'Industry Certifications' },
+  { value: '7+', label: 'Years in Production' },
   { value: '80%', label: 'Faster Deployments' },
-  { value: '3', label: 'Cloud Platforms' },
+  { value: '3', label: 'Cloud Certifications' },
+  { value: 'AWS · GCP · Azure', label: 'Multi-Cloud Delivery' },
 ]
 
 export const focusAreas = ['Backend', 'AI / LLM', 'Cloud', 'DevOps', 'Kubernetes']

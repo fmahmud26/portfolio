@@ -35,6 +35,12 @@ npm run build
 
 Output goes to `dist/` — deploy to any static host (GitHub Pages, Netlify, Vercel, S3, etc.).
 
+To keep `dist/` in sync while developing, run this in a second terminal:
+
+```bash
+npm run build:watch
+```
+
 ```bash
 npm run preview   # preview the production build locally
 ```
@@ -47,7 +53,7 @@ src/
 │   ├── layout/     # Navbar, Footer, Container, SmoothScroll
 │   ├── three/      # HeroScene (3D cosmic background)
 │   └── ui/         # Buttons, tooltips, BackToTop, footer pressables, etc.
-├── sections/       # Hero, About, Experience, Projects, Skills, Certifications, Contact
+├── sections/       # Hero, About, Skills, Experience, Certifications, Education, Contact
 ├── pages/          # HomePage
 ├── hooks/          # useActiveSection, useGsapScroll, useReducedMotion
 ├── context/        # ThemeContext

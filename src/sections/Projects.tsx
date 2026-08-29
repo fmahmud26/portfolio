@@ -3,19 +3,16 @@ import { ArrowUpRight, Layers } from 'lucide-react'
 import { useGsapStagger } from '../hooks/useGsapScroll'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
-import { projects } from '../data/content'
+import { projects, sections } from '../data/content'
 
 export function Projects() {
   const ref = useGsapStagger<HTMLDivElement>()
   const [activeId, setActiveId] = useState<string | null>(null)
+  const copy = sections.work
 
   return (
-    <SectionShell id="work" atmosphere="subtle">
-      <SectionHeading
-        label="Selected Work"
-        title="Systems I've built"
-        subtitle="Production systems spanning AI pipelines, enterprise backends, cloud infrastructure, and DevSecOps."
-      />
+    <SectionShell id="work" atmosphere="minimal">
+      <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
       <div ref={ref} className="grid gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3 xl:gap-7">
         {projects.map((project) => {
@@ -28,9 +25,12 @@ export function Projects() {
               data-stagger
               onMouseEnter={() => setActiveId(project.id)}
               onMouseLeave={() => setActiveId(null)}
-              className={`surface-panel interactive-lift group relative overflow-hidden rounded-2xl p-5 sm:p-7 lg:p-8 ${
+              onFocus={() => setActiveId(project.id)}
+              onBlur={() => setActiveId(null)}
+              tabIndex={0}
+              className={`surface-panel interactive-lift group relative overflow-hidden rounded-2xl p-5 outline-none focus-visible:ring-2 focus-visible:ring-accent/40 sm:p-7 lg:p-8 ${
                 isFeatured
-                  ? 'sm:col-span-2 xl:col-span-2 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-10 xl:gap-12'
+                  ? 'sm:col-span-2 xl:col-span-2 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-10 xl:gap-12'
                   : ''
               } ${isActive ? 'border-accent/25' : ''}`}
             >
@@ -60,9 +60,36 @@ export function Projects() {
                   {project.title}
                 </h3>
 
-                <p className="mt-3 max-w-none text-sm leading-relaxed text-muted sm:mt-4 sm:text-base">
-                  {project.description}
+                <p className="mt-3 max-w-none text-sm leading-relaxed text-foreground sm:mt-4 sm:text-base">
+                  {project.summary}
                 </p>
+
+                <dl className="mt-5 space-y-4 sm:mt-6">
+                  <div>
+                    <dt className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase sm:text-[11px]">
+                      Problem
+                    </dt>
+                    <dd className="mt-1.5 text-sm leading-relaxed text-muted sm:text-[0.9375rem]">
+                      {project.problem}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase sm:text-[11px]">
+                      Approach
+                    </dt>
+                    <dd className="mt-1.5 text-sm leading-relaxed text-muted sm:text-[0.9375rem]">
+                      {project.approach}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase sm:text-[11px]">
+                      Outcome
+                    </dt>
+                    <dd className="mt-1.5 text-sm leading-relaxed text-muted sm:text-[0.9375rem]">
+                      {project.outcome}
+                    </dd>
+                  </div>
+                </dl>
 
                 <div className="mt-5 flex flex-wrap gap-2 sm:mt-6">
                   {project.tags.map((tag) => (
@@ -104,7 +131,7 @@ export function Projects() {
                 <div className="relative mt-6 min-h-[180px] overflow-hidden rounded-xl border border-border bg-bg-subtle/80 sm:mt-8 sm:min-h-[220px] lg:mt-0 lg:min-h-[240px]">
                   <div className="absolute inset-0 bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_55%,color-mix(in_srgb,var(--color-cyan)_10%,transparent))]" />
                   <div className="absolute inset-0 opacity-[0.07]">
-                    <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+                    <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                       <defs>
                         <pattern id={`grid-${project.id}`} width="24" height="24" patternUnits="userSpaceOnUse">
                           <path
