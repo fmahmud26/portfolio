@@ -39,12 +39,12 @@ const PLANET_COLORS = [
 ]
 
 const ANCHOR_SYSTEMS: SolarSystemPlacement[] = [
-  { position: [-5.8, 4.8, -2], scale: 0.68, opacity: 0.72, phase: 0.4, starColor: '#fbbf24', planets: 4, orbitSpeed: 0.42 },
-  { position: [6.2, 3.2, -3.5], scale: 0.58, opacity: 0.64, phase: 1.1, starColor: '#f97316', planets: 4, orbitSpeed: 0.4 },
-  { position: [-4.2, 1.2, -5], scale: 0.52, opacity: 0.58, phase: 2.4, starColor: '#fcd34d', planets: 3, orbitSpeed: 0.36 },
-  { position: [5.4, -0.8, -7], scale: 0.46, opacity: 0.52, phase: 3.6, starColor: '#fb923c', planets: 3, orbitSpeed: 0.34 },
-  { position: [-6.0, -3.5, -9], scale: 0.38, opacity: 0.44, phase: 4.8, starColor: '#fde68a', planets: 3, orbitSpeed: 0.3 },
-  { position: [4.8, -6.2, -11], scale: 0.32, opacity: 0.38, phase: 6.0, starColor: '#fdba74', planets: 2, orbitSpeed: 0.26, far: true },
+  { position: [-5.8, 4.8, -2], scale: 0.72, opacity: 0.84, phase: 0.4, starColor: '#fbbf24', planets: 4, orbitSpeed: 0.52 },
+  { position: [6.2, 3.2, -3.5], scale: 0.62, opacity: 0.76, phase: 1.1, starColor: '#f97316', planets: 4, orbitSpeed: 0.48 },
+  { position: [-4.2, 1.2, -5], scale: 0.56, opacity: 0.68, phase: 2.4, starColor: '#fcd34d', planets: 3, orbitSpeed: 0.44 },
+  { position: [5.4, -0.8, -7], scale: 0.5, opacity: 0.62, phase: 3.6, starColor: '#fb923c', planets: 3, orbitSpeed: 0.42 },
+  { position: [-6.0, -3.5, -9], scale: 0.42, opacity: 0.54, phase: 4.8, starColor: '#fde68a', planets: 3, orbitSpeed: 0.38 },
+  { position: [4.8, -6.2, -11], scale: 0.36, opacity: 0.48, phase: 6.0, starColor: '#fdba74', planets: 2, orbitSpeed: 0.34, far: true },
 ]
 
 function generateSystems(count: number, seed: number, ySpread: number): SolarSystemPlacement[] {
@@ -61,11 +61,11 @@ function generateSystems(count: number, seed: number, ySpread: number): SolarSys
     systems.push({
       position: [x, y, z],
       scale: far ? 0.08 + rand() * 0.14 : 0.18 + rand() * 0.28,
-      opacity: far ? 0.14 + rand() * 0.16 : 0.28 + rand() * 0.28,
+      opacity: far ? 0.22 + rand() * 0.2 : 0.38 + rand() * 0.32,
       phase: rand() * Math.PI * 2,
       starColor: STAR_COLORS[Math.floor(rand() * STAR_COLORS.length)] ?? '#fbbf24',
       planets: far ? 2 : 3 + Math.floor(rand() * 2),
-      orbitSpeed: 0.14 + rand() * 0.28,
+      orbitSpeed: 0.2 + rand() * 0.32,
       far,
     })
   }
@@ -89,9 +89,9 @@ function generateRoguePlanets(count: number, seed: number, ySpread: number): Rog
       size: far ? 0.025 + rand() * 0.04 : 0.045 + rand() * 0.07,
       color: PLANET_COLORS[Math.floor(rand() * PLANET_COLORS.length)] ?? '#6366f1',
       phase: rand() * Math.PI * 2,
-      opacity: far ? 0.2 + rand() * 0.25 : 0.35 + rand() * 0.35,
+      opacity: far ? 0.28 + rand() * 0.28 : 0.48 + rand() * 0.38,
       ring: !far && rand() > 0.78,
-      orbitDrift: rand() * 0.35 + 0.08,
+      orbitDrift: rand() * 0.45 + 0.12,
     })
   }
 

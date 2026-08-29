@@ -81,17 +81,17 @@ export function GalaxyCore({
     }
 
     if (groupRef.current) {
-      groupRef.current.rotation.x = initialTilt[0] + Math.sin(t * 0.11) * spin.wobble
-      groupRef.current.rotation.y = initialTilt[1] + t * drift.yaw * spinScale * 0.08
-      groupRef.current.rotation.z = initialTilt[2] + Math.sin(t * 0.09 + phase) * drift.roll
+      groupRef.current.rotation.x = initialTilt[0] + Math.sin(t * 0.14) * spin.wobble
+      groupRef.current.rotation.y = initialTilt[1] + t * drift.yaw * spinScale * 0.12
+      groupRef.current.rotation.z = initialTilt[2] + Math.sin(t * 0.11 + phase) * drift.roll * 1.4
     }
 
     if (coreRef.current) {
-      coreRef.current.scale.setScalar(1 + Math.sin(t * 0.9) * 0.025)
+      coreRef.current.scale.setScalar(1 + Math.sin(t * 1.05) * 0.035)
     }
     if (haloRef.current) {
       const mat = haloRef.current.material as THREE.MeshBasicMaterial
-      mat.opacity = COMFORT.haloOpacity[mode] * opacityScale + Math.sin(t * 0.65) * 0.014
+      mat.opacity = COMFORT.haloOpacity[mode] * opacityScale + Math.sin(t * 0.78) * 0.022
     }
   })
 
@@ -105,7 +105,7 @@ export function GalaxyCore({
           transparent
           opacity={COMFORT.dustOpacity[mode] * opacityScale}
           depthWrite={false}
-          blending={THREE.NormalBlending}
+          blending={isDark ? THREE.AdditiveBlending : THREE.NormalBlending}
         />
       </points>
 
@@ -117,7 +117,7 @@ export function GalaxyCore({
           transparent
           opacity={COMFORT.discOpacity[mode] * opacityScale}
           depthWrite={false}
-          blending={THREE.NormalBlending}
+          blending={isDark ? THREE.AdditiveBlending : THREE.NormalBlending}
         />
       </points>
 
