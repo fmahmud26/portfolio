@@ -5,7 +5,7 @@ type ContainerProps = {
   className?: string
 }
 
-/** Single global layout gutter — width includes responsive side margins, no nested px-* */
+/** Full-width layout with shared edge inset — matches header & footer */
 export const containerClassName = 'page-container w-full'
 
 export function Container({ children, className = '' }: ContainerProps) {

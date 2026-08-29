@@ -37,7 +37,7 @@ export function Navbar() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className={`fixed top-0 right-0 left-0 z-50 w-full pt-[env(safe-area-inset-top,0px)] transition-all duration-500 ${
-        scrolled ? 'px-3 pt-2 sm:px-4 sm:pt-3' : ''
+        scrolled ? 'pt-2 sm:pt-3' : ''
       }`}
     >
       <div
@@ -47,7 +47,7 @@ export function Navbar() {
       >
         <div className="header-shine pointer-events-none h-px w-full opacity-70" />
 
-        <ContainerNav className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 py-2.5 sm:gap-3 sm:py-3 lg:gap-4">
+        <ContainerNav className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-1.5 py-2.5 sm:gap-2 sm:py-3 lg:gap-3">
           <a href="#" className="group relative z-20 flex min-w-0 shrink-0 items-center gap-3">
             <ProfileAvatar interactive />
             <div className="hidden min-w-0 md:block">

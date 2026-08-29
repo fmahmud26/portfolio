@@ -7,24 +7,32 @@ import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { GalaxyCore } from './galaxy/GalaxyCore'
 import { SolarSystem } from './galaxy/SolarSystem'
 import { RoguePlanet } from './galaxy/RoguePlanet'
+import { Asteroid } from './galaxy/Asteroid'
+import { UnidentifiedObject } from './galaxy/UnidentifiedObject'
 import { DeepStarField } from './galaxy/DeepStarField'
 import { AmbientCosmicDrift } from './galaxy/AmbientCosmicDrift'
 import { cosmicVisibility } from './galaxy/cosmicMotion'
 import {
   DESKTOP_GALAXIES,
+  DESKTOP_ASTEROIDS,
   DESKTOP_ROGUE_PLANETS,
   DESKTOP_SOLAR_SYSTEMS,
+  DESKTOP_UNIDENTIFIED_OBJECTS,
   HERO_RIGHT_GALAXY,
   HERO_RIGHT_GALAXY_MOBILE,
   LIGHT_BG,
   DARK_BG,
   MOBILE_GALAXIES,
+  MOBILE_ASTEROIDS,
   MOBILE_ROGUE_PLANETS,
   MOBILE_SOLAR_SYSTEMS,
+  MOBILE_UNIDENTIFIED_OBJECTS,
   SCROLL_PARALLAX,
+  type AsteroidPlacement,
   type GalaxyPlacement,
   type RoguePlanetPlacement,
   type SolarSystemPlacement,
+  type UnidentifiedObjectPlacement,
 } from './galaxy/constants'
 
 function getLenis() {
@@ -122,6 +130,8 @@ function CosmicField({
   galaxies,
   solarSystems,
   roguePlanets,
+  asteroids,
+  unidentifiedObjects,
   heroGalaxy,
 }: {
   isDark: boolean
@@ -129,6 +139,8 @@ function CosmicField({
   galaxies: GalaxyPlacement[]
   solarSystems: SolarSystemPlacement[]
   roguePlanets: RoguePlanetPlacement[]
+  asteroids: AsteroidPlacement[]
+  unidentifiedObjects: UnidentifiedObjectPlacement[]
   heroGalaxy: GalaxyPlacement
 }) {
   return (
@@ -149,6 +161,24 @@ function CosmicField({
           <RoguePlanet
             key={`planet-${planet.phase}-${index}`}
             placement={planet}
+            isDark={isDark}
+            index={index}
+          />
+        ))}
+
+        {asteroids.map((asteroid, index) => (
+          <Asteroid
+            key={`asteroid-${asteroid.seed}-${index}`}
+            placement={asteroid}
+            isDark={isDark}
+            index={index}
+          />
+        ))}
+
+        {unidentifiedObjects.map((object, index) => (
+          <UnidentifiedObject
+            key={`ufo-${object.phase}-${index}`}
+            placement={object}
             isDark={isDark}
             index={index}
           />
@@ -200,6 +230,8 @@ export function GalaxyBackground() {
   const galaxies = isMobile ? MOBILE_GALAXIES : DESKTOP_GALAXIES
   const solarSystems = isMobile ? MOBILE_SOLAR_SYSTEMS : DESKTOP_SOLAR_SYSTEMS
   const roguePlanets = isMobile ? MOBILE_ROGUE_PLANETS : DESKTOP_ROGUE_PLANETS
+  const asteroids = isMobile ? MOBILE_ASTEROIDS : DESKTOP_ASTEROIDS
+  const unidentifiedObjects = isMobile ? MOBILE_UNIDENTIFIED_OBJECTS : DESKTOP_UNIDENTIFIED_OBJECTS
   const heroGalaxy = isMobile ? HERO_RIGHT_GALAXY_MOBILE : HERO_RIGHT_GALAXY
 
   if (reducedMotion) return null
@@ -211,6 +243,7 @@ export function GalaxyBackground() {
         style={{ background: isDark ? DARK_BG : LIGHT_BG }}
       >
         <div className="cosmic-deep-starfield__sky absolute inset-0" aria-hidden="true" />
+        <div className="cosmic-deep-starfield__debris absolute inset-0" aria-hidden="true" />
 
         <Canvas
           camera={{ position: [0, 0, 14], fov: 52 }}
@@ -224,6 +257,8 @@ export function GalaxyBackground() {
             galaxies={galaxies}
             solarSystems={solarSystems}
             roguePlanets={roguePlanets}
+            asteroids={asteroids}
+            unidentifiedObjects={unidentifiedObjects}
             heroGalaxy={heroGalaxy}
           />
         </Canvas>

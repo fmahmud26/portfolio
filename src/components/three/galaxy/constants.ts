@@ -16,13 +16,17 @@ export const COMFORT = {
 /** Scroll parallax range — scene shifts vertically as user scrolls main content. */
 export const SCROLL_PARALLAX = { range: 38, offset: -19 } as const
 
-export type { GalaxyPlacement, RoguePlanetPlacement, SolarSystemPlacement } from './types'
+export type { GalaxyPlacement, RoguePlanetPlacement, SolarSystemPlacement, AsteroidPlacement, UnidentifiedObjectPlacement } from './types'
 
 export {
+  DESKTOP_ASTEROIDS,
   DESKTOP_ROGUE_PLANETS,
   DESKTOP_SOLAR_SYSTEMS,
+  DESKTOP_UNIDENTIFIED_OBJECTS,
+  MOBILE_ASTEROIDS,
   MOBILE_ROGUE_PLANETS,
   MOBILE_SOLAR_SYSTEMS,
+  MOBILE_UNIDENTIFIED_OBJECTS,
 } from './generateCosmos'
 
 import type { GalaxyPlacement } from './types'

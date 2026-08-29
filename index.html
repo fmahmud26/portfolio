@@ -18,6 +18,17 @@
     <title>Firoz Mahmud — Senior Software Engineer</title>
     <script>
       (function () {
+        if ('scrollRestoration' in history) {
+          history.scrollRestoration = 'manual';
+        }
+        window.scrollTo(0, 0);
+        if (window.location.hash) {
+          history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+      })();
+    </script>
+    <script>
+      (function () {
         var stored = localStorage.getItem('portfolio-theme');
         var theme = 'light';
 

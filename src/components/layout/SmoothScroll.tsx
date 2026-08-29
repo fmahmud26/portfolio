@@ -23,6 +23,10 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
   const lenisRef = useRef<Lenis | null>(null)
 
   useEffect(() => {
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual'
+    }
+
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -32,6 +36,10 @@ export function SmoothScroll({ children }: SmoothScrollProps) {
     lenisRef.current = lenis
     ;(window as Window & { __lenis?: Lenis }).__lenis = lenis
     lenis.on('scroll', ScrollTrigger.update)
+
+    // Fresh loads always start at the top — user scrolls from there.
+    lenis.scrollTo(0, { immediate: true })
+    window.scrollTo(0, 0)
 
     const onAnchorClick = (event: MouseEvent) => {
       const target = event.target

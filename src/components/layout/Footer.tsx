@@ -67,7 +67,7 @@ export function Footer() {
             </ul>
           </nav>
 
-          <div className="order-2 flex items-center gap-2 pr-12 sm:order-3 sm:gap-2.5 sm:pr-16">
+          <div className="order-2 flex items-center gap-2 sm:order-3 sm:gap-2.5">
             <nav
               aria-label="Social and contact links"
               className="flex items-center gap-2 sm:gap-2.5"

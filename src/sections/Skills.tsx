@@ -20,10 +20,15 @@ export function Skills() {
     const nav = navRef.current
     if (!nav) return
     const activeBtn = nav.querySelector<HTMLElement>('[aria-pressed="true"]')
-    activeBtn?.scrollIntoView({
+    if (!activeBtn) return
+
+    // Scroll the tab strip only — never the document (scrollIntoView jumped the page on load).
+    const navRect = nav.getBoundingClientRect()
+    const btnRect = activeBtn.getBoundingClientRect()
+    const offset = btnRect.left - navRect.left - (navRect.width - btnRect.width) / 2
+    nav.scrollTo({
+      left: nav.scrollLeft + offset,
       behavior: reducedMotion ? 'auto' : 'smooth',
-      block: 'nearest',
-      inline: 'nearest',
     })
   }, [activeIndex, reducedMotion])
 
