@@ -14,7 +14,7 @@ export function ProfileAvatar({ className = '', interactive = false }: ProfileAv
     <div
       className={`relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-accent/25 bg-accent/10 text-sm font-semibold text-accent ${
         interactive
-          ? 'transition-all group-hover:border-accent/40 group-hover:shadow-[0_0_20px_rgba(99,102,241,0.25)]'
+          ? 'avatar-interactive transition-all group-hover:border-accent/40'
           : ''
       } ${className}`.trim()}
     >

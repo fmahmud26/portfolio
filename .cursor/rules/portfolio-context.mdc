@@ -12,19 +12,20 @@ alwaysApply: true
 1. **Content source**: `src/data/content.ts` — never invent resume facts
 2. **Display role**: Senior Software Engineer (Forward Deployed AI only in `availability` text)
 3. **Font**: Inter only
-4. **Layout**: use `.page-container` — no nested `px-*` + `max-w-*` stacking
+4. **Layout**: use `.page-container` (capped `--content-max`) — header/footer use `.page-container--edge`; no nested `px-*` + `max-w-*` stacking
 5. **Buttons**: use `src/components/ui/Button.tsx` — glass CSS in `index.css`; nav/tabs use `glassLayers={false}` + `GlassSelectIndicator`
 6. **Nav scroll-spy**: use `src/hooks/useActiveSection.ts` — not IntersectionObserver
-7. **Mobile header**: below `lg` (1023px) — photo stays visible; hamburger opens slide-down nav + theme; hamburger **unmounted** at `lg+` (conditional render, not `lg:hidden` on `Button`)
-8. **Theme**: `localStorage` key `portfolio-theme`; light `#e9eef5`, dark `#2e2e36`; system preference on first visit
+7. **Mobile header**: below `lg` (1023px) — photo stays visible; hamburger opens slide-down nav + theme; hamburger **unmounted** at `lg+` (conditional render, not `lg:hidden` on `Button`); name/title only at `lg+`
+8. **Theme**: `localStorage` key `portfolio-theme`; light `#e9eef5`, dark `#2e2e36`; dark accents indigo–teal (same family as light); system preference on first visit
 9. **Reduced motion**: use `useReducedMotion()` for animations; `GalaxyBackground` returns null
 10. **Lenis**: smooth scroll via `window.__lenis`; BackToTop uses it for scroll-to-top; mobile menu calls `stop()` / `start()`
-11. **Cosmic visuals**: lazy `GalaxyBackground` (page-level WebGL) + `HeroScene` (hero CSS overlays); sections get sparse stars via `CosmicAtmosphere` minimal — no nebula blobs per section
+11. **Cosmic visuals**: quiet cosmic horizon — lazy `GalaxyBackground` (hero-right galaxy + sparse depth, fog, indigo–teal lights; no UFOs/asteroids) + `HeroScene` CSS overlays; sections use `CosmicAtmosphere` minimal stars only
 12. **Footer placement**: outside galaxy wrapper in `HomePage.tsx` — stays above canvas
 13. **Commits**: only when user explicitly requests
 14. **Production build**: run `npm run build` after code changes so `dist/` stays updated (or keep `npm run build:watch` running)
 15. **Section titles**: Title Case for headings; subtitles stay sentence case
-16. **AI context**: after structural/UX/command changes, update `AGENTS.md`, `CLAUDE.md`, and this file
+16. **Thin sections**: Education uses `SectionShell density="compact"`
+17. **AI context**: after structural/UX/command changes, update `AGENTS.md`, `CLAUDE.md`, and this file
 
 ## Live page order
 

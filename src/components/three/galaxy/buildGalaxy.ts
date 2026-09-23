@@ -29,9 +29,9 @@ export function buildGalaxyDisc(isDark: boolean, seed = 0): GalaxyDiscData {
   const yOffsets = new Float32Array(count)
   const flatten = 0.48
 
-  const inner = new THREE.Color(isDark ? '#cfc4ea' : '#4f46e5')
-  const outer = new THREE.Color(isDark ? '#9290cc' : '#312e81')
-  const accent = new THREE.Color(isDark ? '#a8bdd0' : '#0f766e')
+  const inner = new THREE.Color(isDark ? '#c7d2fe' : '#4f46e5')
+  const outer = new THREE.Color(isDark ? '#6366f1' : '#312e81')
+  const accent = new THREE.Color(isDark ? '#5ec8d6' : '#0f766e')
 
   let index = 0
   for (let arm = 0; arm < arms; arm++) {
@@ -79,7 +79,7 @@ export function buildDustHalo(isDark: boolean, count: number, seed = 0): GalaxyD
   const baseAngles = new Float32Array(count)
   const yOffsets = new Float32Array(count)
   const flatten = 0.44
-  const tint = new THREE.Color(isDark ? '#9a94c4' : '#6366f1')
+  const tint = new THREE.Color(isDark ? '#818cf8' : '#4755c7')
 
   for (let i = 0; i < count; i++) {
     const i3 = i * 3

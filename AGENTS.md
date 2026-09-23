@@ -112,16 +112,16 @@ portfolio/
 
 | File | Purpose |
 |------|---------|
-| `GalaxyBackground.tsx` | Sticky full-viewport Canvas; lazy-loaded on `HomePage`; disabled when `prefers-reduced-motion` |
+| `GalaxyBackground.tsx` | Sticky full-viewport Canvas; lazy-loaded; fog + indigo–teal lights; no asteroids/UFOs; disabled when `prefers-reduced-motion` |
 | `HeroScene.tsx` | Hero-only CSS gradients/readability overlays (no WebGL) |
-| `galaxy/constants.ts` | `HERO_RIGHT_GALAXY`, distant galaxies, `COMFORT` tokens, parallax range |
-| `galaxy/generateCosmos.ts` | Procedural solar systems + rogue planets (desktop/mobile counts) |
-| `galaxy/GalaxyCore.tsx` | Spiral galaxy mesh (differential spin, core halo) |
+| `galaxy/constants.ts` | `HERO_RIGHT_GALAXY`, distant galaxies, `COMFORT`, `COSMIC_FOG`, parallax range |
+| `galaxy/generateCosmos.ts` | Sparse solar systems + rogue planets (desktop/mobile); asteroids/UFOs retired from live scene |
+| `galaxy/GalaxyCore.tsx` | Spiral galaxy mesh (differential spin, core halo) — indigo–teal accents |
 | `galaxy/SolarSystem.tsx` | Star + orbiting planets |
 | `galaxy/RoguePlanet.tsx` | Standalone drifting planets |
-| `galaxy/DeepStarField.tsx` | Multi-layer drei `Stars` + pinprick particles |
-| `galaxy/AmbientCosmicDrift.tsx` | Slow time-based scene drift |
-| `galaxy/cosmicMotion.ts` | `cosmicVisibility(isDark, opacity)` theme multiplier |
+| `galaxy/DeepStarField.tsx` | Multi-layer drei `Stars` + pinprick particles (reduced counts) |
+| `galaxy/AmbientCosmicDrift.tsx` | Subtle time-based scene drift |
+| `galaxy/cosmicMotion.ts` | `cosmicVisibility(isDark, opacity)` — soft multipliers, clamped ≤ 0.96 |
 
 ---
 
@@ -165,26 +165,35 @@ All live sections use `atmosphere="minimal"` on `SectionShell` (sparse distant s
 - **Default on first visit**: system preference (`prefers-color-scheme`), then `localStorage` key `portfolio-theme`
 - **Toggle**: `ThemeContext` + `ThemeToggle`
 - **No flash**: inline script in `index.html` applies `.dark` before paint
-- Light mode: soft off-white canvas `#e9eef5`, indigo `#4755c7` + teal `#117a8a` accents
-- Dark mode: soft gray `#2e2e36`, not pure black
+- Light mode: soft off-white canvas `#e9eef5`, indigo `#4755c7` / `#4350bd` + teal `#117a8a` accents
+- Dark mode: soft gray `#2e2e36`, **indigo–teal accents** (`#8b9cf7` / `#5ec8d6`) — same brand family as light (not violet)
 - WebGL canvas bg: `LIGHT_BG = '#e9eef5'`, `DARK_BG = '#2e2e36'` in `galaxy/constants.ts`
 
 ### Layout container (important)
 
-Single gutter system in `index.css`:
+Single gutter + max-width system in `index.css`:
 
 ```css
---content-max: 87.5rem;  /* 1400px */
---page-gutter: clamp(1.25rem, 3vw, 4rem);
+--content-max: 87.5rem; /* 1400px */
+--page-gutter: clamp(...); /* fluid by breakpoint */
 .page-container {
   width: min(calc(100% - 2 * var(--page-gutter)), var(--content-max));
   margin-inline: auto;
 }
+.page-container--edge {
+  /* header/footer: full bleed + gutter padding */
+  width: 100%;
+  padding-inline: max(var(--page-gutter), env(safe-area-inset-*));
+}
 ```
 
-**Do NOT** stack `max-width` + large `px-*` on nested containers — causes narrow layout.
+- **Sections / Hero**: `Container` → `.page-container` (capped width)
+- **Navbar / Footer**: `ContainerNav` → `.page-container--edge` (full-bleed chrome)
+- **Do NOT** stack `max-width` + large `px-*` on nested containers — causes narrow layout.
 
 Reading width for long text: `.reading-width` / `--reading-max: 42rem`.
+
+Compact thin sections: `SectionShell` `density="compact"` (Education) uses `--section-py-compact`.
 
 ### Button system (glass / M3-inspired)
 
@@ -274,7 +283,7 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 | **Section order** | About → Skills → Experience → Projects → Certifications → Education → Contact (all in nav) |
 | **Projects** | Mounted on `HomePage`; section id `#projects`; hero CTA links to `#projects` |
 | **Certifications & Education** | Split from combined Credentials; separate sections + nav entries |
-| **3D cosmos** | `GalaxyBackground` sticky canvas with Lenis scroll parallax; featured galaxy beside hero text (right); procedural solar systems/planets; `AmbientCosmicDrift`; boosted visibility in light + dark via `cosmicVisibility()` |
+| **3D cosmos** | Quiet cosmic horizon: featured hero-right galaxy + sparse stars/systems; no UFOs/asteroids; depth fog; indigo–teal lights; calmer drift |
 | **Hero overlays** | `HeroScene` = CSS gradients only; WebGL lives in page-level `GalaxyBackground` |
 | **Section atmosphere** | All sections `minimal` — sparse distant CSS stars |
 | **Skills section** | Manual category tabs only (`LayoutGroup id="skills-nav"`) — no auto-slide |
@@ -282,6 +291,11 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 | **Light theme** | Soft `#e9eef5` canvas, frosted glass buttons/surfaces |
 | **dist/ builds** | Run `npm run build` after changes, or keep `npm run build:watch` running |
 | **AI context files** | Keep `AGENTS.md`, `CLAUDE.md`, `.cursor/rules/portfolio-context.mdc` in sync |
+| **Content sync** | Portfolio facts match `Firoz_Mahmud_Resume.pdf` / resume TeX — dates, bullets, certs (SAA + Terraform only), Smart Digital Ad project |
+| **Page width** | `.page-container` capped at `--content-max`; header/footer use `--edge` |
+| **Dark accents** | Indigo–teal family aligned with light theme (no violet shift) |
+| **Education density** | `SectionShell density="compact"` for thin credential sections |
+| **Experience cards** | Flatter `.experience-role` panels (no lift on every role) |
 
 ---
 
@@ -369,4 +383,4 @@ Nav scroll-spy order (from `navLinks`): about → skills → experience → proj
 
 ---
 
-*Last updated: 2026-08-29 — Mobile hamburger nav below `lg` (conditional render + slide-down panel); AI context sync for Claude & Cursor.*
+*Last updated: 2026-09-23 — Deep polish: hero light/fog fix, indigo–teal cosmos, a11y (nav focus trap, skills tabs, projects), content nits.*

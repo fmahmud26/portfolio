@@ -1,167 +1,91 @@
-import { useState } from 'react'
-import { ArrowUpRight, Layers } from 'lucide-react'
 import { useGsapStagger } from '../hooks/useGsapScroll'
+import { Button } from '../components/ui/Button'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
 import { projects, sections } from '../data/content'
 
 export function Projects() {
   const ref = useGsapStagger<HTMLDivElement>()
-  const [activeId, setActiveId] = useState<string | null>(null)
   const copy = sections.projects
 
   return (
     <SectionShell id="projects" atmosphere="minimal">
       <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
-      <div ref={ref} className="grid gap-5 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3 xl:gap-7">
+      <div ref={ref} className="grid gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
         {projects.map((project) => {
-          const isActive = activeId === project.id
           const isFeatured = project.featured
 
           return (
             <article
               key={project.id}
               data-stagger
-              onMouseEnter={() => setActiveId(project.id)}
-              onMouseLeave={() => setActiveId(null)}
-              onFocus={() => setActiveId(project.id)}
-              onBlur={() => setActiveId(null)}
-              tabIndex={0}
-              className={`surface-panel interactive-lift group relative overflow-hidden rounded-2xl p-5 outline-none focus-visible:ring-2 focus-visible:ring-accent/40 sm:p-7 lg:p-8 ${
-                isFeatured
-                  ? 'sm:col-span-2 xl:col-span-2 lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:items-start lg:gap-10 xl:gap-12'
-                  : ''
-              } ${isActive ? 'border-accent/25' : ''}`}
+              className={`panel-card group relative overflow-hidden p-5 outline-none sm:p-6 ${
+                isFeatured ? 'sm:col-span-2 xl:col-span-2' : ''
+              }`}
             >
               <div
-                className="pointer-events-none absolute -right-8 -top-8 font-display text-[5rem] font-bold leading-none text-foreground/[0.03] sm:text-[6rem]"
-                aria-hidden="true"
-              >
-                {project.id}
-              </div>
-
-              <div
-                className={`pointer-events-none absolute inset-0 bg-linear-to-br from-accent/[0.04] via-transparent to-cyan/[0.05] transition-opacity duration-500 ${
-                  isActive ? 'opacity-100' : 'opacity-0'
-                }`}
+                className="pointer-events-none absolute inset-0 bg-linear-to-br from-accent/[0.05] via-transparent to-cyan/[0.04] opacity-0 transition-opacity duration-400 group-hover:opacity-100"
                 aria-hidden="true"
               />
-
-              <div className="relative min-w-0">
-                <div className="flex items-center gap-2">
-                  <Layers size={14} className="text-accent" aria-hidden="true" />
-                  <span className="font-mono text-xs tracking-wider text-accent uppercase">
-                    Case study {project.id}
+              <div className="relative flex items-center justify-between gap-3">
+                <span className="label-micro text-accent/80">
+                  {String(project.id).padStart(2, '0')}
+                </span>
+                {isFeatured && (
+                  <span className="rounded-full border border-accent/30 bg-linear-to-r from-accent/15 to-cyan/10 px-2.5 py-0.5 text-[0.625rem] font-medium tracking-wide text-accent">
+                    Featured
                   </span>
-                </div>
-
-                <h3 className="font-display mt-3 text-xl font-semibold sm:text-2xl lg:text-[1.75rem]">
-                  {project.title}
-                </h3>
-
-                <p className="mt-3 max-w-none text-sm leading-relaxed text-foreground sm:mt-4 sm:text-base">
-                  {project.summary}
-                </p>
-
-                <dl className="mt-5 space-y-4 sm:mt-6">
-                  <div>
-                    <dt className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase sm:text-[11px]">
-                      Problem
-                    </dt>
-                    <dd className="mt-1.5 text-sm leading-relaxed text-muted sm:text-[0.9375rem]">
-                      {project.problem}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase sm:text-[11px]">
-                      Approach
-                    </dt>
-                    <dd className="mt-1.5 text-sm leading-relaxed text-muted sm:text-[0.9375rem]">
-                      {project.approach}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="font-mono text-[10px] tracking-[0.16em] text-accent uppercase sm:text-[11px]">
-                      Outcome
-                    </dt>
-                    <dd className="mt-1.5 text-sm leading-relaxed text-muted sm:text-[0.9375rem]">
-                      {project.outcome}
-                    </dd>
-                  </div>
-                </dl>
-
-                <div className="mt-5 flex flex-wrap gap-2 sm:mt-6">
-                  {project.tags.map((tag) => (
-                    <span key={tag} className="tag-pill">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {(project.link || project.github) && (
-                  <div className="mt-5 flex flex-wrap gap-3">
-                    {project.link && (
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-accent transition-colors hover:text-accent-glow"
-                      >
-                        View project
-                        <ArrowUpRight size={14} aria-hidden="true" />
-                      </a>
-                    )}
-                    {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors hover:text-foreground"
-                      >
-                        Source
-                        <ArrowUpRight size={14} aria-hidden="true" />
-                      </a>
-                    )}
-                  </div>
                 )}
               </div>
 
-              {isFeatured && (
-                <div className="relative mt-6 min-h-[180px] overflow-hidden rounded-xl border border-border bg-bg-subtle/80 sm:mt-8 sm:min-h-[220px] lg:mt-0 lg:min-h-[240px]">
-                  <div className="absolute inset-0 bg-[linear-gradient(135deg,color-mix(in_srgb,var(--color-accent)_12%,transparent),transparent_55%,color-mix(in_srgb,var(--color-cyan)_10%,transparent))]" />
-                  <div className="absolute inset-0 opacity-[0.07]">
-                    <svg className="h-full w-full" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                      <defs>
-                        <pattern id={`grid-${project.id}`} width="24" height="24" patternUnits="userSpaceOnUse">
-                          <path
-                            d="M24 0H0V24"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="0.5"
-                          />
-                        </pattern>
-                      </defs>
-                      <rect width="100%" height="100%" fill={`url(#grid-${project.id})`} />
-                    </svg>
-                  </div>
-                  <div className="relative flex h-full min-h-[180px] flex-col justify-end p-5 sm:min-h-[220px] lg:min-h-[240px] lg:p-6">
-                    <p className="font-mono text-[10px] tracking-[0.18em] text-muted uppercase">
-                      Stack layers
-                    </p>
-                    <div className="mt-3 space-y-2">
-                      {project.tags.slice(0, 4).map((tag, i) => (
-                        <div
-                          key={tag}
-                          className="flex items-center gap-3 rounded-lg border border-border/80 bg-surface/50 px-3 py-2 text-xs text-foreground sm:text-sm"
-                          style={{ marginLeft: `${i * 8}px`, width: `calc(100% - ${i * 8}px)` }}
-                        >
-                          <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden="true" />
-                          {tag}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+              <h3 className="font-display relative mt-3 text-lg font-semibold tracking-tight sm:text-xl">
+                {project.title}
+              </h3>
+
+              <p className="relative mt-2 max-w-none text-sm leading-relaxed text-foreground/90">
+                {project.summary}
+              </p>
+
+              <dl
+                className={`relative mt-5 grid gap-4 ${
+                  isFeatured ? 'project-case-grid lg:grid-cols-3 lg:gap-0' : ''
+                }`}
+              >
+                <div className={isFeatured ? 'project-case-cell' : ''}>
+                  <dt className="label-micro text-accent/75">Problem</dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-foreground/78">{project.problem}</dd>
+                </div>
+                <div className={isFeatured ? 'project-case-cell' : ''}>
+                  <dt className="label-micro text-accent/75">Approach</dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-foreground/78">{project.approach}</dd>
+                </div>
+                <div className={isFeatured ? 'project-case-cell project-case-cell--outcome' : ''}>
+                  <dt className="label-micro text-accent/75">Outcome</dt>
+                  <dd className="mt-1.5 text-sm leading-relaxed text-foreground/85">{project.outcome}</dd>
+                </div>
+              </dl>
+
+              <div className="relative mt-5 flex flex-wrap gap-1.5">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="tag-pill">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {(project.link || project.github) && (
+                <div className="relative mt-4 flex flex-wrap gap-2">
+                  {project.link && (
+                    <Button href={project.link} variant="tertiary" size="sm" external>
+                      View project
+                    </Button>
+                  )}
+                  {project.github && (
+                    <Button href={project.github} variant="ghost" size="sm" external>
+                      Source
+                    </Button>
+                  )}
                 </div>
               )}
             </article>

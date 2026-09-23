@@ -30,10 +30,11 @@ export function Certifications() {
           href={profile.credly}
           target="_blank"
           rel="noopener noreferrer"
-          className="credential-footer-link group mt-6"
+          className="credential-footer-link group"
           data-stagger
         >
           {copy.credlyLink}
+          <span className="sr-only"> (opens in new tab)</span>
           <ArrowUpRight
             size={15}
             className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"

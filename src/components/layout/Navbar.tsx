@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { navLinks, profile } from '../../data/content'
@@ -10,6 +10,14 @@ import { Button } from '../ui/Button'
 import { useActiveSection } from '../../hooks/useActiveSection'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 
+function getFocusable(container: HTMLElement) {
+  return Array.from(
+    container.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  ).filter((el) => !el.hasAttribute('disabled') && el.offsetParent !== null)
+}
+
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [pendingSection, setPendingSection] = useState<string | null>(null)
@@ -18,6 +26,9 @@ export function Navbar() {
     typeof window !== 'undefined' ? window.matchMedia('(max-width: 1023px)').matches : false,
   )
   const reducedMotion = useReducedMotion()
+  const menuId = useId()
+  const menuPanelRef = useRef<HTMLDivElement>(null)
+  const menuButtonRef = useRef<HTMLButtonElement>(null)
   const sectionIds = navLinks.map((l) => l.href.slice(1))
   const activeSection = useActiveSection(sectionIds)
   const displayActive = pendingSection ?? activeSection
@@ -53,8 +64,37 @@ export function Navbar() {
     const lenis = (window as Window & { __lenis?: { stop: () => void; start: () => void } }).__lenis
     lenis?.stop()
 
+    const panel = menuPanelRef.current
+    const previouslyFocused = document.activeElement as HTMLElement | null
+
+    // Move focus into the dialog once it mounts
+    requestAnimationFrame(() => {
+      const focusables = panel ? getFocusable(panel) : []
+      focusables[0]?.focus()
+    })
+
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeMobileMenu()
+      if (e.key === 'Escape') {
+        e.preventDefault()
+        closeMobileMenu()
+        return
+      }
+
+      if (e.key !== 'Tab' || !panel) return
+      const focusables = getFocusable(panel)
+      if (focusables.length === 0) return
+
+      const first = focusables[0]!
+      const last = focusables[focusables.length - 1]!
+      const active = document.activeElement as HTMLElement | null
+
+      if (e.shiftKey && active === first) {
+        e.preventDefault()
+        last.focus()
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault()
+        first.focus()
+      }
     }
 
     window.addEventListener('keydown', onKeyDown)
@@ -62,6 +102,12 @@ export function Navbar() {
     return () => {
       lenis?.start()
       window.removeEventListener('keydown', onKeyDown)
+      // Prefer the hamburger; fall back to whatever had focus before open
+      if (menuButtonRef.current) {
+        menuButtonRef.current.focus()
+      } else {
+        previouslyFocused?.focus?.()
+      }
     }
   }, [mobileMenuOpen, isMobileNav, closeMobileMenu])
 
@@ -74,13 +120,19 @@ export function Navbar() {
     ? { duration: 0 }
     : { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const }
 
+  const headerMotion = reducedMotion
+    ? { initial: false as const }
+    : {
+        initial: { y: -100, opacity: 0 },
+        animate: { y: 0, opacity: 1 },
+        transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] as const },
+      }
+
   return (
     <motion.header
-      initial={{ y: -100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+      {...headerMotion}
       className={`fixed top-0 right-0 left-0 z-50 w-full pt-[env(safe-area-inset-top,0px)] transition-all duration-500 ${
-        scrolled ? 'pt-2 sm:pt-3' : ''
+        scrolled ? 'px-3 pt-2 sm:px-4 sm:pt-3' : ''
       }`}
     >
       <div
@@ -93,7 +145,7 @@ export function Navbar() {
         <ContainerNav className="relative z-50 grid grid-cols-[auto_1fr_auto] items-center gap-1.5 py-2.5 sm:gap-2 sm:py-3 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:gap-3">
           <a href="#" className="group relative z-20 flex min-w-0 shrink-0 items-center gap-3">
             <ProfileAvatar interactive />
-            <div className="hidden min-w-0 md:block">
+            <div className="hidden min-w-0 lg:block">
               <p className="truncate text-sm font-semibold leading-tight">{profile.name}</p>
               <p className="truncate text-xs text-muted">{profile.title}</p>
             </div>
@@ -136,13 +188,14 @@ export function Navbar() {
 
             {isMobileNav && (
               <Button
+                ref={menuButtonRef}
                 type="button"
                 variant="outlined"
                 size="sm"
                 iconOnly
                 aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
                 aria-expanded={mobileMenuOpen}
-                aria-controls="mobile-nav-menu"
+                aria-controls={menuId}
                 onClick={() => setMobileMenuOpen((open) => !open)}
               >
                 {mobileMenuOpen ? <X size={20} strokeWidth={2.25} /> : <Menu size={20} strokeWidth={2.25} />}
@@ -166,7 +219,8 @@ export function Navbar() {
               />
 
               <motion.div
-                id="mobile-nav-menu"
+                ref={menuPanelRef}
+                id={menuId}
                 role="dialog"
                 aria-modal="true"
                 aria-label="Site navigation"
@@ -206,7 +260,7 @@ export function Navbar() {
                     </nav>
                   </LayoutGroup>
 
-                  <div className="mobile-nav-theme mt-4 flex items-center justify-between gap-3 px-1">
+                  <div className="mobile-nav-theme flex items-center justify-between gap-3 px-1">
                     <span className="text-sm font-medium text-muted">Theme</span>
                     <ThemeToggle />
                   </div>

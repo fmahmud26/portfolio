@@ -16,20 +16,22 @@ function DistantPinpricks({ count, isDark }: { count: number; isDark: boolean })
   const geometry = useMemo(() => {
     const positions = new Float32Array(count * 3)
     const colors = new Float32Array(count * 3)
-    const tint = new THREE.Color(isDark ? '#eceaff' : '#4755c7')
-    const dim = new THREE.Color(isDark ? '#a8a4d8' : '#64748b')
+    const tint = new THREE.Color(isDark ? '#a5b4fc' : '#4755c7')
+    const dim = new THREE.Color(isDark ? '#94a3b8' : '#64748b')
+    const teal = new THREE.Color(isDark ? '#5ec8d6' : '#117a8a')
 
     for (let i = 0; i < count; i++) {
       const i3 = i * 3
-      const radius = 80 + Math.random() * 120
+      const radius = 90 + Math.random() * 110
       const theta = Math.random() * Math.PI * 2
       const phi = Math.acos(2 * Math.random() - 1)
 
       positions[i3] = radius * Math.sin(phi) * Math.cos(theta)
-      positions[i3 + 1] = (Math.random() - 0.5) * 140
-      positions[i3 + 2] = radius * Math.sin(phi) * Math.sin(theta) - 40
+      positions[i3 + 1] = (Math.random() - 0.5) * 130
+      positions[i3 + 2] = radius * Math.sin(phi) * Math.sin(theta) - 45
 
-      const c = Math.random() > 0.78 ? tint : dim
+      const roll = Math.random()
+      const c = roll > 0.92 ? teal : roll > 0.72 ? tint : dim
       colors[i3] = c.r
       colors[i3 + 1] = c.g
       colors[i3 + 2] = c.b
@@ -43,18 +45,18 @@ function DistantPinpricks({ count, isDark }: { count: number; isDark: boolean })
 
   useFrame(({ clock }) => {
     if (!ref.current) return
-    ref.current.rotation.y = clock.elapsedTime * 0.0042
-    ref.current.rotation.x = Math.sin(clock.elapsedTime * 0.055) * 0.028
+    ref.current.rotation.y = clock.elapsedTime * 0.0028
+    ref.current.rotation.x = Math.sin(clock.elapsedTime * 0.04) * 0.016
   })
 
   return (
     <points ref={ref} geometry={geometry}>
       <pointsMaterial
-        size={isDark ? 0.12 : 0.11}
+        size={isDark ? 0.1 : 0.095}
         sizeAttenuation
         vertexColors
         transparent
-        opacity={isDark ? 0.94 : 0.62}
+        opacity={isDark ? 0.72 : 0.48}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
       />
@@ -68,32 +70,32 @@ export function DeepStarField({ isDark, isMobile, scrollY }: DeepStarFieldProps)
   useFrame(({ clock }) => {
     if (!groupRef.current) return
     const t = clock.elapsedTime
-    groupRef.current.rotation.y = t * 0.0048 + scrollY() * 0.34
-    groupRef.current.rotation.z = Math.sin(t * 0.038) * 0.018
-    groupRef.current.position.y = scrollY() * 7.5 - 3.5
+    // ScrollParallax owns depth motion — stars only breathe gently in place
+    groupRef.current.rotation.y = t * 0.0028 + scrollY() * 0.06
+    groupRef.current.rotation.z = Math.sin(t * 0.024) * 0.008
   })
 
-  const farCount = isMobile ? 1600 : 3600
-  const midCount = isMobile ? 580 : 1200
-  const pinCount = isMobile ? 720 : 1600
+  const farCount = isMobile ? 900 : 1800
+  const midCount = isMobile ? 320 : 640
+  const pinCount = isMobile ? 400 : 800
 
   return (
     <group ref={groupRef}>
       <Stars
-        radius={260}
-        depth={200}
+        radius={280}
+        depth={180}
         count={farCount}
-        factor={isDark ? 1.85 : 1.72}
+        factor={isDark ? 1.55 : 1.42}
         fade
-        speed={0.048}
+        speed={0.032}
       />
       <Stars
-        radius={140}
-        depth={90}
+        radius={150}
+        depth={80}
         count={midCount}
-        factor={isDark ? 2.05 : 1.92}
+        factor={isDark ? 1.7 : 1.55}
         fade
-        speed={0.078}
+        speed={0.048}
       />
       <DistantPinpricks count={pinCount} isDark={isDark} />
     </group>

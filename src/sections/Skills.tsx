@@ -15,14 +15,14 @@ export function Skills() {
   const reducedMotion = useReducedMotion()
   const active = skillCategories[activeIndex]
   const copy = sections.skills
+  const panelId = 'skills-panel'
 
   useEffect(() => {
     const nav = navRef.current
     if (!nav) return
-    const activeBtn = nav.querySelector<HTMLElement>('[aria-pressed="true"]')
+    const activeBtn = nav.querySelector<HTMLElement>('[aria-selected="true"]')
     if (!activeBtn) return
 
-    // Scroll the tab strip only — never the document (scrollIntoView jumped the page on load).
     const navRect = nav.getBoundingClientRect()
     const btnRect = activeBtn.getBoundingClientRect()
     const offset = btnRect.left - navRect.left - (navRect.width - btnRect.width) / 2
@@ -42,12 +42,39 @@ export function Skills() {
             ref={navRef}
             data-stagger
             aria-label="Skill categories"
-            className="flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
+            role="tablist"
+            className="skills-tab-scroll flex gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-col lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden"
+            onKeyDown={(e) => {
+              const last = skillCategories.length - 1
+              let next = activeIndex
+              if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+                e.preventDefault()
+                next = activeIndex === last ? 0 : activeIndex + 1
+              } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+                e.preventDefault()
+                next = activeIndex === 0 ? last : activeIndex - 1
+              } else if (e.key === 'Home') {
+                e.preventDefault()
+                next = 0
+              } else if (e.key === 'End') {
+                e.preventDefault()
+                next = last
+              } else {
+                return
+              }
+              setActiveIndex(next)
+              requestAnimationFrame(() => {
+                navRef.current
+                  ?.querySelector<HTMLElement>(`#skills-tab-${next}`)
+                  ?.focus()
+              })
+            }}
           >
             {skillCategories.map((category, index) => {
               const isActive = index === activeIndex
+              const tabId = `skills-tab-${index}`
               return (
-                <div key={category.name} className="relative shrink-0 lg:w-full">
+                <div key={category.name} className="relative shrink-0 lg:w-full" role="presentation">
                   <GlassSelectIndicator
                     layoutId="skills-tab-glass"
                     active={isActive}
@@ -55,8 +82,12 @@ export function Skills() {
                   />
                   <Button
                     type="button"
+                    id={tabId}
+                    role="tab"
                     onClick={() => setActiveIndex(index)}
-                    aria-pressed={isActive}
+                    aria-selected={isActive}
+                    aria-controls={panelId}
+                    tabIndex={isActive ? 0 : -1}
                     variant="outlined"
                     size="md"
                     selected={isActive}
@@ -71,7 +102,13 @@ export function Skills() {
           </nav>
         </LayoutGroup>
 
-        <div data-stagger className="surface-panel rounded-2xl p-6 sm:p-8 lg:p-9">
+        <div
+          data-stagger
+          id={panelId}
+          role="tabpanel"
+          aria-labelledby={`skills-tab-${activeIndex}`}
+          className="panel-card relative overflow-hidden p-5 sm:p-6"
+        >
           <AnimatePresence mode="wait">
             <motion.div
               key={active.name}
@@ -80,19 +117,21 @@ export function Skills() {
               exit={reducedMotion ? undefined : { opacity: 0, y: -8 }}
               transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
             >
-              <h3 className="font-display text-xl font-semibold sm:text-2xl">{active.name}</h3>
-              <p className="mt-2 max-w-none text-sm leading-relaxed text-muted sm:text-base">
+              <p className="font-display text-sm font-semibold tracking-tight text-foreground sm:text-base">
+                {active.name}
+              </p>
+              <p className="mt-1.5 text-sm leading-relaxed text-foreground/75 sm:text-[0.9375rem]">
                 {active.description}
               </p>
 
-              <ul className="mt-6 grid gap-3 sm:grid-cols-2 sm:gap-4">
+              <ul className="mt-5 grid gap-2.5 sm:grid-cols-2 sm:gap-3">
                 {active.skills.map((skill, i) => (
                   <motion.li
                     key={skill}
                     initial={reducedMotion ? false : { opacity: 0, x: -8 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: reducedMotion ? 0 : i * 0.04, duration: 0.3 }}
-                    className="skill-chip flex items-center gap-3 rounded-xl border border-border/80 px-4 py-3 text-sm text-foreground sm:text-[0.9375rem]"
+                    className="skill-chip"
                   >
                     <span
                       className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent"

@@ -1,22 +1,34 @@
 export const DARK_BG = '#2e2e36'
 export const LIGHT_BG = '#e9eef5'
 
-/** Galaxy motion tuning — differential spin reads as realistic spiral rotation. */
+/** Galaxy motion — calmer spin; hero spiral still reads as living. */
 export const COMFORT = {
-  discOpacity: { dark: 0.58, light: 0.44 },
-  dustOpacity: { dark: 0.28, light: 0.24 },
-  ringOpacity: { dark: { inner: 0.28, outer: 0.18 }, light: { inner: 0.26, outer: 0.16 } },
-  haloOpacity: { dark: 0.12, light: 0.09 },
-  coreEmissive: { dark: 0.72, light: 0.56 },
-  particleSize: { dark: { disc: 0.044, dust: 0.03 }, light: { disc: 0.048, dust: 0.03 } },
-  spin: { disc: 0.58, dust: -0.26, ringInner: 0.34, ringOuter: -0.22, wobble: 0.02 },
-  drift: { yaw: 0.032, pitch: 0.014, roll: 0.01 },
+  discOpacity: { dark: 0.52, light: 0.4 },
+  dustOpacity: { dark: 0.24, light: 0.2 },
+  ringOpacity: { dark: { inner: 0.22, outer: 0.14 }, light: { inner: 0.2, outer: 0.12 } },
+  haloOpacity: { dark: 0.1, light: 0.08 },
+  coreEmissive: { dark: 0.62, light: 0.48 },
+  particleSize: { dark: { disc: 0.042, dust: 0.028 }, light: { disc: 0.046, dust: 0.028 } },
+  spin: { disc: 0.48, dust: -0.22, ringInner: 0.28, ringOuter: -0.18, wobble: 0.015 },
+  drift: { yaw: 0.024, pitch: 0.01, roll: 0.008 },
 } as const
 
-/** Scroll parallax range — scene shifts vertically as user scrolls main content. */
-export const SCROLL_PARALLAX = { range: 38, offset: -19 } as const
+/** Scroll parallax — slightly gentler so the hero galaxy lingers beside the name. */
+export const SCROLL_PARALLAX = { range: 32, offset: -16 } as const
 
-export type { GalaxyPlacement, RoguePlanetPlacement, SolarSystemPlacement, AsteroidPlacement, UnidentifiedObjectPlacement } from './types'
+/** Soft depth fog — near stays past the hero galaxy so the signature stays crisp. */
+export const COSMIC_FOG = {
+  dark: { near: 24, far: 56 },
+  light: { near: 22, far: 50 },
+} as const
+
+export type {
+  GalaxyPlacement,
+  RoguePlanetPlacement,
+  SolarSystemPlacement,
+  AsteroidPlacement,
+  UnidentifiedObjectPlacement,
+} from './types'
 
 export {
   DESKTOP_ASTEROIDS,
@@ -31,34 +43,35 @@ export {
 
 import type { GalaxyPlacement } from './types'
 
-/** Prominent galaxy beside hero copy — right side, vertically aligned with name/pitch. */
+/**
+ * Signature asset — beside hero copy on the right.
+ * Parallax offset −16 → world Y ≈ 3.2 at page top (aligned with name/pitch).
+ */
 export const HERO_RIGHT_GALAXY: GalaxyPlacement = {
-  position: [7.85, 19.6, -3.4],
-  scale: 0.5,
-  opacity: 0.92,
+  position: [7.6, 19.2, -3.2],
+  scale: 0.62,
+  opacity: 0.98,
   phase: 0.85,
-  tilt: [0.74, -0.36, 0.1],
-  spin: 1.08,
+  tilt: [0.72, -0.34, 0.08],
+  spin: 1.02,
 }
 
 export const HERO_RIGHT_GALAXY_MOBILE: GalaxyPlacement = {
-  position: [5.1, 18.9, -3.8],
-  scale: 0.34,
-  opacity: 0.84,
+  position: [4.8, 18.6, -3.6],
+  scale: 0.42,
+  opacity: 0.9,
   phase: 1.15,
-  tilt: [0.7, -0.26, 0.08],
-  spin: 1,
+  tilt: [0.68, -0.24, 0.06],
+  spin: 0.95,
 }
 
-/** Faint distant galaxies — solar systems dominate the scene. */
+/** Sparse distant punctuation — three on desktop, one on mobile. */
 export const DESKTOP_GALAXIES: GalaxyPlacement[] = [
-  { position: [7.2, 5.2, -18], scale: 0.16, opacity: 0.48, phase: 0, tilt: [0.82, 0.26, 0.1], spin: 1.05, far: true },
-  { position: [-8.0, 0.5, -22], scale: 0.12, opacity: 0.4, phase: 2.1, tilt: [0.74, -0.18, 0.22], spin: 0.92, far: true },
-  { position: [6.4, -8.5, -26], scale: 0.09, opacity: 0.32, phase: 4.4, tilt: [0.88, 0.12, -0.1], spin: 0.82, far: true },
-  { position: [-5.8, -16.0, -30], scale: 0.07, opacity: 0.26, phase: 6.2, tilt: [0.68, 0.08, 0.2], spin: 0.72, far: true },
+  { position: [-7.5, 3.5, -22], scale: 0.11, opacity: 0.32, phase: 0, tilt: [0.8, 0.22, 0.08], spin: 0.9, far: true },
+  { position: [6.8, -6.0, -28], scale: 0.08, opacity: 0.24, phase: 3.2, tilt: [0.86, 0.1, -0.08], spin: 0.78, far: true },
+  { position: [-5.2, -14.5, -32], scale: 0.06, opacity: 0.2, phase: 5.8, tilt: [0.7, 0.06, 0.16], spin: 0.7, far: true },
 ]
 
 export const MOBILE_GALAXIES: GalaxyPlacement[] = [
-  { position: [5.0, 4.0, -16], scale: 0.13, opacity: 0.42, phase: 0, tilt: [0.82, 0.22, 0.08], spin: 0.95, far: true },
-  { position: [-4.5, -6.0, -24], scale: 0.09, opacity: 0.3, phase: 3.2, tilt: [0.76, -0.1, 0.15], spin: 0.78, far: true },
+  { position: [-4.8, -4.0, -24], scale: 0.09, opacity: 0.28, phase: 1.4, tilt: [0.78, -0.08, 0.12], spin: 0.82, far: true },
 ]

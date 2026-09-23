@@ -1,38 +1,32 @@
 import { useEffect, useRef, useState } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import type { Group } from 'three'
+import * as THREE from 'three'
 import type Lenis from 'lenis'
 import { useTheme } from '../../context/ThemeContext'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { GalaxyCore } from './galaxy/GalaxyCore'
 import { SolarSystem } from './galaxy/SolarSystem'
 import { RoguePlanet } from './galaxy/RoguePlanet'
-import { Asteroid } from './galaxy/Asteroid'
-import { UnidentifiedObject } from './galaxy/UnidentifiedObject'
 import { DeepStarField } from './galaxy/DeepStarField'
 import { AmbientCosmicDrift } from './galaxy/AmbientCosmicDrift'
 import { cosmicVisibility } from './galaxy/cosmicMotion'
 import {
+  COSMIC_FOG,
   DESKTOP_GALAXIES,
-  DESKTOP_ASTEROIDS,
   DESKTOP_ROGUE_PLANETS,
   DESKTOP_SOLAR_SYSTEMS,
-  DESKTOP_UNIDENTIFIED_OBJECTS,
   HERO_RIGHT_GALAXY,
   HERO_RIGHT_GALAXY_MOBILE,
   LIGHT_BG,
   DARK_BG,
   MOBILE_GALAXIES,
-  MOBILE_ASTEROIDS,
   MOBILE_ROGUE_PLANETS,
   MOBILE_SOLAR_SYSTEMS,
-  MOBILE_UNIDENTIFIED_OBJECTS,
   SCROLL_PARALLAX,
-  type AsteroidPlacement,
   type GalaxyPlacement,
   type RoguePlanetPlacement,
   type SolarSystemPlacement,
-  type UnidentifiedObjectPlacement,
 } from './galaxy/constants'
 
 function getLenis() {
@@ -48,24 +42,48 @@ function getScrollProgress() {
   return max > 0 ? window.scrollY / max : 0
 }
 
+/** Indigo–teal lighting aligned with brand — lights sit in parallax space with the hero galaxy. */
 function SceneLights({ isDark }: { isDark: boolean }) {
   return (
     <>
-      <ambientLight intensity={isDark ? 0.58 : 0.5} />
+      <ambientLight intensity={isDark ? 0.42 : 0.38} />
       <hemisphereLight
-        args={[isDark ? '#ddd6fe' : '#c7d2fe', isDark ? DARK_BG : LIGHT_BG, isDark ? 0.4 : 0.26]}
+        args={[isDark ? '#c7d2fe' : '#e8eef8', isDark ? DARK_BG : LIGHT_BG, isDark ? 0.28 : 0.2]}
       />
       <pointLight
-        position={[3.5, 2, 4.5]}
-        intensity={isDark ? 1.08 : 0.68}
-        color={isDark ? '#c4b5fd' : '#6366f1'}
+        position={[3.2, 18, 4]}
+        intensity={isDark ? 0.64 : 0.42}
+        color={isDark ? '#8b9cf7' : '#4755c7'}
       />
-      <pointLight position={[-1.5, -0.5, 2.5]} intensity={isDark ? 0.52 : 0.34} color="#94a3b8" />
-      <pointLight position={[0, -4, -8]} intensity={isDark ? 0.42 : 0.2} color="#fbbf24" />
-      <pointLight position={[-6, 3, -12]} intensity={isDark ? 0.34 : 0.14} color="#67e8f9" />
-      <pointLight position={[7.5, 1.5, -2]} intensity={isDark ? 0.52 : 0.32} color={isDark ? '#c4b5fd' : '#6366f1'} />
+      <pointLight position={[-2, 16, 3]} intensity={isDark ? 0.24 : 0.16} color="#94a3b8" />
+      <pointLight
+        position={[-5, 12, -10]}
+        intensity={isDark ? 0.24 : 0.12}
+        color={isDark ? '#5ec8d6' : '#117a8a'}
+      />
+      {/* Fill beside HERO_RIGHT_GALAXY (~y 19.2) — same parallax space */}
+      <pointLight
+        position={[7.4, 19.2, -2.5]}
+        intensity={isDark ? 0.42 : 0.28}
+        color={isDark ? '#a5b4fc' : '#5663d4'}
+      />
     </>
   )
+}
+
+function SceneAtmosphere({ isDark }: { isDark: boolean }) {
+  const { scene } = useThree()
+  const bg = isDark ? DARK_BG : LIGHT_BG
+  const fog = isDark ? COSMIC_FOG.dark : COSMIC_FOG.light
+
+  useEffect(() => {
+    scene.fog = new THREE.Fog(bg, fog.near, fog.far)
+    return () => {
+      scene.fog = null
+    }
+  }, [scene, bg, fog.near, fog.far])
+
+  return null
 }
 
 function ScrollParallax({ children }: { children: React.ReactNode }) {
@@ -94,19 +112,19 @@ function AnimatedGalaxy({
   featured?: boolean
 }) {
   const groupRef = useRef<Group>(null)
-  const drift = featured ? 0.07 : 0.14
+  const drift = featured ? 0.02 : 0.06
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime + galaxy.phase
     if (!groupRef.current) return
 
-    groupRef.current.position.y =
-      galaxy.position[1] + Math.sin(t * 0.2 + index) * drift
-    groupRef.current.rotation.y = Math.sin(t * 0.08 + galaxy.phase) * 0.06 + t * 0.01
-    groupRef.current.position.x =
-      galaxy.position[0] + Math.cos(t * 0.1 + galaxy.phase) * drift
-    groupRef.current.position.z =
-      galaxy.position[2] + Math.sin(t * 0.07 + galaxy.phase) * drift * 0.5
+    groupRef.current.position.y = galaxy.position[1] + Math.sin(t * 0.12 + index) * drift
+    groupRef.current.rotation.y = Math.sin(t * 0.05 + galaxy.phase) * 0.03 + t * 0.006
+    if (!featured) {
+      groupRef.current.position.x = galaxy.position[0] + Math.cos(t * 0.06 + galaxy.phase) * drift
+      groupRef.current.position.z =
+        galaxy.position[2] + Math.sin(t * 0.045 + galaxy.phase) * drift * 0.35
+    }
   })
 
   return (
@@ -130,8 +148,6 @@ function CosmicField({
   galaxies,
   solarSystems,
   roguePlanets,
-  asteroids,
-  unidentifiedObjects,
   heroGalaxy,
 }: {
   isDark: boolean
@@ -139,12 +155,11 @@ function CosmicField({
   galaxies: GalaxyPlacement[]
   solarSystems: SolarSystemPlacement[]
   roguePlanets: RoguePlanetPlacement[]
-  asteroids: AsteroidPlacement[]
-  unidentifiedObjects: UnidentifiedObjectPlacement[]
   heroGalaxy: GalaxyPlacement
 }) {
   return (
     <ScrollParallax>
+      <SceneAtmosphere isDark={isDark} />
       <SceneLights isDark={isDark} />
       <AmbientCosmicDrift>
         <DeepStarField isDark={isDark} isMobile={isMobile} scrollY={getScrollProgress} />
@@ -161,24 +176,6 @@ function CosmicField({
           <RoguePlanet
             key={`planet-${planet.phase}-${index}`}
             placement={planet}
-            isDark={isDark}
-            index={index}
-          />
-        ))}
-
-        {asteroids.map((asteroid, index) => (
-          <Asteroid
-            key={`asteroid-${asteroid.seed}-${index}`}
-            placement={asteroid}
-            isDark={isDark}
-            index={index}
-          />
-        ))}
-
-        {unidentifiedObjects.map((object, index) => (
-          <UnidentifiedObject
-            key={`ufo-${object.phase}-${index}`}
-            placement={object}
             isDark={isDark}
             index={index}
           />
@@ -230,8 +227,6 @@ export function GalaxyBackground() {
   const galaxies = isMobile ? MOBILE_GALAXIES : DESKTOP_GALAXIES
   const solarSystems = isMobile ? MOBILE_SOLAR_SYSTEMS : DESKTOP_SOLAR_SYSTEMS
   const roguePlanets = isMobile ? MOBILE_ROGUE_PLANETS : DESKTOP_ROGUE_PLANETS
-  const asteroids = isMobile ? MOBILE_ASTEROIDS : DESKTOP_ASTEROIDS
-  const unidentifiedObjects = isMobile ? MOBILE_UNIDENTIFIED_OBJECTS : DESKTOP_UNIDENTIFIED_OBJECTS
   const heroGalaxy = isMobile ? HERO_RIGHT_GALAXY_MOBILE : HERO_RIGHT_GALAXY
 
   if (reducedMotion) return null
@@ -246,7 +241,7 @@ export function GalaxyBackground() {
         <div className="cosmic-deep-starfield__debris absolute inset-0" aria-hidden="true" />
 
         <Canvas
-          camera={{ position: [0, 0, 14], fov: 52 }}
+          camera={{ position: [0, 0, 14], fov: 50 }}
           dpr={isMobile ? [1, 1.5] : [1, 2]}
           gl={{ antialias: !isMobile, alpha: true, powerPreference: 'high-performance' }}
           style={{ width: '100%', height: '100%', display: 'block', position: 'relative', zIndex: 1 }}
@@ -257,8 +252,6 @@ export function GalaxyBackground() {
             galaxies={galaxies}
             solarSystems={solarSystems}
             roguePlanets={roguePlanets}
-            asteroids={asteroids}
-            unidentifiedObjects={unidentifiedObjects}
             heroGalaxy={heroGalaxy}
           />
         </Canvas>

@@ -2,7 +2,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ArrowUpRight, Mail, MapPin, Phone } from 'lucide-react'
 import { Button } from '../components/ui/Button'
-import { GitHubIcon } from '../components/ui/BrandIcons'
+import { GitHubIcon, LinkedInIcon } from '../components/ui/BrandIcons'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
 import { profile, sections } from '../data/content'
@@ -20,55 +20,57 @@ export function Contact() {
 
       <motion.div
         ref={ref}
-        initial={reducedMotion ? false : { opacity: 0, y: 32 }}
+        initial={reducedMotion ? false : { opacity: 0, y: 16 }}
         animate={inView || reducedMotion ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-        className="surface-panel glow-accent relative overflow-hidden rounded-2xl p-6 sm:rounded-3xl sm:p-10 lg:p-12 xl:p-14"
+        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+        className="panel-card relative overflow-hidden p-5 sm:p-6"
       >
-        <div className="relative grid gap-10 lg:grid-cols-2 lg:gap-12 xl:gap-16">
+        <div
+          className="pointer-events-none absolute inset-0 bg-linear-to-br from-accent/[0.06] via-transparent to-cyan/[0.04]"
+          aria-hidden="true"
+        />
+        <div className="relative grid gap-6 lg:grid-cols-2 lg:items-start lg:gap-10">
           <div>
-            <h3 className="font-display text-2xl font-semibold sm:text-3xl">{copy.innerTitle}</h3>
-            <p className="mt-3 max-w-none text-base leading-relaxed text-muted sm:mt-4 sm:text-lg">
+            <p className="max-w-md text-[0.9375rem] leading-relaxed text-foreground/80 sm:text-base">
               {copy.intro}
             </p>
 
-            <ul className="mt-6 space-y-3 sm:mt-8 sm:space-y-4">
+            <ul className="mt-5 space-y-0.5">
               <li>
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="flex items-center gap-3 text-sm text-muted transition-colors hover:text-foreground sm:text-base"
-                >
-                  <Mail size={18} className="shrink-0 text-accent" aria-hidden="true" />
-                  <span className="break-all">{profile.email}</span>
+                <a href={`mailto:${profile.email}`} className="contact-detail-row">
+                  <Mail size={15} className="shrink-0 text-accent" aria-hidden="true" />
+                  <span className="break-all text-sm">{profile.email}</span>
                 </a>
               </li>
               <li>
                 <a
-                  href={`tel:${profile.phone.replace(/\s/g, '')}`}
-                  className="flex items-center gap-3 text-sm text-muted transition-colors hover:text-foreground sm:text-base"
+                  href={`tel:${profile.phone.replace(/[^\d+]/g, '')}`}
+                  className="contact-detail-row"
                 >
-                  <Phone size={18} className="shrink-0 text-accent" aria-hidden="true" />
-                  {profile.phone}
+                  <Phone size={15} className="shrink-0 text-accent" aria-hidden="true" />
+                  <span className="text-sm">{profile.phone}</span>
                 </a>
               </li>
-              <li className="flex items-center gap-3 text-sm text-muted sm:text-base">
-                <MapPin size={18} className="shrink-0 text-accent" aria-hidden="true" />
-                {profile.location}
+              <li>
+                <span className="contact-detail-row contact-detail-row--static">
+                  <MapPin size={15} className="shrink-0 text-accent" aria-hidden="true" />
+                  <span className="text-sm">{profile.location}</span>
+                </span>
               </li>
             </ul>
           </div>
 
-          <div className="btn-group btn-group--stack-sm flex flex-col items-stretch justify-center pr-0 lg:items-start">
-            <Button href={`mailto:${profile.email}`} variant="primary" size="lg" fullWidth className="lg:w-auto">
+          <div className="btn-group flex flex-col items-stretch sm:max-w-xs lg:ml-auto lg:items-stretch">
+            <Button href={`mailto:${profile.email}`} variant="primary" size="md" fullWidth>
               {copy.emailCta}
-              <ArrowUpRight size={18} aria-hidden="true" />
+              <ArrowUpRight size={15} aria-hidden="true" />
             </Button>
-            <Button href={profile.linkedin} variant="outlined" size="lg" fullWidth className="lg:w-auto" external>
+            <Button href={profile.linkedin} variant="outlined" size="md" fullWidth external>
+              <LinkedInIcon size={15} />
               {copy.linkedinCta}
-              <ArrowUpRight size={18} aria-hidden="true" />
             </Button>
-            <Button href={profile.github} variant="outlined" size="lg" fullWidth className="lg:w-auto" external>
-              <GitHubIcon size={18} />
+            <Button href={profile.github} variant="ghost" size="md" fullWidth external>
+              <GitHubIcon size={15} />
               {copy.githubCta}
             </Button>
           </div>

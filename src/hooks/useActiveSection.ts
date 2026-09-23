@@ -28,7 +28,7 @@ function computeActiveSection(sectionIds: string[]) {
   if (!sectionIds.length) return ''
 
   const activationY = ACTIVATION_OFFSET
-  let passed = sectionIds[0] ?? ''
+  let passed = ''
 
   for (const id of sectionIds) {
     const el = document.getElementById(id)
@@ -38,6 +38,9 @@ function computeActiveSection(sectionIds: string[]) {
       passed = id
     }
   }
+
+  // Still in the hero — no nav section should look selected.
+  if (!passed) return ''
 
   const passedIndex = sectionIds.indexOf(passed)
 
@@ -70,7 +73,7 @@ function computeActiveSection(sectionIds: string[]) {
 }
 
 export function useActiveSection(sectionIds: string[]) {
-  const [active, setActive] = useState(() => sectionIds[0] ?? '')
+  const [active, setActive] = useState('')
 
   useEffect(() => {
     if (!sectionIds.length) return

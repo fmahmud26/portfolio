@@ -6,8 +6,8 @@ import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { Tooltip } from './Tooltip'
 
 const SCROLL_THRESHOLD = 320
-const BUTTON_SIZE = 56
-const RING_RADIUS = 24
+const BUTTON_SIZE = 52
+const RING_RADIUS = 22
 const RING_CIRCUMFERENCE = 2 * Math.PI * RING_RADIUS
 
 function getLenis() {
@@ -17,7 +17,7 @@ function getLenis() {
 function scrollToTop() {
   const lenis = getLenis()
   if (lenis) {
-    lenis.scrollTo(0, { duration: 1.1 })
+    lenis.scrollTo(0, { duration: 1.05 })
     return
   }
   window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -29,7 +29,11 @@ export function BackToTop() {
   const [progress, setProgress] = useState(0)
   const [hovered, setHovered] = useState(false)
 
-  const springProgress = useSpring(progress, { stiffness: 140, damping: 24, mass: 0.6 })
+  const springProgress = useSpring(progress, {
+    stiffness: reducedMotion ? 400 : 160,
+    damping: reducedMotion ? 40 : 26,
+    mass: 0.55,
+  })
   const strokeDashoffset = useTransform(
     springProgress,
     (value) => RING_CIRCUMFERENCE * (1 - value),
@@ -92,11 +96,11 @@ export function BackToTop() {
     <AnimatePresence>
       {visible && (
         <motion.div
-          initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.92 }}
+          initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 14, scale: 0.9 }}
           animate={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
-          exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.94 }}
-          transition={{ duration: reducedMotion ? 0.15 : 0.28, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6"
+          exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.92 }}
+          transition={{ duration: reducedMotion ? 0.15 : 0.32, ease: [0.22, 1, 0.36, 1] }}
+          className="back-to-top fixed right-4 bottom-4 z-50 sm:right-6 sm:bottom-6"
           style={{
             marginRight: 'env(safe-area-inset-right, 0px)',
             marginBottom: 'env(safe-area-inset-bottom, 0px)',
@@ -110,43 +114,56 @@ export function BackToTop() {
               onHoverEnd={() => setHovered(false)}
               aria-label={`Back to top — ${progressPercent}% scrolled`}
               whileTap={reducedMotion ? undefined : { scale: 0.94 }}
-              animate={reducedMotion ? undefined : { scale: hovered ? 1.04 : 1 }}
-              transition={{ type: 'spring', stiffness: 420, damping: 26 }}
-              className="group relative flex items-center justify-center rounded-full focus-visible:outline-none"
+              animate={
+                reducedMotion
+                  ? undefined
+                  : { scale: hovered ? 1.06 : 1, y: hovered ? -1 : 0 }
+              }
+              transition={{ type: 'spring', stiffness: 420, damping: 24 }}
+              className="back-to-top__hit group relative flex items-center justify-center rounded-full focus-visible:outline-none"
               style={{ width: BUTTON_SIZE, height: BUTTON_SIZE }}
             >
+              <span className="back-to-top__glow" aria-hidden="true" />
+
               <svg
-                className="absolute inset-0 -rotate-90"
-                viewBox="0 0 56 56"
+                className="back-to-top__ring absolute inset-0 -rotate-90"
+                viewBox="0 0 52 52"
                 aria-hidden="true"
               >
+                <defs>
+                  <linearGradient id="back-to-top-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="var(--color-accent)" />
+                    <stop offset="100%" stopColor="var(--color-cyan)" />
+                  </linearGradient>
+                </defs>
                 <circle
-                  cx="28"
-                  cy="28"
+                  cx="26"
+                  cy="26"
                   r={RING_RADIUS}
                   fill="none"
                   stroke="currentColor"
-                  strokeWidth="2"
-                  className="text-border/80"
+                  strokeWidth="2.25"
+                  className="text-border/70"
                 />
                 <motion.circle
-                  cx="28"
-                  cy="28"
+                  cx="26"
+                  cy="26"
                   r={RING_RADIUS}
                   fill="none"
-                  stroke="var(--color-accent)"
-                  strokeWidth="2"
+                  stroke="url(#back-to-top-ring)"
+                  strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeDasharray={RING_CIRCUMFERENCE}
                   style={{ strokeDashoffset }}
                 />
               </svg>
 
-              <span className="btn btn--fab relative z-10 shadow-none transition-shadow duration-200 group-hover:shadow-md">
+              <span className="back-to-top__fab btn btn--fab relative z-10">
+                <span className="btn__shine" aria-hidden="true" />
                 <ArrowUp
-                  size={20}
-                  strokeWidth={2.25}
-                  className="text-accent transition-transform duration-200 group-hover:-translate-y-px"
+                  size={18}
+                  strokeWidth={2.35}
+                  className="relative text-accent transition-transform duration-300 ease-out group-hover:-translate-y-0.5 group-focus-visible:-translate-y-0.5"
                   aria-hidden="true"
                 />
               </span>

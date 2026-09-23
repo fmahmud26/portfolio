@@ -19,18 +19,18 @@ export function RoguePlanet({ placement, isDark, index }: RoguePlanetProps) {
     const t = clock.elapsedTime + placement.phase
     if (!groupRef.current) return
 
-    const orbit = placement.orbitDrift * 1.75
+    const orbit = placement.orbitDrift * 1.05
     groupRef.current.position.x =
-      placement.position[0] + Math.cos(t * orbit + index) * 0.26
+      placement.position[0] + Math.cos(t * orbit + index) * 0.14
     groupRef.current.position.y =
-      placement.position[1] + Math.sin(t * 0.16 + index) * 0.12
+      placement.position[1] + Math.sin(t * 0.1 + index) * 0.06
     groupRef.current.position.z =
-      placement.position[2] + Math.sin(t * orbit * 0.85 + placement.phase) * 0.2
-    groupRef.current.rotation.y = t * orbit * 0.28
+      placement.position[2] + Math.sin(t * orbit * 0.7 + placement.phase) * 0.1
+    groupRef.current.rotation.y = t * orbit * 0.18
 
     if (meshRef.current) {
-      meshRef.current.rotation.x = Math.sin(t * 0.18 + placement.phase) * 0.22
-      meshRef.current.rotation.z = t * 0.12
+      meshRef.current.rotation.x = Math.sin(t * 0.12 + placement.phase) * 0.12
+      meshRef.current.rotation.z = t * 0.07
     }
   })
 
@@ -53,7 +53,7 @@ export function RoguePlanet({ placement, isDark, index }: RoguePlanetProps) {
         <mesh rotation={[Math.PI / 2.2, 0.15, 0]}>
           <torusGeometry args={[placement.size * 1.7, placement.size * 0.22, 4, 32]} />
           <meshBasicMaterial
-            color={isDark ? '#c4b5fd' : '#6366f1'}
+            color={isDark ? '#a5b4fc' : '#4755c7'}
             transparent
             opacity={0.52 * opacity}
             depthWrite={false}

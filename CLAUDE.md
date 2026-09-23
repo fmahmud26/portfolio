@@ -9,12 +9,14 @@
 - **Commands**: `npm run dev` | `npm run build` | `npm run build:watch` | `npm run lint`
 - **dist/**: run `npm run build` after code changes (or `npm run build:watch` in a second terminal)
 - **Display title**: Senior Software Engineer (FDE only in availability text)
-- **Layout**: `.page-container` in `src/index.css` — do not stack extra horizontal padding
+- **Layout**: `.page-container` capped at `--content-max` with side gutters; header/footer use `.page-container--edge`
 - **Buttons**: use `Button.tsx` (glass system in `index.css`); `MagneticButton` is deprecated
 - **Nav active state**: `src/hooks/useActiveSection.ts` (scroll-spy, Lenis-aware, near-line + bottom fixes)
-- **Nav UI**: `lg+` → 7-link header pill + theme toggle; `< lg` → photo + hamburger; panel has nav links + theme (`matchMedia` max-width 1023px; hamburger not rendered on desktop)
-- **Theme**: `portfolio-theme` in localStorage; light bg `#e9eef5`, dark `#2e2e36`
+- **Nav UI**: `lg+` → 7-link header pill + theme toggle; `< lg` → photo + hamburger; panel has nav links + theme (`matchMedia` max-width 1023px; hamburger not rendered on desktop; name/title only at `lg+`)
+- **Theme**: `portfolio-theme` in localStorage; light bg `#e9eef5`, dark `#2e2e36`; dark accents indigo–teal (match light brand)
 - **Photo**: `public/img/myself.jpeg` with FM fallback
+- **Content**: facts must match resume PDF / TeX — no invented skills, certs, or dates
+- **Thin sections**: Education uses `SectionShell density="compact"`
 
 ## Page order (live)
 
@@ -28,7 +30,7 @@ Hero → About → Skills → Experience → Projects → Certifications → Edu
 - Section **subtitles**: sentence case
 - **Skills**: manual category tabs only — no auto-slide
 - **Mobile nav**: hamburger only when viewport &lt; 1024px; do not use `lg:hidden` on `Button` for hamburger (use conditional render); Lenis paused while menu open
-- **Cosmic**: lazy `GalaxyBackground` (sticky WebGL canvas, scroll parallax, hero-right galaxy, solar systems, stars); `HeroScene` = hero CSS readability overlays only; sections use sparse stars (`CosmicAtmosphere` minimal)
+- **Cosmic**: quiet horizon — featured hero-right galaxy, sparse stars/systems, depth fog, indigo–teal lights; no UFOs/asteroids; `HeroScene` = CSS overlays only; sections use sparse CSS stars
 - **Footer**: sibling of main/galaxy wrapper — not inside cosmic canvas
 - **LayoutGroup**: one per nav list (`header-nav`, `mobile-header-nav`, `footer-nav`, `skills-nav`) — not per link
 

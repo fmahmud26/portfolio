@@ -2,7 +2,7 @@ import { useGsapStagger } from '../hooks/useGsapScroll'
 import { SectionHeading } from '../components/ui/SectionHeading'
 import { SectionShell } from '../components/ui/SectionShell'
 import { experience, sections } from '../data/content'
-import { Briefcase, ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 
 function formatDateTimeRange(role: (typeof experience)[0]['roles'][0]) {
   if (role.dateTimeEnd) {
@@ -21,69 +21,68 @@ export function Experience() {
 
       <div ref={ref} className="relative w-full">
         <div
-          className="timeline-rail absolute top-2 bottom-2 left-[11px] w-px sm:left-5"
+          className="timeline-rail absolute top-1 bottom-1 left-[7px] w-px"
           aria-hidden="true"
         />
 
-        <div className="space-y-10 sm:space-y-12">
+        <div className="space-y-7 sm:space-y-8">
           {experience.map((job, jobIndex) => (
-            <article key={job.company} data-stagger className="relative pl-10 sm:pl-14">
+            <article key={job.company} data-stagger className="relative pl-8 sm:pl-10">
               <div
-                className="absolute left-0 top-1.5 flex h-6 w-6 items-center justify-center rounded-full border border-accent/30 bg-surface sm:left-2 sm:h-7 sm:w-7"
+                className="timeline-node absolute left-0 top-1.5 h-3.5 w-3.5"
                 aria-hidden="true"
               >
-                <Briefcase size={12} className="text-accent" />
+                <span className="timeline-node__core" />
               </div>
 
-              <header className="mb-6 sm:mb-8">
-                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                  <h3 className="font-display text-xl font-semibold sm:text-2xl">
+              <header className="mb-4">
+                <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
+                  <h3 className="font-display text-lg font-semibold tracking-tight sm:text-xl">
                     {job.url ? (
                       <a
                         href={job.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 transition-colors hover:text-accent"
+                        className="inline-flex items-center gap-1 transition-colors hover:text-accent"
                       >
                         {job.company}
-                        <ArrowUpRight size={16} className="shrink-0 text-accent/80" aria-hidden="true" />
+                        <ArrowUpRight size={14} className="shrink-0 text-accent/70" aria-hidden="true" />
                         <span className="sr-only"> (opens in new tab)</span>
                       </a>
                     ) : (
                       job.company
                     )}
                   </h3>
-                  <span className="font-mono text-xs text-muted">{String(jobIndex + 1).padStart(2, '0')}</span>
+                  <span className="font-mono text-[0.6875rem] text-muted/80">
+                    {String(jobIndex + 1).padStart(2, '0')}
+                  </span>
                 </div>
-                <p className="mt-1 text-sm text-muted">{job.location}</p>
+                <p className="mt-0.5 text-sm text-muted">{job.location}</p>
               </header>
 
-              <div className="space-y-8">
+              <div className="space-y-4">
                 {job.roles.map((role) => (
-                  <div
-                    key={role.title + role.period}
-                    className="surface-panel interactive-lift rounded-xl p-5 sm:rounded-2xl sm:p-6 lg:p-7"
-                  >
-                    <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
-                      <h4 className="text-base font-medium text-accent-glow sm:text-lg">
+                  <div key={role.title + role.period} className="experience-role">
+                    <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
+                      <h4 className="text-sm font-medium text-accent-glow sm:text-[0.9375rem]">
                         {role.title}
                       </h4>
                       <time
-                        className="font-mono shrink-0 text-xs text-muted sm:text-sm"
+                        className="font-mono shrink-0 text-[0.6875rem] text-muted sm:text-xs"
                         dateTime={formatDateTimeRange(role)}
                       >
                         {role.period}
                       </time>
                     </div>
 
-                    <ul className="mt-4 space-y-3 sm:mt-5">
+                    <ul className="mt-3 space-y-2">
                       {role.highlights.map((item) => (
                         <li
                           key={item.slice(0, 48)}
-                          className="flex gap-3 text-sm leading-relaxed text-muted sm:text-[0.9375rem]"
+                          className="flex gap-2.5 text-sm leading-relaxed text-foreground/78"
                         >
                           <span
-                            className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent"
+                            className="mt-[0.55rem] h-1 w-1 shrink-0 rounded-full bg-accent/70"
                             aria-hidden="true"
                           />
                           <span>{item}</span>

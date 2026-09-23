@@ -20,7 +20,7 @@ const PLANET_PALETTE: PlanetSpec[] = [
   { orbit: 0.62, size: 0.075, speed: 1.65, color: '#94a3b8', tilt: 0.12, spin: 0.42 },
   { orbit: 0.92, size: 0.095, speed: 1.15, color: '#6366f1', tilt: -0.08, spin: 0.28 },
   { orbit: 1.28, size: 0.11, speed: 0.82, color: '#117a8a', tilt: 0.18, spin: 0.22, ring: true },
-  { orbit: 1.68, size: 0.085, speed: 0.52, color: '#a78bfa', tilt: -0.14, spin: 0.18 },
+  { orbit: 1.68, size: 0.085, speed: 0.52, color: '#8b9cf7', tilt: -0.14, spin: 0.18 },
 ]
 
 type SolarSystemProps = {
@@ -48,16 +48,16 @@ export function SolarSystem({ placement, isDark, index }: SolarSystemProps) {
 
   useFrame(({ clock }) => {
     const t = clock.elapsedTime + placement.phase
-    const speed = placement.orbitSpeed * 1.65
+    const speed = placement.orbitSpeed * 1.25
 
     if (rootRef.current) {
       rootRef.current.position.y =
-        placement.position[1] + Math.sin(t * 0.18 + index) * 0.14 * (far ? 0.6 : 1)
+        placement.position[1] + Math.sin(t * 0.12 + index) * 0.07 * (far ? 0.5 : 1)
       rootRef.current.position.x =
-        placement.position[0] + Math.cos(t * 0.12 + placement.phase) * 0.18
+        placement.position[0] + Math.cos(t * 0.08 + placement.phase) * 0.09
       rootRef.current.position.z =
-        placement.position[2] + Math.sin(t * 0.08 + placement.phase) * 0.1
-      rootRef.current.rotation.y = Math.sin(t * 0.07 + placement.phase) * 0.09 + t * 0.012
+        placement.position[2] + Math.sin(t * 0.06 + placement.phase) * 0.05
+      rootRef.current.rotation.y = Math.sin(t * 0.05 + placement.phase) * 0.05 + t * 0.008
     }
 
     orbitRefs.current.forEach((orbit, i) => {
@@ -72,17 +72,17 @@ export function SolarSystem({ placement, isDark, index }: SolarSystemProps) {
       const spec = planetSpecs[i]
       if (!spec) return
       planet.rotation.y = t * spec.spin
-      planet.rotation.x = Math.sin(t * 0.22 + spec.tilt + i) * 0.08
+      planet.rotation.x = Math.sin(t * 0.16 + spec.tilt + i) * 0.05
     })
 
     if (sunRef.current) {
-      sunRef.current.scale.setScalar(1 + Math.sin(t * 1.35) * 0.07)
-      sunRef.current.rotation.y = t * 0.15
+      sunRef.current.scale.setScalar(1 + Math.sin(t * 0.9) * 0.04)
+      sunRef.current.rotation.y = t * 0.1
     }
 
     if (glowRef.current) {
       const mat = glowRef.current.material as THREE.MeshBasicMaterial
-      mat.opacity = glowOpacity + Math.sin(t * 0.85) * 0.06
+      mat.opacity = glowOpacity + Math.sin(t * 0.7) * 0.04
     }
   })
 
@@ -133,7 +133,7 @@ export function SolarSystem({ placement, isDark, index }: SolarSystemProps) {
               <mesh position={[spec.orbit, 0, 0]} rotation={[Math.PI / 2.4, 0.2, 0]}>
                 <torusGeometry args={[spec.size * 1.85, spec.size * 0.28, 6, 48]} />
                 <meshBasicMaterial
-                  color={isDark ? '#c4b5fd' : '#6366f1'}
+                  color={isDark ? '#a5b4fc' : '#4755c7'}
                   transparent
                   opacity={0.58 * opacity}
                   depthWrite={false}

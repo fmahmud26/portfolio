@@ -17,6 +17,7 @@ type CredentialRowProps = {
   meta?: string
   href?: string
   linkLabel?: string
+  badge?: string
 }
 
 export function CredentialRow({
@@ -26,6 +27,7 @@ export function CredentialRow({
   meta,
   href,
   linkLabel = 'Verify',
+  badge,
 }: CredentialRowProps) {
   return (
     <li className="credential-row" data-stagger>
@@ -35,7 +37,10 @@ export function CredentialRow({
 
       <div className="min-w-0 flex-1">
         <p className="credential-title">{title}</p>
-        <p className="mt-1.5 text-sm leading-relaxed text-muted">{detail}</p>
+        {badge ? <p className="credential-badge">{badge}</p> : null}
+        <p className={`text-sm leading-relaxed text-muted ${badge ? 'mt-1' : 'mt-1.5'}`}>
+          {detail}
+        </p>
       </div>
 
       {(meta || href) && (

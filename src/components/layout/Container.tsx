@@ -5,13 +5,16 @@ type ContainerProps = {
   className?: string
 }
 
-/** Full-width layout with shared edge inset — matches header & footer */
-export const containerClassName = 'page-container w-full'
+/** Section content width — capped at --content-max with side gutters */
+export const containerClassName = 'page-container'
+
+/** Header / footer chrome — full bleed with gutter padding */
+export const containerNavClassName = 'page-container--edge'
 
 export function Container({ children, className = '' }: ContainerProps) {
   return <div className={`${containerClassName} ${className}`.trim()}>{children}</div>
 }
 
 export function ContainerNav({ children, className = '' }: ContainerProps) {
-  return <div className={`${containerClassName} ${className}`.trim()}>{children}</div>
+  return <div className={`${containerNavClassName} ${className}`.trim()}>{children}</div>
 }

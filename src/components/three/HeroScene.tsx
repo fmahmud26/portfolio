@@ -8,13 +8,13 @@ export function HeroScene() {
   return (
     <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
       <div
-        className="cosmos-drift-slow absolute h-[320px] w-[320px] rounded-full opacity-20 blur-3xl"
+        className="cosmos-drift-slow absolute h-[300px] w-[300px] rounded-full opacity-[0.18] blur-3xl"
         style={{
-          top: '22%',
-          right: '10%',
+          top: '20%',
+          right: '8%',
           background: isDark
-            ? 'radial-gradient(circle at 40% 40%, rgba(176,166,228,0.1) 0%, rgba(129,140,248,0.03) 48%, transparent 78%)'
-            : 'radial-gradient(circle at 40% 40%, rgba(79,70,229,0.14) 0%, rgba(17,122,138,0.06) 48%, transparent 78%)',
+            ? 'radial-gradient(circle at 40% 40%, rgba(139,156,247,0.12) 0%, rgba(94,200,214,0.04) 48%, transparent 78%)'
+            : 'radial-gradient(circle at 40% 40%, rgba(71,85,199,0.16) 0%, rgba(17,122,138,0.07) 48%, transparent 78%)',
         }}
       />
 
@@ -24,8 +24,8 @@ export function HeroScene() {
         className="pointer-events-none absolute inset-y-0 left-0 w-full sm:w-[82%] lg:w-[68%] xl:max-w-5xl"
         style={{
           background: isDark
-            ? 'linear-gradient(to right, rgba(46,46,54,0.99) 0%, rgba(46,46,54,0.88) 38%, rgba(46,46,54,0.52) 62%, transparent 100%)'
-            : 'linear-gradient(to right, rgba(233,238,245,0.98) 0%, rgba(233,238,245,0.9) 36%, rgba(233,238,245,0.55) 58%, transparent 100%)',
+            ? 'linear-gradient(to right, rgba(46,46,54,0.92) 0%, rgba(46,46,54,0.68) 32%, rgba(46,46,54,0.28) 55%, transparent 100%)'
+            : 'linear-gradient(to right, rgba(233,238,245,0.9) 0%, rgba(233,238,245,0.7) 32%, rgba(233,238,245,0.28) 56%, transparent 100%)',
         }}
       />
 

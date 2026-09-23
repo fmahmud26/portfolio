@@ -9,7 +9,7 @@ export function Education() {
   const copy = sections.education
 
   return (
-    <SectionShell id="education" atmosphere="minimal">
+    <SectionShell id="education" atmosphere="minimal" density="compact">
       <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
       <div ref={ref}>
@@ -17,6 +17,7 @@ export function Education() {
           <CredentialRow
             index={1}
             title={education.degree}
+            badge={education.major}
             detail={education.school}
             meta={education.year}
           />

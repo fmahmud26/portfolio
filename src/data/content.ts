@@ -11,10 +11,10 @@ export const profile = {
   github: 'https://github.com/fmahmud26',
   credly: 'https://www.credly.com/users/fmahmud26',
   summary:
-    'I build and operate production backend systems—translating requirements into durable architecture, shipping with CI/CD and observability from day one, and mentoring teams on cloud-native delivery.',
+    'Senior Software Engineer with 7+ years shipping production systems end to end—embedded with clients from ambiguous requirements to deployed, customer-facing software. Builds LLM-powered features (OpenAI API) alongside Java, Python, and Go backends, owning delivery on AWS from prototype to hardened production.',
   availability: 'Open to Forward Deployed AI, backend, and cloud engineering roles',
   heroPitch:
-    'Seven years delivering enterprise SaaS, LLM-powered data pipelines, and Kubernetes-backed platforms across AWS, GCP, and Azure.',
+    'Seven years delivering enterprise SaaS, LLM-powered data pipelines, and Kubernetes-backed platforms on AWS—from ambiguous requirements to customer-facing production.',
 }
 
 export const workPrinciples = [
@@ -42,7 +42,7 @@ export const sections = {
     subtitle:
       'From early scoping through deployment and operations—focused on systems that hold up under real load.',
     continued:
-      'At Brain Station 23, I lead technical delivery for enterprise SaaS: backend architecture, Kubernetes operations, and DevSecOps across AWS, GCP, and Azure—while mentoring engineers on Java, Python, and cloud-native patterns.',
+      'At Brain Station 23, I own technical delivery for enterprise SaaS: scoping with Product and clients, prototyping, shipping, and operating in production—while mentoring engineers across Java, Python, and Go stacks.',
   },
   experience: {
     label: 'Experience',
@@ -65,19 +65,18 @@ export const sections = {
   certifications: {
     label: 'Certifications',
     title: 'Industry Certifications',
-    subtitle: 'Verified credentials from AWS, HashiCorp, and the CNCF.',
+    subtitle: 'Verified credentials from AWS and HashiCorp.',
     credlyLink: 'View all verified credentials on Credly',
   },
   education: {
     label: 'Education',
-    title: 'Formal Training',
-    subtitle: 'Foundation in computer science and software engineering.',
+    title: 'Academic Foundation',
+    subtitle: 'Computer science degree with a major in artificial intelligence.',
   },
   contact: {
     label: 'Contact',
     title: 'Start a Conversation',
     subtitle: 'Available for Forward Deployed AI, backend, and cloud engineering roles.',
-    innerTitle: 'Reach out directly',
     intro:
       'For LLM integrations, platform builds, or cloud architecture work—I respond to email and LinkedIn.',
     emailCta: 'Send an Email',
@@ -109,24 +108,25 @@ export const experience: Experience[] = [
     roles: [
       {
         title: 'Senior Software Engineer',
-        period: 'Jul 2024 — Present',
-        dateTimeStart: '2024-07',
+        period: 'Jul 2025 — Present',
+        dateTimeStart: '2025-07',
         highlights: [
-          'Own end-to-end technical delivery for enterprise SaaS products—scoping with product teams and clients, prototyping, shipping, and operating in production.',
-          'Lead CI/CD on Jenkins and GitHub Actions for Docker and Kubernetes workloads; reduced deployment time by 80% through zero-downtime releases and DevSecOps gates (SAST, dependency scanning, and image security).',
-          'Mentor engineers on Java, Python, and cloud-native patterns; lead backend design reviews and code quality standards.',
+          'Own technical delivery for enterprise SaaS products end to end—scoping with Product and clients, prototyping, shipping, and operating in production.',
+          'Drive CI/CD on Jenkins and GitHub Actions for Docker/Kubernetes; cut deployment time 80% with zero-downtime releases and DevSecOps gates (secrets, SAST, dependency, and image scans).',
+          'Mentor engineers across Java, Python, and Go stacks; lead design and code reviews.',
+          'Architected Smart Digital Advertisement (Go) for 100+ distributed WiFi stations—evolving a single-node POC into a highly available, horizontally scalable AWS platform with ALB, Auto Scaling, PostgreSQL, and Redis.',
         ],
       },
       {
         title: 'Software Engineer',
-        period: 'Oct 2021 — Jun 2024',
-        dateTimeStart: '2021-10',
-        dateTimeEnd: '2024-06',
+        period: 'Nov 2021 — Jun 2025',
+        dateTimeStart: '2021-11',
+        dateTimeEnd: '2025-06',
         highlights: [
-          'Built and led the Omnizia PubMed Service (Python, FastAPI, OpenAI API, PostgreSQL, AWS) with LLM-powered tagging for summaries, sentiment analysis, and categorization.',
-          'Owned Spring Boot multi-tenant SaaS backends (database-per-tenant) with OAuth2/JWT, optimized SQL, and Spring WebFlux concurrency.',
-          'Delivered AWS-backed APIs with caching, Redis, and RabbitMQ; deployed and operated services with Docker and Kubernetes.',
-          'Implemented Prometheus, Grafana, and Loki observability stacks for production visibility and faster incident response.',
+          'Interviewed clients and data-entry teams to map a manual, multi-day tagging workflow; built and led the Omnizia PubMed Service (Java, Spring Boot, OpenAI API), automating LLM-powered tagging, summarization, and categorization.',
+          'Owned Spring Boot multi-tenant SaaS backends (database-per-tenant) and delivered Python/FastAPI services with React frontends directly for enterprise clients.',
+          'Built AWS-backed APIs with caching, optimized SQL access, Spring WebFlux concurrency, and OAuth2/JWT security; validated with load testing and strong unit-test coverage.',
+          'Implemented Prometheus/Grafana/Loki observability to keep production issues visible and fast to diagnose.',
         ],
       },
     ],
@@ -138,13 +138,12 @@ export const experience: Experience[] = [
     roles: [
       {
         title: 'Associate Software Engineer',
-        period: 'Feb 2019 — Sep 2021',
-        dateTimeStart: '2019-02',
-        dateTimeEnd: '2021-09',
+        period: 'May 2019 — Oct 2021',
+        dateTimeStart: '2019-05',
+        dateTimeEnd: '2021-10',
         highlights: [
-          'Built scalable REST APIs and backend services for a national ed-tech platform serving millions of users.',
-          'Delivered API-driven, white-label backend modules with configurable branding and caching for partner organizations.',
-          'Supported high-traffic live-class and content-delivery workflows with performance-focused Java services.',
+          'Built Android core features for Bangladesh’s large-scale 10 Minute School app—Split APK, live classes, and offline learning for millions of learners.',
+          'Delivered API-driven, white-label modules with branding cached at app start for partner organizations.',
         ],
       },
     ],
@@ -168,52 +167,54 @@ export const projects: Project[] = [
   {
     id: '01',
     title: 'Omnizia PubMed Service',
-    summary: 'LLM-powered ingestion pipeline for PubMed articles with automated tagging and categorization.',
+    summary:
+      'LLM-powered tagging, summarization, and categorization pipeline that replaced a multi-day manual PubMed workflow.',
     problem:
-      'Research teams spent significant time manually reviewing and categorizing PubMed articles before downstream use.',
+      'Clients and data-entry teams spent multiple days manually tagging and categorizing PubMed articles before downstream use.',
     approach:
-      'Built an asynchronous Python/FastAPI pipeline on AWS with PostgreSQL storage and OpenAI API integration for summaries, sentiment analysis, and structured tagging.',
+      'Interviewed stakeholders to map the workflow, then built and led an asynchronous Java/Spring Boot service on AWS with PostgreSQL and OpenAI API integration for automated tagging, summarization, and categorization.',
     outcome:
-      'Automated curation workflows—reducing manual review effort while keeping article metadata consistent and searchable.',
-    tags: ['Python', 'FastAPI', 'OpenAI API', 'PostgreSQL', 'AWS'],
+      'Eliminated the manual multi-day tagging effort while keeping article metadata consistent and searchable for enterprise clients.',
+    tags: ['Java', 'Spring Boot', 'OpenAI API', 'PostgreSQL', 'AWS'],
     featured: true,
   },
   {
     id: '02',
+    title: 'Smart Digital Advertisement',
+    summary:
+      'Go service powering a highly available advertising platform for 100+ distributed WiFi stations on AWS.',
+    problem:
+      'A single-node proof of concept could not reliably serve ads across a growing footprint of distributed WiFi stations.',
+    approach:
+      'Evolved the POC into a horizontally scalable Go service on AWS with ALB, Auto Scaling, PostgreSQL, and Redis—designed for high availability and operational simplicity.',
+    outcome:
+      'Production platform supporting 100+ WiFi stations with resilient delivery and room to scale horizontally.',
+    tags: ['Go', 'AWS', 'ALB', 'Auto Scaling', 'PostgreSQL', 'Redis'],
+    featured: true,
+  },
+  {
+    id: '03',
     title: 'Enterprise Multi-Tenant SaaS',
     summary: 'Database-per-tenant Spring Boot backends with OAuth2 security and reactive concurrency.',
     problem:
       'Enterprise clients required isolated tenant data, secure API access, and predictable performance under concurrent load.',
     approach:
-      'Designed database-per-tenant Spring Boot services with OAuth2/JWT, optimized SQL access patterns, and Spring WebFlux for non-blocking I/O on high-traffic endpoints.',
+      'Designed database-per-tenant Spring Boot services with OAuth2/JWT, optimized SQL access patterns, and Spring WebFlux for non-blocking I/O—paired with Python/FastAPI and React delivery for client-facing surfaces.',
     outcome:
       'Hardened REST APIs and tenant isolation that supported multiple enterprise clients on shared infrastructure.',
-    tags: ['Java', 'Spring Boot', 'PostgreSQL', 'OAuth2', 'Redis'],
-    featured: true,
+    tags: ['Java', 'Spring Boot', 'Spring WebFlux', 'OAuth2', 'PostgreSQL'],
   },
   {
-    id: '03',
+    id: '04',
     title: 'CI/CD and DevSecOps Platform',
     summary: 'Automated release pipelines with security gates for containerized Kubernetes workloads.',
     problem:
       'Manual deployments were slow, error-prone, and lacked consistent security checks before production release.',
     approach:
-      'Implemented Jenkins and GitHub Actions pipelines for Docker builds and Kubernetes deploys—with SAST, dependency scanning, image security gates, and zero-downtime rollout patterns.',
+      'Implemented Jenkins and GitHub Actions pipelines for Docker builds and Kubernetes deploys—with secrets management, SAST, dependency scanning, image security gates, and zero-downtime rollout patterns.',
     outcome:
       'Reduced deployment time by 80% while embedding DevSecOps checks into every release.',
-    tags: ['Docker', 'Kubernetes', 'Jenkins', 'GitHub Actions', 'Terraform'],
-  },
-  {
-    id: '04',
-    title: 'Cloud Observability Stack',
-    summary: 'Unified metrics, logs, and alerting for microservices on AWS and Kubernetes.',
-    problem:
-      'Production incidents were harder to diagnose without correlated metrics and logs across distributed services.',
-    approach:
-      'Deployed Prometheus for metrics, Grafana for dashboards, and Loki for log aggregation—integrated with existing Kubernetes and AWS workloads.',
-    outcome:
-      'Faster incident response and clearer production visibility across microservice boundaries.',
-    tags: ['Prometheus', 'Grafana', 'Loki', 'AWS', 'Kubernetes'],
+    tags: ['Docker', 'Kubernetes', 'Jenkins', 'GitHub Actions', 'DevSecOps'],
   },
 ]
 
@@ -227,69 +228,56 @@ export const skillCategories: SkillCategory[] = [
   {
     name: 'Programming',
     description: 'Languages used for backend services, APIs, data access, and automation.',
-    skills: ['Java', 'Python', 'Go', 'Rust', 'TypeScript', 'SQL'],
-  },
-  {
-    name: 'Backend Engineering',
-    description: 'Frameworks and patterns for secure, scalable service development.',
-    skills: ['Spring Boot', 'FastAPI', 'Gin', 'Spring WebFlux', 'REST APIs', 'OAuth2/JWT'],
+    skills: ['Java', 'Python', 'TypeScript', 'Go', 'SQL', 'Bash'],
   },
   {
     name: 'AI / LLM',
     description: 'Integrating large language models into production workflows and products.',
     skills: [
       'OpenAI API',
-      'LangChain4j',
-      'LangChain',
-      'LangGraph',
       'Prompt Engineering',
-      'RAG',
-      'LLM Pipelines',
+      'LLM Tagging Pipelines',
       'Summarization',
-      'Tagging & Classification',
+      'Categorization',
     ],
   },
   {
-    name: 'Cloud',
-    description: 'Architecture and delivery across major cloud platforms.',
-    skills: ['AWS', 'GCP', 'Azure', 'Solutions Architecture'],
+    name: 'Frameworks',
+    description: 'Service frameworks and UI stacks used to ship client-facing products.',
+    skills: ['FastAPI', 'Spring Boot', 'Spring Data JPA', 'Spring WebFlux', 'React'],
   },
   {
-    name: 'Infrastructure as Code',
-    description: 'Provisioning and environment consistency as code.',
-    skills: ['Terraform', 'Ansible'],
-  },
-  {
-    name: 'CI/CD',
-    description: 'Automated build, test, security, and release pipelines.',
-    skills: ['Jenkins', 'GitHub Actions', 'GitLab CI', 'Zero-Downtime Deploys'],
-  },
-  {
-    name: 'DevOps & DevSecOps',
-    description: 'Containers, orchestration, GitOps, and security tooling for build and release.',
+    name: 'Cloud & Delivery',
+    description: 'Cloud platforms and delivery tooling for reliable production releases.',
     skills: [
+      'AWS',
       'Docker',
       'Kubernetes',
-      'GitOps',
-      'Argo CD',
-      'OpenShift',
-      'SAST',
-      'SonarQube',
-      'Trivy',
-      'Dependency Scanning',
-      'HashiCorp Vault',
-      'OPA',
+      'Terraform',
+      'Ansible',
+      'GitHub Actions',
+      'Jenkins',
+      'GitLab CI',
     ],
   },
   {
     name: 'Data & Messaging',
     description: 'Storage, caching, and asynchronous messaging.',
-    skills: ['PostgreSQL', 'MongoDB', 'DynamoDB', 'Redis', 'RabbitMQ', 'SQL Optimization'],
+    skills: ['PostgreSQL', 'MongoDB', 'Redis', 'RabbitMQ'],
   },
   {
-    name: 'Observability',
-    description: 'Metrics, logging, and performance validation in production.',
-    skills: ['Prometheus', 'Grafana', 'Loki', 'Load Testing'],
+    name: 'Practices',
+    description: 'Engineering habits that keep systems operable under real load.',
+    skills: [
+      'Rapid Prototyping',
+      'API Design',
+      'Prometheus',
+      'Grafana',
+      'Loki',
+      'DevSecOps Gates',
+      'TDD',
+      'Agile',
+    ],
   },
 ]
 
@@ -306,20 +294,15 @@ export const certifications: Certification[] = [
     link: 'https://www.credly.com/badges/ac24f7c7-0a02-446a-b938-107476460760',
   },
   {
-    name: 'HashiCorp Certified: Terraform Associate',
+    name: 'HashiCorp Certified: Terraform Associate (004)',
     issuer: 'HashiCorp',
-    link: 'https://www.credly.com/users/fmahmud26',
-  },
-  {
-    name: 'Certified Kubernetes Administrator (CKA)',
-    issuer: 'Cloud Native Computing Foundation',
-    link: 'https://www.credly.com/users/fmahmud26',
   },
 ]
 
 export const education = {
-  degree: 'B.Sc. in Computer Science and Engineering',
+  degree: 'B.Sc. in Computer Science and Engineering (CSE)',
   school: 'Bangladesh University of Business and Technology',
+  major: 'Major in Artificial Intelligence',
   year: '2018',
 }
 
@@ -336,8 +319,5 @@ export const navLinks = [
 export const stats = [
   { value: '7+', label: 'Years in Production' },
   { value: '80%', label: 'Faster Deployments' },
-  { value: '3', label: 'Cloud Certifications' },
-  { value: 'AWS · GCP · Azure', label: 'Multi-Cloud Delivery' },
+  { value: '2', label: 'Cloud Certifications' },
 ]
-
-export const focusAreas = ['Backend', 'AI / LLM', 'Cloud', 'DevOps', 'Kubernetes']

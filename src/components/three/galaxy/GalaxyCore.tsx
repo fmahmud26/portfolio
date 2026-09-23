@@ -38,8 +38,8 @@ export function GalaxyCore({
   const dustData = useMemo(() => buildDustHalo(isDark, dustCount, phase), [isDark, dustCount, phase])
 
   const mode = isDark ? 'dark' : 'light'
-  const accent = isDark ? '#b4aae6' : '#4338ca'
-  const rim = isDark ? '#a8bdd0' : '#4755c7'
+  const accent = isDark ? '#8b9cf7' : '#4350bd'
+  const rim = isDark ? '#5ec8d6' : '#117a8a'
   const ringOpacityScale = lite ? 0.72 : 1
   const particleSize = COMFORT.particleSize[mode]
 
@@ -153,8 +153,8 @@ export function GalaxyCore({
           <mesh ref={coreRef}>
             <sphereGeometry args={[0.17, 24, 24]} />
             <meshStandardMaterial
-              color={isDark ? '#ebe6fa' : '#f8f7ff'}
-              emissive={isDark ? '#b0a6e4' : '#6366f1'}
+              color={isDark ? '#eef2ff' : '#f8fafc'}
+              emissive={isDark ? '#8b9cf7' : '#4755c7'}
               emissiveIntensity={COMFORT.coreEmissive[mode] * opacityScale}
               roughness={0.28}
               metalness={0.06}
