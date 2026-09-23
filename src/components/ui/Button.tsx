@@ -5,6 +5,7 @@ import {
   type ReactNode,
 } from 'react'
 import { Loader2 } from 'lucide-react'
+import { useMaterialRipple } from '../../hooks/useMaterialRipple'
 
 export type ButtonVariant =
   | 'primary'
@@ -25,6 +26,7 @@ type SharedButtonProps = {
   iconOnly?: boolean
   selected?: boolean
   glassLayers?: boolean
+  ripple?: boolean
   className?: string
   children?: ReactNode
 }
@@ -73,6 +75,7 @@ function ButtonGlassLayers() {
     <>
       <span className="btn__edge" aria-hidden="true" />
       <span className="btn__shine" aria-hidden="true" />
+      <span className="btn__state" aria-hidden="true" />
     </>
   )
 }
@@ -87,11 +90,13 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       iconOnly = false,
       selected = false,
       glassLayers = true,
+      ripple = true,
       className = '',
       children,
       ...rest
     } = props
 
+    const onRipple = useMaterialRipple()
     const classes = buildClassName({
       variant,
       size,
@@ -107,6 +112,7 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     const content = (
       <>
         {glassLayers && <ButtonGlassLayers />}
+        {!glassLayers && <span className="btn__state" aria-hidden="true" />}
         {loading && (
           <Loader2 className="btn__spinner" size={spinnerSize} strokeWidth={2} aria-hidden="true" />
         )}
@@ -115,7 +121,10 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
     )
 
     if ('href' in props && props.href) {
-      const { href, external, ...anchorRest } = rest as Omit<ButtonAsAnchor, keyof SharedButtonProps>
+      const { href, external, onPointerDown, ...anchorRest } = rest as Omit<
+        ButtonAsAnchor,
+        keyof SharedButtonProps
+      > & { onPointerDown?: ButtonAsAnchor['onPointerDown'] }
       const openInNewTab = external ?? isExternalHref(href)
 
       return (
@@ -125,6 +134,10 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
           className={classes}
           aria-busy={loading || undefined}
           aria-disabled={loading || undefined}
+          onPointerDown={(e) => {
+            if (ripple) onRipple(e)
+            onPointerDown?.(e)
+          }}
           {...(openInNewTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
           {...anchorRest}
         >
@@ -133,10 +146,10 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
       )
     }
 
-    const { disabled, type = 'button', ...buttonRest } = rest as Omit<
+    const { disabled, type = 'button', onPointerDown, ...buttonRest } = rest as Omit<
       ButtonAsButton,
       keyof SharedButtonProps
-    >
+    > & { onPointerDown?: ButtonAsButton['onPointerDown'] }
 
     return (
       <button
@@ -145,6 +158,10 @@ export const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonPr
         disabled={disabled || loading}
         className={classes}
         aria-busy={loading || undefined}
+        onPointerDown={(e) => {
+          if (ripple) onRipple(e)
+          onPointerDown?.(e)
+        }}
         {...buttonRest}
       >
         {content}

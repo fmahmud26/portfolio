@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react'
 import { Navbar } from '../components/layout/Navbar'
 import { Footer } from '../components/layout/Footer'
 import { BackToTop } from '../components/ui/BackToTop'
+import { ScrollProgress } from '../components/ui/ScrollProgress'
 import { SkipLink } from '../components/ui/SkipLink'
 import { Hero } from '../sections/Hero'
 import { About } from '../sections/About'
@@ -20,6 +21,7 @@ export function HomePage() {
   return (
     <div className="relative isolate">
       <SkipLink />
+      <ScrollProgress />
       <Navbar />
       <div className="relative">
         <Suspense fallback={null}>

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { ArrowDown, ArrowUpRight } from 'lucide-react'
 import { Container } from '../components/layout/Container'
+import { AnimatedStat } from '../components/ui/AnimatedStat'
 import { Button } from '../components/ui/Button'
 import { GitHubIcon } from '../components/ui/BrandIcons'
 import { profile, stats } from '../data/content'
@@ -25,8 +26,12 @@ export function Hero() {
 
       <Container className="relative w-full pt-28 pb-20 sm:pt-32 lg:pt-36">
         <div className="relative z-10 w-full max-w-2xl xl:max-w-3xl">
-          <div
-            className="absolute -left-3 top-1.5 hidden h-[calc(100%-0.25rem)] w-px bg-linear-to-b from-accent/70 via-cyan/40 to-transparent lg:block"
+          <motion.div
+            className="absolute -left-3 top-1.5 hidden w-px origin-top bg-linear-to-b from-accent/70 via-cyan/40 to-transparent lg:block"
+            style={{ height: 'calc(100% - 0.25rem)' }}
+            initial={reducedMotion ? false : { scaleY: 0, opacity: 0 }}
+            animate={{ scaleY: 1, opacity: 1 }}
+            transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
             aria-hidden="true"
           />
 
@@ -56,12 +61,12 @@ export function Hero() {
           >
             {profile.name.split(' ')[0]}
             <br />
-            <span className="hero-name-glow text-gradient">{profile.name.split(' ')[1]}</span>
+            <span className="hero-name-glow text-gradient text-gradient--shimmer">{profile.name.split(' ')[1]}</span>
           </motion.h1>
 
           <motion.p
             {...fadeUp(0.38, reducedMotion)}
-            className="mt-2.5 font-display text-base font-medium text-foreground sm:text-lg"
+            className="mt-3 font-display text-base font-medium text-foreground sm:mt-3.5 sm:text-lg"
           >
             {profile.title}
           </motion.p>
@@ -77,16 +82,27 @@ export function Hero() {
             {...fadeUp(0.5, reducedMotion)}
             className="hero-stats mt-6"
           >
-            {stats.map((stat) => (
-              <div key={stat.label} className="hero-stats__item">
+            {stats.map((stat, index) => (
+              <motion.div
+                key={stat.label}
+                className="hero-stats__item"
+                initial={reducedMotion ? false : { opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 0.45,
+                  delay: reducedMotion ? 0 : 0.55 + index * 0.08,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
                 <dt className="sr-only">{stat.label}</dt>
                 <dd>
-                  <span className="hero-stat-value font-display text-xl font-semibold tracking-tight sm:text-2xl">
-                    {stat.value}
-                  </span>
+                  <AnimatedStat
+                    value={stat.value}
+                    className="hero-stat-value font-display text-xl font-semibold tracking-tight sm:text-2xl"
+                  />
                   <span className="hero-stats__label">{stat.label}</span>
                 </dd>
-              </div>
+              </motion.div>
             ))}
           </motion.dl>
 

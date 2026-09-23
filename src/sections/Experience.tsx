@@ -43,10 +43,14 @@ export function Experience() {
                         href={job.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 transition-colors hover:text-accent"
+                        className="experience-company-link inline-flex items-center gap-1 transition-colors hover:text-accent"
                       >
                         {job.company}
-                        <ArrowUpRight size={14} className="shrink-0 text-accent/70" aria-hidden="true" />
+                        <ArrowUpRight
+                          size={14}
+                          className="experience-company-link__icon shrink-0 text-accent/70"
+                          aria-hidden="true"
+                        />
                         <span className="sr-only"> (opens in new tab)</span>
                       </a>
                     ) : (
@@ -64,7 +68,7 @@ export function Experience() {
                 {job.roles.map((role) => (
                   <div key={role.title + role.period} className="experience-role">
                     <div className="flex flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between sm:gap-4">
-                      <h4 className="text-sm font-medium text-accent-glow sm:text-[0.9375rem]">
+                      <h4 className="experience-role__title text-sm font-medium sm:text-[0.9375rem]">
                         {role.title}
                       </h4>
                       <time

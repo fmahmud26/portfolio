@@ -3,12 +3,12 @@ export const LIGHT_BG = '#e9eef5'
 
 /** Galaxy motion — calmer spin; hero spiral still reads as living. */
 export const COMFORT = {
-  discOpacity: { dark: 0.52, light: 0.4 },
-  dustOpacity: { dark: 0.24, light: 0.2 },
-  ringOpacity: { dark: { inner: 0.22, outer: 0.14 }, light: { inner: 0.2, outer: 0.12 } },
-  haloOpacity: { dark: 0.1, light: 0.08 },
-  coreEmissive: { dark: 0.62, light: 0.48 },
-  particleSize: { dark: { disc: 0.042, dust: 0.028 }, light: { disc: 0.046, dust: 0.028 } },
+  discOpacity: { dark: 0.56, light: 0.48 },
+  dustOpacity: { dark: 0.26, light: 0.24 },
+  ringOpacity: { dark: { inner: 0.24, outer: 0.15 }, light: { inner: 0.26, outer: 0.16 } },
+  haloOpacity: { dark: 0.12, light: 0.11 },
+  coreEmissive: { dark: 0.66, light: 0.58 },
+  particleSize: { dark: { disc: 0.042, dust: 0.028 }, light: { disc: 0.05, dust: 0.032 } },
   spin: { disc: 0.48, dust: -0.22, ringInner: 0.28, ringOuter: -0.18, wobble: 0.015 },
   drift: { yaw: 0.024, pitch: 0.01, roll: 0.008 },
 } as const

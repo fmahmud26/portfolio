@@ -36,7 +36,7 @@ export function Skills() {
     <SectionShell id="skills" atmosphere="minimal">
       <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
-      <div ref={ref} className="grid gap-6 lg:grid-cols-[minmax(0,18rem)_1fr] lg:gap-10 xl:grid-cols-[minmax(0,20rem)_1fr] xl:gap-12">
+      <div ref={ref} className="grid items-start gap-6 lg:grid-cols-[minmax(0,18rem)_1fr] lg:items-stretch lg:gap-10 xl:grid-cols-[minmax(0,20rem)_1fr] xl:gap-12">
         <LayoutGroup id="skills-nav">
           <nav
             ref={navRef}
@@ -107,7 +107,7 @@ export function Skills() {
           id={panelId}
           role="tabpanel"
           aria-labelledby={`skills-tab-${activeIndex}`}
-          className="panel-card relative overflow-hidden p-5 sm:p-6"
+          className="panel-card relative h-full min-h-0 overflow-hidden p-5 sm:p-6"
         >
           <AnimatePresence mode="wait">
             <motion.div
@@ -128,9 +128,10 @@ export function Skills() {
                 {active.skills.map((skill, i) => (
                   <motion.li
                     key={skill}
-                    initial={reducedMotion ? false : { opacity: 0, x: -8 }}
-                    animate={{ opacity: 1, x: 0 }}
+                    initial={reducedMotion ? false : { opacity: 0, x: -8, scale: 0.98 }}
+                    animate={{ opacity: 1, x: 0, scale: 1 }}
                     transition={{ delay: reducedMotion ? 0 : i * 0.04, duration: 0.3 }}
+                    whileHover={reducedMotion ? undefined : { y: -2 }}
                     className="skill-chip"
                   >
                     <span

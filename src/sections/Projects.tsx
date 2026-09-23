@@ -12,17 +12,17 @@ export function Projects() {
     <SectionShell id="projects" atmosphere="minimal">
       <SectionHeading label={copy.label} title={copy.title} subtitle={copy.subtitle} />
 
-      <div ref={ref} className="grid gap-4 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
+      <div ref={ref} className="projects-bento">
         {projects.map((project) => {
-          const isFeatured = project.featured
+          const isFeatured = Boolean(project.featured)
+          const isWideCase = project.id === '01' || project.id === '02' || project.id === '04'
+          const isTallSide = project.id === '03'
 
           return (
             <article
               key={project.id}
               data-stagger
-              className={`panel-card group relative overflow-hidden p-5 outline-none sm:p-6 ${
-                isFeatured ? 'sm:col-span-2 xl:col-span-2' : ''
-              }`}
+              className={`panel-card group relative flex h-full min-h-0 flex-col overflow-hidden p-5 outline-none sm:p-6 projects-bento__${project.id}`}
             >
               <div
                 className="pointer-events-none absolute inset-0 bg-linear-to-br from-accent/[0.05] via-transparent to-cyan/[0.04] opacity-0 transition-opacity duration-400 group-hover:opacity-100"
@@ -33,7 +33,7 @@ export function Projects() {
                   {String(project.id).padStart(2, '0')}
                 </span>
                 {isFeatured && (
-                  <span className="rounded-full border border-accent/30 bg-linear-to-r from-accent/15 to-cyan/10 px-2.5 py-0.5 text-[0.625rem] font-medium tracking-wide text-accent">
+                  <span className="project-featured-badge rounded-full border border-accent/30 bg-linear-to-r from-accent/15 to-cyan/10 px-2.5 py-0.5 text-[0.625rem] font-medium tracking-wide text-accent">
                     Featured
                   </span>
                 )}
@@ -48,25 +48,25 @@ export function Projects() {
               </p>
 
               <dl
-                className={`relative mt-5 grid gap-4 ${
-                  isFeatured ? 'project-case-grid lg:grid-cols-3 lg:gap-0' : ''
-                }`}
+                className={`relative mt-5 grid flex-1 gap-4 ${
+                  isWideCase ? 'project-case-grid lg:grid-cols-3 lg:gap-0' : 'content-start'
+                } ${isTallSide ? 'sm:gap-5' : ''}`}
               >
-                <div className={isFeatured ? 'project-case-cell' : ''}>
+                <div className={isWideCase ? 'project-case-cell' : ''}>
                   <dt className="label-micro text-accent/75">Problem</dt>
                   <dd className="mt-1.5 text-sm leading-relaxed text-foreground/78">{project.problem}</dd>
                 </div>
-                <div className={isFeatured ? 'project-case-cell' : ''}>
+                <div className={isWideCase ? 'project-case-cell' : ''}>
                   <dt className="label-micro text-accent/75">Approach</dt>
                   <dd className="mt-1.5 text-sm leading-relaxed text-foreground/78">{project.approach}</dd>
                 </div>
-                <div className={isFeatured ? 'project-case-cell project-case-cell--outcome' : ''}>
+                <div className={isWideCase ? 'project-case-cell project-case-cell--outcome' : ''}>
                   <dt className="label-micro text-accent/75">Outcome</dt>
                   <dd className="mt-1.5 text-sm leading-relaxed text-foreground/85">{project.outcome}</dd>
                 </div>
               </dl>
 
-              <div className="relative mt-5 flex flex-wrap gap-1.5">
+              <div className="relative mt-auto flex flex-wrap gap-1.5 pt-5">
                 {project.tags.map((tag) => (
                   <span key={tag} className="tag-pill">
                     {tag}

@@ -14,20 +14,21 @@ export function useGsapReveal<T extends HTMLElement = HTMLElement>() {
   useEffect(() => {
     const el = ref.current
     if (!el || prefersReducedMotion()) {
-      if (el) gsap.set(el, { opacity: 1, y: 0 })
+      if (el) gsap.set(el, { clearProps: 'opacity,transform' })
       return
     }
 
     const ctx = gsap.context(() => {
       gsap.from(el, {
-        y: 48,
+        y: 28,
         opacity: 0,
-        duration: 0.85,
+        duration: 0.75,
         ease: 'power3.out',
+        clearProps: 'transform',
         scrollTrigger: {
           trigger: el,
           start: 'top 88%',
-          toggleActions: 'play none none reverse',
+          toggleActions: 'play none none none',
         },
       })
     }, el)
@@ -49,21 +50,23 @@ export function useGsapStagger<T extends HTMLElement>() {
     if (!items.length) return
 
     if (prefersReducedMotion()) {
-      gsap.set(items, { opacity: 1, y: 0 })
+      gsap.set(items, { clearProps: 'opacity,transform' })
       return
     }
 
     const ctx = gsap.context(() => {
       gsap.from(items, {
-        y: 40,
+        y: 24,
         opacity: 0,
-        duration: 0.72,
-        stagger: 0.1,
+        duration: 0.65,
+        stagger: 0.07,
         ease: 'power3.out',
+        // Keep grid tops aligned — no scale (center-origin scale skews tall cells)
+        clearProps: 'transform',
         scrollTrigger: {
           trigger: el,
           start: 'top 82%',
-          toggleActions: 'play none none reverse',
+          toggleActions: 'play none none none',
         },
       })
     }, el)

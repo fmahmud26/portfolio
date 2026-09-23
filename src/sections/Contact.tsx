@@ -36,31 +36,61 @@ export function Contact() {
             </p>
 
             <ul className="mt-5 space-y-0.5">
-              <li>
-                <a href={`mailto:${profile.email}`} className="contact-detail-row">
-                  <Mail size={15} className="shrink-0 text-accent" aria-hidden="true" />
-                  <span className="break-all text-sm">{profile.email}</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href={`tel:${profile.phone.replace(/[^\d+]/g, '')}`}
-                  className="contact-detail-row"
-                >
-                  <Phone size={15} className="shrink-0 text-accent" aria-hidden="true" />
-                  <span className="text-sm">{profile.phone}</span>
-                </a>
-              </li>
-              <li>
+              {(
+                [
+                  {
+                    key: 'email',
+                    href: `mailto:${profile.email}`,
+                    icon: Mail,
+                    label: profile.email,
+                    className: 'break-all text-sm',
+                  },
+                  {
+                    key: 'phone',
+                    href: `tel:${profile.phone.replace(/[^\d+]/g, '')}`,
+                    icon: Phone,
+                    label: profile.phone,
+                    className: 'text-sm',
+                  },
+                ] as const
+              ).map((item, i) => {
+                const Icon = item.icon
+                return (
+                  <motion.li
+                    key={item.key}
+                    initial={reducedMotion ? false : { opacity: 0, x: -8 }}
+                    animate={inView || reducedMotion ? { opacity: 1, x: 0 } : {}}
+                    transition={{
+                      duration: 0.35,
+                      delay: reducedMotion ? 0 : 0.12 + i * 0.06,
+                      ease: [0.22, 1, 0.36, 1],
+                    }}
+                  >
+                    <a href={item.href} className="contact-detail-row">
+                      <Icon size={15} className="shrink-0 text-accent" aria-hidden="true" />
+                      <span className={item.className}>{item.label}</span>
+                    </a>
+                  </motion.li>
+                )
+              })}
+              <motion.li
+                initial={reducedMotion ? false : { opacity: 0, x: -8 }}
+                animate={inView || reducedMotion ? { opacity: 1, x: 0 } : {}}
+                transition={{
+                  duration: 0.35,
+                  delay: reducedMotion ? 0 : 0.24,
+                  ease: [0.22, 1, 0.36, 1],
+                }}
+              >
                 <span className="contact-detail-row contact-detail-row--static">
                   <MapPin size={15} className="shrink-0 text-accent" aria-hidden="true" />
                   <span className="text-sm">{profile.location}</span>
                 </span>
-              </li>
+              </motion.li>
             </ul>
           </div>
 
-          <div className="btn-group flex flex-col items-stretch sm:max-w-xs lg:ml-auto lg:items-stretch">
+          <div className="btn-group flex flex-col items-stretch gap-2.5 sm:max-w-xs lg:ml-auto lg:items-stretch">
             <Button href={`mailto:${profile.email}`} variant="primary" size="md" fullWidth>
               {copy.emailCta}
               <ArrowUpRight size={15} aria-hidden="true" />

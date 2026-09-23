@@ -34,14 +34,21 @@ export function SectionHeading({
         transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
         className={`flex items-center gap-2.5 ${align === 'center' ? 'justify-center' : ''}`}
       >
-        <span className="h-px w-6 bg-linear-to-r from-accent/70 to-cyan/40 sm:w-8" aria-hidden="true" />
+        <motion.span
+          className="h-px w-6 origin-left bg-linear-to-r from-accent/70 to-cyan/40 sm:w-8"
+          initial={reducedMotion ? false : { scaleX: 0 }}
+          whileInView={{ scaleX: 1 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+          aria-hidden="true"
+        />
         <span className="label-micro text-accent">{label}</span>
       </motion.div>
 
       <motion.h2
         {...motionProps}
         transition={{ duration: 0.5, delay: reducedMotion ? 0 : 0.05, ease: [0.22, 1, 0.36, 1] }}
-        className="font-display mt-3 text-[clamp(1.625rem,2.8vw,2.375rem)] font-semibold tracking-tight text-balance"
+        className="font-display section-title-accent mt-3 text-[clamp(1.625rem,2.8vw,2.375rem)] font-semibold tracking-tight text-balance"
       >
         {title}
       </motion.h2>
@@ -50,7 +57,7 @@ export function SectionHeading({
         <motion.p
           {...motionProps}
           transition={{ duration: 0.5, delay: reducedMotion ? 0 : 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className={`mt-2.5 max-w-xl text-[0.9375rem] leading-relaxed text-muted sm:text-base ${
+          className={`mt-3.5 max-w-xl text-[0.9375rem] leading-relaxed text-muted sm:text-base ${
             align === 'center' ? 'mx-auto' : ''
           }`}
         >
